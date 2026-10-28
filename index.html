@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الانتقال إلى الإحداثي</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f3340">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 .leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-layer{position:absolute;left:0;top:0}
 .leaflet-container{overflow:hidden;position:relative;background:#ddd}
@@ -136,6 +139,12 @@ tr.pt{cursor:pointer}tr.pt:hover{background:var(--hover)}
 #mapwrap{flex:1;position:relative;display:flex;min-width:0}
 #map{flex:1;direction:ltr;background:#cfd8dc}
 #toast{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:1100;max-width:min(580px,90%);padding:9px 15px;border-radius:4px;background:var(--bar);color:var(--bar-ink);font-size:13px;line-height:1.6;box-shadow:var(--shadow);text-align:center}
+#phView{position:fixed;inset:0;z-index:3600;background:rgba(0,0,0,.9);display:flex;flex-direction:column}
+#phView .phbar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;color:#fff;flex-wrap:wrap}
+#phView .phbtn{display:flex;gap:6px}
+#phView img{flex:1;min-height:0;width:100%;object-fit:contain}
+.phbox{margin-top:6px}.phbox img{height:54px;width:54px;object-fit:cover;border-radius:4px;margin:2px;cursor:pointer;border:1px solid var(--line)}
+.phbox button{min-height:28px;padding:0 10px;font-size:12px}
 #atp{position:fixed;left:0;right:0;bottom:26px;height:42vh;z-index:2500;display:flex;flex-direction:column;background:var(--panel);border-top:2px solid var(--acc);box-shadow:var(--shadow)}
 #atp.big{height:78vh}
 .atbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line)}
@@ -452,11 +461,25 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 <div class="row"><button id="rpPng" class="alt">ورقة الخريطة PNG</button><button id="rpPrint">طباعة / PDF</button></div>
 <div class="row"><button id="rpXls" class="alt">تقرير المشروع Excel</button></div>
 <div id="rpSt" class="note"></div>
+<h2>الصور الميدانية</h2>
+<div id="phInfo" class="note"></div>
+<div class="row"><button id="phZip" class="alt">تصدير الصور ZIP</button><button id="phClr" class="alt">حذف كل الصور</button></div>
+<h2>العمل بدون إنترنت</h2>
+<div id="offSt" class="note"></div>
+<label for="offZ">تنزيل الخريطة الظاهرة حتى تكبير إضافي</label>
+<select id="offZ"><option value="0">+0</option><option value="1">+1</option><option value="2" selected>+2</option><option value="3">+3</option><option value="4">+4</option></select>
+<div id="offInfo" class="note"></div>
+<div class="row"><button id="offDl" class="alt">تنزيل المنطقة الظاهرة</button><button id="offClr" class="alt">مسح الخرائط المخزّنة</button></div>
 </section>
 
 </div>
 </aside>
 <div id="mapwrap"><div id="map"></div><div id="toast" hidden role="status"></div><div id="guide" hidden role="dialog" aria-label="الدليل"></div></div>
+</div>
+<input type="file" id="phIn" accept="image/*" capture="environment" multiple hidden>
+<div id="phView" hidden>
+ <div class="phbar"><span id="phCap"></span><span class="phbtn"><button type="button" id="phPrev" class="alt">◀</button><button type="button" id="phNext" class="alt">▶</button><button type="button" id="phDel" class="alt"></button><button type="button" id="phX" class="alt">✕</button></span></div>
+ <img id="phImg" alt="">
 </div>
 <div id="atp" hidden>
  <div class="atbar">
@@ -761,7 +784,7 @@ const EN={
 "أسماء الأماكن": "Place names",
 "موقعي الحالي": "My current location"
 };
-Object.assign(EN,{"وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
+Object.assign(EN,{"الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
 const RUNRE=/[\u0600-\u06FF]+(?:[ \u00A0«»()…،:؟.\-—\/]*[\u0600-\u06FF]+)*/g;
 function T(s,v){
   let r=s;
@@ -1212,7 +1235,7 @@ function draw(fit){
     const col=cc?(cmap[String(r[cc])]||PAL[9]):'#0b5d7a',lab=lc?r[lc]:T('نقطة ')+(i+1);
     const x={r,c,lab,i,m:null};
     x.m=L.circleMarker(c,{renderer:rend,radius:6,color:'#fff',weight:1.5,fillColor:col,fillOpacity:1}).addTo(pts);
-    x.m.bindPopup(()=>'<div dir="auto" style="max-height:220px;overflow:auto;font:12px sans-serif"><b>'+esc(lab)+'</b><table>'+cols.map(k=>`<tr><td>${esc(k)}</td><td dir="ltr">${esc(r[k])}</td></tr>`).join('')+'</table>'+(x.chain!=null?T('المسافة التراكمية: ')+fmt(x.chain)+T('<br>المقطع السابق: ')+fmt(x.seg):'')+'</div>'+info(c[0],c[1]),{maxWidth:320});
+    x.m.bindPopup(()=>'<div dir="auto" style="max-height:220px;overflow:auto;font:12px sans-serif"><b>'+esc(lab)+'</b><table>'+cols.map(k=>`<tr><td>${esc(k)}</td><td dir="ltr">${esc(r[k])}</td></tr>`).join('')+'</table>'+(x.chain!=null?T('المسافة التراكمية: ')+fmt(x.chain)+T('<br>المقطع السابق: ')+fmt(x.seg):'')+'</div>'+phHTML(c)+info(c[0],c[1]),{maxWidth:320});
     shown.push(x);
   });
   if($('cpath').value==='__all'){let acc=0;shown.forEach((x,i)=>{x.seg=i?L.latLng(shown[i-1].c).distanceTo(x.c):0;acc+=x.seg;x.chain=acc})}
@@ -2472,6 +2495,186 @@ async function rpMake(kind){
 }
 $('rpPng').onclick=()=>rpMake('png');$('rpPrint').onclick=()=>rpMake('print');
 
+/* ---------- الصور الميدانية ---------- */
+const PDB={
+  open(){return new Promise((ok,no)=>{if(!window.indexedDB)return no(Error('IndexedDB'));const r=indexedDB.open('gotoxy_photos',1);
+    r.onupgradeneeded=()=>{const st=r.result.createObjectStore('photos',{keyPath:'id'});st.createIndex('pid','pid')};
+    r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})},
+  async run(mode,fn){const db=await this.open();return new Promise((ok,no)=>{const t=db.transaction('photos',mode),q=fn(t.objectStore('photos'));
+    t.oncomplete=()=>{db.close();ok(q&&q.result)};t.onerror=t.onabort=()=>{db.close();no(t.error||Error('tx'))}})},
+  byPid(pid){return this.run('readonly',s=>s.index('pid').getAll(pid))},
+  put(o){return this.run('readwrite',s=>s.put(o))},
+  del(id){return this.run('readwrite',s=>s.delete(id))},
+  delPid(pid){return this.byPid(pid).then(a=>Promise.all(a.map(p=>this.del(p.id))))}
+};
+const phMap=new Map();let phCtx=null,phCur=null,phDelT=0;
+const phKey=c=>(+c[0]).toFixed(6)+','+(+c[1]).toFixed(6);
+const phTotal=()=>{let n=0;phMap.forEach(a=>{n+=a.length});return n};
+function phInfoRender(){
+  const n=phTotal(),sz=[...phMap.values()].flat().reduce((a,p)=>a+(p.size||0),0);
+  $('phInfo').textContent=n?B(n+' صورة في هذا المشروع (~'+(sz/1048576).toFixed(1)+' ميغابايت). تُحفظ على هذا الجهاز فقط.',n+' photo(s) in this project (~'+(sz/1048576).toFixed(1)+' MB). Stored on this device only.'):B('لا توجد صور. اضغط نقطة على الخريطة ثم «إضافة صورة».','No photos. Tap a point on the map, then "Add photo".');
+}
+async function phLoad(){
+  phMap.forEach(a=>a.forEach(p=>URL.revokeObjectURL(p.url)));phMap.clear();
+  if(curId){try{(await PDB.byPid(curId)).sort((a,b)=>a.t-b.t).forEach(p=>{const a=phMap.get(p.key)||[];a.push({id:p.id,name:p.name,t:p.t,size:p.blob.size,blob:p.blob,url:URL.createObjectURL(p.blob),w:p.w,h:p.h});phMap.set(p.key,a)})}catch(_){}}
+  phInfoRender();
+}
+function phHTML(c){
+  const k=phKey(c),a=phMap.get(k)||[];
+  return '<div class="phbox" data-k="'+esc(k)+'">'+a.map((p,i)=>`<img class="phth" data-i="${i}" src="${p.url}" alt="">`).join('')+'<div><button type="button" class="phadd">📷 '+B('إضافة صورة','Add photo')+'</button></div></div>';
+}
+async function phResize(file){
+  const url=URL.createObjectURL(file);
+  try{
+    const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>no(Error('image'));i.src=url});
+    const k=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),w=Math.round(im.naturalWidth*k),h=Math.round(im.naturalHeight*k);
+    const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);
+    const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.82));
+    if(!blob)throw Error('blob');return{blob,w,h};
+  }finally{URL.revokeObjectURL(url)}
+}
+async function phAdd(key,name,files){
+  let n=0;
+  for(const f of files){
+    try{
+      const r=await phResize(f),rec={id:newPid(),pid:curId,key,name,t:Date.now(),w:r.w,h:r.h,blob:r.blob};
+      await PDB.put(rec);
+      const a=phMap.get(key)||[];a.push({id:rec.id,name,t:rec.t,size:r.blob.size,blob:r.blob,url:URL.createObjectURL(r.blob),w:r.w,h:r.h});phMap.set(key,a);n++;
+    }catch(e){toast(B('تعذّر حفظ الصورة: ','Could not save the photo: ')+((e&&e.message)||e),4000)}
+  }
+  phInfoRender();
+  if(n){toast(B('أُضيفت '+n+' صورة.','Added '+n+' photo(s).'),2000);const x=shown.find(s=>phKey(s.c)===key);if(x){map.closePopup();setTimeout(()=>{try{x.m.openPopup()}catch(_){}},50)}}
+}
+$('phIn').addEventListener('change',()=>{const f=[...$('phIn').files];$('phIn').value='';if(phCtx&&f.length)phAdd(phCtx.key,phCtx.name,f)});
+function phShow(){
+  const a=phMap.get(phCur.key)||[];
+  if(!a.length){$('phView').hidden=true;return}
+  phCur.i=Math.max(0,Math.min(a.length-1,phCur.i));const p=a[phCur.i];
+  $('phImg').src=p.url;$('phCap').textContent=(p.name||phCur.key)+' — '+new Date(p.t).toLocaleString()+' ('+(phCur.i+1)+'/'+a.length+')';
+  $('phDel').textContent=B('حذف','Delete');$('phView').hidden=false;
+}
+document.addEventListener('click',e=>{
+  const t=e.target;if(!t||!t.closest)return;
+  const add=t.closest('.phadd'),th=t.closest('.phth');
+  if(add){const box=add.closest('.phbox'),k=box.dataset.k,x=shown.find(s=>phKey(s.c)===k);phCtx={key:k,name:x?String(x.lab):k};$('phIn').click();e.stopPropagation()}
+  else if(th){const box=th.closest('.phbox');phCur={key:box.dataset.k,i:+th.dataset.i};phDelT=0;phShow();e.stopPropagation()}
+},true);
+$('phX').onclick=()=>{$('phView').hidden=true};
+$('phPrev').onclick=()=>{phCur.i--;phDelT=0;phShow()};
+$('phNext').onclick=()=>{phCur.i++;phDelT=0;phShow()};
+$('phDel').onclick=async()=>{
+  if(Date.now()-phDelT>3500){phDelT=Date.now();$('phDel').textContent=B('اضغط للتأكيد','Press to confirm');return}
+  phDelT=0;const a=phMap.get(phCur.key)||[],p=a[phCur.i];if(!p)return;
+  try{await PDB.del(p.id)}catch(_){}
+  URL.revokeObjectURL(p.url);a.splice(phCur.i,1);if(!a.length)phMap.delete(phCur.key);
+  phInfoRender();phShow();
+};
+document.addEventListener('keydown',e=>{if(!$('phView').hidden){if(e.key==='Escape'){$('phView').hidden=true;e.preventDefault()}else if(e.key==='ArrowLeft'){$('phPrev').click()}else if(e.key==='ArrowRight'){$('phNext').click()}}});
+$('phZip').onclick=async()=>{
+  if(!phTotal()){toast(B('لا توجد صور للتصدير.','No photos to export.'),2500);return}
+  if(typeof JSZip==='undefined'){toast(B('مكتبة ZIP غير محمّلة','ZIP library not loaded'),4000);return}
+  const z=new JSZip(),csv=['File,Point,Lat,Lon,Date'],safe=t=>String(t).replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,50)||'point';
+  const used=new Set();
+  phMap.forEach((a,k)=>{a.forEach((p,i)=>{
+    let fn=safe(p.name||k)+'_'+(i+1)+'.jpg',n=1;while(used.has(fn))fn=safe(p.name||k)+'_'+(i+1)+'_'+(++n)+'.jpg';used.add(fn);
+    z.file('photos/'+fn,p.blob);const [la,lo]=k.split(',');
+    csv.push([fn,'"'+String(p.name||'').replace(/"/g,'""')+'"',la,lo,new Date(p.t).toISOString()].join(','));
+  })});
+  z.file('photos.csv','﻿'+csv.join('\n'));
+  download('photos.zip',await z.generateAsync({type:'blob'}),'application/zip');
+};
+let phClrT=0;
+$('phClr').onclick=async()=>{
+  if(!phTotal()){toast(B('لا توجد صور.','No photos.'),2000);return}
+  if(Date.now()-phClrT>3500){phClrT=Date.now();$('phClr').textContent=B('اضغط مرة أخرى للحذف','Press again to delete');return}
+  phClrT=0;$('phClr').textContent=T('حذف كل الصور');
+  try{await PDB.delPid(curId)}catch(_){}
+  await phLoad();toast(B('حُذفت كل صور المشروع.','All project photos deleted.'),2500);
+};
+{const _ap=applyProject;applyProject=function(){const r=_ap.apply(this,arguments);phLoad();return r}}
+{const _bo=buildOut;buildOut=function(){const out=_bo.apply(this,arguments);if(phTotal())out.forEach((o,i)=>{if(shown[i])o.Photos=(phMap.get(phKey(shown[i].c))||[]).length});return out}}
+
+/* ---------- العمل بدون إنترنت ---------- */
+const OFF_KB=22;
+function offUrlFn(layer){
+  let u=layer._url;if(!u)return null;
+  u=u.replace('{level}','{z}').replace('{row}','{y}').replace('{col}','{x}');
+  if(/\{(?!x\}|y\}|z\}|s\}|r\})/.test(u))return null;
+  const sd=(layer._subdomains&&layer._subdomains.length)?layer._subdomains:[''];
+  return(x,y,z)=>u.replace('{s}',sd[Math.abs(x+y)%sd.length]).replace('{r}','').replace('{x}',x).replace('{y}',y).replace('{z}',z);
+}
+/* خطة التنزيل: قائمة روابط بلا تكرار، مع سقف للعدد */
+function offPlan(fns,b,z0,z1,proj,cap){
+  const urls=[];let total=0;
+  for(const f of fns){
+    const seen=new Set();
+    for(let z=z0;z<=z1;z++){
+      const zz=Math.min(z,f.maxZ);if(seen.has(zz))continue;seen.add(zz);
+      const a=proj(b.n,b.w,zz),c=proj(b.s,b.e,zz),N=Math.pow(2,zz);
+      const x0=Math.max(0,Math.floor(a[0]/256)),x1=Math.min(N-1,Math.floor(c[0]/256)),y0=Math.max(0,Math.floor(a[1]/256)),y1=Math.min(N-1,Math.floor(c[1]/256));
+      for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){total++;if(urls.length<cap)urls.push(f.fn(x,y,zz))}
+    }
+  }
+  return{urls:[...new Set(urls)],total};
+}
+function offCurrent(){
+  const fns=[];
+  map.eachLayer(l=>{if(l instanceof L.TileLayer&&l._url){const fn=offUrlFn(l);if(fn)fns.push({fn,maxZ:l.options.maxNativeZoom||l.options.maxZoom||19})}});
+  const bd=map.getBounds(),z0=Math.round(map.getZoom()),z1=z0+(+$('offZ').value);
+  return{fns,b:{n:bd.getNorth(),s:bd.getSouth(),w:bd.getWest(),e:bd.getEast()},z0,z1,proj:(la,lo,z)=>{const p=map.project(L.latLng(la,lo),z);return[p.x,p.y]}};
+}
+let offBusy=false,offStop=false;
+function offEstimate(){
+  try{
+    if(!$('offInfo'))return;
+    const o=offCurrent(),pl=offPlan(o.fns,o.b,o.z0,o.z1,o.proj,6000);
+    $('offInfo').textContent=B('≈ '+pl.total+' صورة خريطة (~'+Math.round(pl.total*OFF_KB/1024)+' ميغابايت)'+(pl.total>6000?' — أكثر من الحد (6000)، قلّل التكبير الإضافي أو قرّب الخريطة.':''),'≈ '+pl.total+' map tiles (~'+Math.round(pl.total*OFF_KB/1024)+' MB)'+(pl.total>6000?' — over the limit (6000): reduce extra zoom or zoom in.':''));
+  }catch(_){}
+}
+function offStatus(){
+  const on=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+  $('offSt').textContent=!('serviceWorker' in navigator)?B('هذا المتصفح لا يدعم العمل بدون إنترنت.','This browser does not support offline use.'):
+    location.protocol==='file:'?B('افتح التطبيق من الرابط (GitHub Pages) وليس كملف لتفعيل العمل بدون إنترنت.','Open the app from its link (GitHub Pages), not as a file, to enable offline use.'):
+    on?B('مفعّل: التطبيق والمكتبات محفوظة، وتُخزَّن الخرائط التي تتصفحها. نزّل منطقة العمل قبل النزول للميدان.','Active: the app and libraries are saved, and maps you browse are cached. Download your work area before going to the field.'):
+    B('سيُفعَّل بعد إعادة تحميل الصفحة مرة واحدة وأنت متصل بالإنترنت.','Will activate after one reload while online.');
+}
+$('offDl').onclick=async()=>{
+  if(offBusy){offStop=true;return}
+  if(!window.caches){toast(B('يتطلب العمل بدون إنترنت فتح التطبيق من الرابط (GitHub Pages).','Offline use needs the app opened from its link (GitHub Pages).'),4000);return}
+  const o=offCurrent(),pl=offPlan(o.fns,o.b,o.z0,o.z1,o.proj,6000);
+  if(!pl.urls.length){toast(B('لا توجد طبقة خريطة قابلة للتنزيل.','No downloadable map layer.'),3000);return}
+  if(pl.total>6000){toast(B('العدد كبير جدًا ('+pl.total+'). قلّل التكبير الإضافي أو قرّب الخريطة.','Too many tiles ('+pl.total+'). Reduce extra zoom or zoom in.'),4500);return}
+  offBusy=true;offStop=false;$('offDl').textContent=B('إيقاف','Stop');
+  const c=await caches.open('gotoxy-tiles');let done=0,fail=0,skip=0,corsFail=0,i=0;
+  const worker=async()=>{
+    while(i<pl.urls.length&&!offStop){
+      const u=pl.urls[i++];
+      try{
+        if(await c.match(u)){skip++}
+        else{const r=await fetch(u,{mode:'cors'});if(r.ok){await c.put(u,r);done++}else fail++}
+      }catch(e){fail++;corsFail++;if(corsFail>=8&&done===0){offStop=true}}
+      $('offInfo').textContent=B('جارٍ التنزيل… ','Downloading… ')+(done+skip+fail)+' / '+pl.urls.length;
+    }
+  };
+  await Promise.all(Array.from({length:6},worker));
+  offBusy=false;$('offDl').textContent=T('تنزيل المنطقة الظاهرة');
+  $('offInfo').textContent=(corsFail>=8&&done===0)?B('تعذّر التنزيل: مزوّد هذه الطبقة (مثل Google) لا يسمح بالتخزين. استخدم صور Esri الجوية.','Download failed: this layer provider (e.g. Google) does not allow caching. Use the Esri imagery.'):
+    B('اكتمل: '+done+' جديدة، '+skip+' موجودة مسبقًا'+(fail?'، '+fail+' فشلت':'')+(offStop?' (أُوقف)':''),'Done: '+done+' new, '+skip+' already stored'+(fail?', '+fail+' failed':'')+(offStop?' (stopped)':''));
+};
+let offClrT=0;
+$('offClr').onclick=async()=>{
+  if(Date.now()-offClrT>3500){offClrT=Date.now();$('offClr').textContent=B('اضغط مرة أخرى للمسح','Press again to clear');return}
+  offClrT=0;$('offClr').textContent=T('مسح الخرائط المخزّنة');
+  try{await caches.delete('gotoxy-tiles')}catch(_){}
+  toast(B('مُسحت الخرائط المخزّنة.','Stored maps cleared.'),2500);
+};
+$('offZ').addEventListener('change',offEstimate);map.on('moveend',offEstimate);
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+  navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(offStatus).catch(()=>{});
+  navigator.serviceWorker.addEventListener('controllerchange',offStatus);
+}
+offStatus();offEstimate();
+
 function projSnapshot(){
   const cfg={};
   ['ctype','cfCrs','cvCustom','cx','cy','cz','clab','ccol','cpath','cfilt'].forEach(id=>cfg[id]=$(id).value);
@@ -2581,6 +2784,7 @@ $('projDel').onclick=async()=>{
   clearTimeout(pdelT);delete $('projDel').dataset.arm;$('projDel').textContent=T('حذف المشروع');
   const gone=curName;
   try{await DB.del(curId)}catch(_){}
+  try{await PDB.delPid(curId)}catch(_){}
   const rest=(await DB.all().catch(()=>[])).sort((a,b)=>b.updated-a.updated);
   if(rest.length)await projSwitch(rest[0].id);
   else{curId=newPid();curName=B('مشروع 1','Project 1');$('projName').value=curName;applyProject({v:1,rows:[],drawn:[],imp:[],visits:[]},true);markDirty();await projFlush()}
@@ -2752,6 +2956,23 @@ bmRender();
 
 /* ---------- الدليل: سطر قصير تحت كل زر + شرح مفصّل لكل زر وقائمة في وضع الدليل ---------- */
 const GUIDE={"qgo": {"ar": ["", "الانتقال السريع", "اكتب أو الصق إحداثيًا ثم اضغط Enter للانتقال إليه فورًا.<br>• Lat, Long عشري: <span dir=\"ltr\">30.5081, 47.7835</span><br>• DMS: <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span><br>• UTM: الشرق ثم الشمال (مثل <span dir=\"ltr\">766000 3375000</span>)، والمنطقة تؤخذ من خانة «المنطقة» في تبويب الإحداثي.<br>يُحفظ كل إحداثي في السجل. إذا لم تُفهم الصيغة تظهر رسالة خطأ."], "en": ["", "Quick go-to", "Type or paste a coordinate and press Enter to jump straight to it.<br>• Decimal Lat, Long: <span dir=\"ltr\">30.5081, 47.7835</span><br>• DMS: <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span><br>• UTM: Easting then Northing (e.g. <span dir=\"ltr\">766000 3375000</span>); the zone comes from the Zone box in the Coordinate tab.<br>Every coordinate is saved to the log. If the format is not understood an error message appears."]}, "langBtn": {"ar": ["", "تبديل اللغة", "يبدّل لغة الواجهة بين العربية والإنجليزية ويقلب الاتجاه (يمين-يسار أو يسار-يمين). يشمل الأزرار والقوائم والرسائل وهذا الدليل. يُحفظ اختيارك في المتصفح."], "en": ["", "Switch language", "Switches the interface between Arabic and English and flips the layout direction (right-to-left or left-to-right). It covers buttons, menus, messages and this guide. Your choice is remembered in the browser."]}, "tbGo": {"ar": ["إلى إحداثي", "الانتقال إلى إحداثي", "يفتح تبويب «الإحداثي» ويضع المؤشر في خانة الإدخال.<br>1) اختر الصيغة (Lat/Long أو UTM).<br>2) اكتب الإحداثي أو الصقه.<br>3) اضغط «انتقل» أو Enter: تقفز الخريطة إلى النقطة ويظهر دبوس مرقّم.<br>تُحفظ النقطة في السجل تلقائيًا."], "en": ["to coordinate", "Go to coordinate", "Opens the Coordinate tab and puts the cursor in the input box.<br>1) Pick the format (Lat/Long or UTM).<br>2) Type or paste the coordinate.<br>3) Press Go or Enter: the map jumps to the point and a numbered pin appears.<br>The point is saved to the log automatically."]}, "tbLoc": {"ar": ["GPS", "موقعي الحالي", "يحدد موقعك الحالي. يتابع القراءات ويعتمد الأدق، ويتوقف تلقائيًا عند ±5 م أو بعد 30 ثانية. تظهر دائرة الدقة حول موقعك.<br>• يحتاج إلى إذن الموقع في المتصفح.<br>• على حاسوب بلا GPS تكون الدقة عشرات الأمتار أو أكثر لأن الموقع يأتي من Wi-Fi والشبكة.<br>• اضغط الزر مرة ثانية أثناء التحديد لاعتماد أفضل قراءة الآن."], "en": ["GPS", "My current location", "Finds your current position. It keeps collecting readings, uses the most accurate one, and stops automatically at ±5 m or after 30 seconds. An accuracy circle is drawn around you.<br>• Needs the browser location permission.<br>• On a computer without GPS the accuracy is tens of metres or worse because the position comes from Wi-Fi and the network.<br>• Press the button again while it is working to accept the best reading now."]}, "tbCam": {"ar": ["من صورة", "قراءة إحداثي من صورة", "يقرأ إحداثيًا مكتوبًا في صورة (OCR).<br>1) اختر صورة أو التقطها.<br>2) ارسم مربعًا حول الإحداثي المطلوب فقط.<br>3) اضغط «اقرأ المربع المحدد» وصحّح النص إن لزم.<br>4) اضغط «استخرج الإحداثي من النص».<br>تنبيه: يقرأ الأرقام اللاتينية (1 2 3) فقط. راجع الأرقام قبل الاعتماد عليها."], "en": ["from photo", "Read a coordinate from a photo", "Reads a coordinate written in a photo (OCR).<br>1) Choose or take a photo.<br>2) Draw a box around only the coordinate you want.<br>3) Press Read selected box and correct the text if needed.<br>4) Press Extract coordinate from text.<br>Note: it reads Latin digits (1 2 3) only. Check the numbers before relying on them."]}, "tbLog": {"ar": ["نقاطك", "سجل الإحداثيات", "يفتح سجل الإحداثيات: كل نقطة انتقلت إليها تُحفظ تلقائيًا في متصفحك. تنتقل بينها بزري السابق والتالي أو بالنقر على الصف، وتصدّرها CSV أو KML أو تفتحها كجدول. يبقى السجل بعد إغلاق الصفحة."], "en": ["your points", "Coordinate log", "Opens the coordinate log: every point you jump to is saved automatically in your browser. Move through them with Previous and Next or by clicking a row, export them as CSV or KML, or open them as a table. The log stays after you close the page."]}, "tlPan": {"ar": ["تنقّل", "تحريك الخريطة", "الوضع العادي: اسحب الخريطة، قرّب وبعّد، وانقر على النقاط لفتح تفاصيلها. زر Esc يعيدك إليه من أي أداة.<br>يضيء الزر عندما لا تكون أي أداة قياس مفعّلة."], "en": ["navigate", "Pan the map", "Normal mode: drag the map, zoom, and click points to open their details. Esc returns you here from any tool.<br>The button is highlighted when no measuring tool is active."]}, "tlLine": {"ar": ["بين نقاط", "قياس مسافة", "انقر نقطتين أو أكثر على الخريطة. يظهر طول كل مقطع والاتجاه والإجمالي في تبويب «القياس». يمكنك النقر على دبوس ليُقاس من مركزه تمامًا (لا تُفتح نافذته أثناء القياس). لإنهاء القياس اضغط «تحريك» أو Esc."], "en": ["between points", "Measure distance", "Click two or more points on the map. The length of each segment, the bearing and the total appear in the Measure tab. You can click a pin to measure from its exact centre (its popup does not open while measuring). To finish press Pan or Esc."]}, "tlPoly": {"ar": ["ومحيط", "قياس مساحة", "انقر ثلاث نقاط أو أكثر. تظهر المساحة بالمتر المربع والهكتار والدونم مع المحيط. المساحة تُحسب على إسقاط UTM فهي دقيقة لمنطقتك."], "en": ["and perimeter", "Measure area", "Click three or more points. The area is shown in square metres, hectares and dunums, together with the perimeter. The area is computed on a UTM projection so it is accurate for your region."]}, "tlP2L": {"ar": ["أقرب مسافة", "نقطة إلى المسار", "يحسب أقصر مسافة بين نقطة تنقر عليها ومسار مرسوم من ملف Excel. ارسم المسار أولًا من تبويب «البيانات» (اختر «كل النقاط بترتيب الصفوف» ثم «ارسم»). تظهر المسافة والمسافة التراكمية على المسار للنقطة الأقرب."], "en": ["nearest", "Point to path", "Calculates the shortest distance between a point you click and a path drawn from an Excel file. Draw the path first from the Data tab (choose All points in row order, then Draw). The distance and the chainage along the path of the nearest point are shown."]}, "tbSaveDraw": {"ar": ["للتصدير", "حفظ الرسم", "يثبّت الخط أو المضلع الحالي كرسم محفوظ: يبقى على الخريطة ويدخل في تصدير KML للرسومات ويُحفظ مع المشروع."], "en": ["to export", "Save drawing", "Keeps the current line or polygon as a saved drawing: it stays on the map, is included in the drawings KML export and is saved with the project."]}, "tbClearDraw": {"ar": ["القياس", "مسح القياس", "يمسح القياس الجاري فقط. الرسومات المحفوظة لا تتأثر، وتُمسح من تبويب «القياس» بزر «مسح المحفوظ»."], "en": ["measure", "Clear measurement", "Clears only the measurement in progress. Saved drawings are not affected; delete them with Clear saved in the Measure tab."]}, "tbWb": {"ar": ["صور قديمة", "صور جوية تاريخية", "صور جوية تاريخية من Esri Wayback. يفتح تبويب «الصور والمشروع» ويحمّل قائمة الإصدارات. اختر إصدارًا لعرضه وغيّر الشفافية لمقارنته بالصورة الحالية. التاريخ المعروض هو تاريخ نشر الإصدار وليس تاريخ التقاط الصورة. يضيء الزر عندما تكون صورة تاريخية معروضة."], "en": ["past imagery", "Historical imagery", "Historical aerial imagery from Esri Wayback. Opens the Imagery and project tab and loads the list of releases. Pick a release to show it and change the opacity to compare it with current imagery. The date shown is the release date, not the capture date. The button is highlighted while a historical layer is shown."]}, "tbExt": {"ar": ["كل النقاط", "المدى الكامل", "يكبّر الخريطة لتشمل كل النقاط المستوردة والسجل والرسومات المحفوظة."], "en": ["all points", "Zoom to all", "Zooms the map to include all imported points, the log and the saved drawings."]}, "tbImp": {"ar": ["ملف نقاط", "استيراد ملف", "يستورد نقاطًا من ملف: Excel (xlsx/xls) أو CSV أو KML أو KMZ أو GeoJSON أو GeoPackage (gpkg) أو Shapefile (ملف ZIP، أو حدّد .shp و .dbf و .prj معًا). بعد الاستيراد اختر عمودي الإحداثي ونوعه (Lat/Long أو UTM) ثم «ارسم». يمكنك استخدام أي عمود كملصق أو للتلوين، وتجميع النقاط وفلترتها."], "en": ["points file", "Import file", "Imports points from a file: Excel (xlsx/xls), CSV, KML, KMZ, GeoJSON or Shapefile (ZIP). After importing, choose the coordinate columns and their type (Lat/Long or UTM) then press Draw. Any column can be used as a label or for colouring, and points can be clustered and filtered."]}, "tbQc": {"ar": ["تدقيق", "فحص الجودة", "يفحص جودة النقاط المستوردة: الصفوف غير الصالحة والنقاط المكررة والنقاط الشاذة البعيدة والقفزات غير الطبيعية بين نقطتين متتاليتين، مع روابط للصفوف المعنية. يحتاج إلى ملف مستورد."], "en": ["check", "Quality check", "Checks the quality of the imported points: invalid rows, duplicate points, distant outliers and unusual jumps between consecutive points, with links to the rows concerned. Needs an imported file."]}, "tbExp": {"ar": ["النقاط", "تصدير النقاط", "يصدّر النقاط المستوردة إلى Excel أو CSV أو KML أو GeoJSON مع إحداثياتها بصيغتي Lat/Long وUTM. اختر الصيغة من تبويب «البيانات» قبل الضغط."], "en": ["points", "Export points", "Exports the imported points to Excel, CSV, KML or GeoJSON with their coordinates in both Lat/Long and UTM. Choose the format in the Data tab before pressing."]}, "tbPsave": {"ar": ["المشروع", "حفظ المشروع", "يحفظ كل شيء في ملف JSON: النقاط المستوردة وإعداداتها والرسومات والسجل وموضع الخريطة، لتفتحه لاحقًا بزر «فتح»."], "en": ["project", "Save project", "Saves everything into a JSON file: imported points and their settings, drawings, the log and the map view, so you can reopen it later with Open."]}, "tbPopen": {"ar": ["مشروع", "فتح مشروع", "يفتح ملف مشروع حفظته سابقًا ويعيد النقاط والرسومات والسجل وموضع الخريطة."], "en": ["project", "Open project", "Opens a project file you saved earlier and restores the points, drawings, log and map view."]}, "tbImg": {"ar": ["للتقارير", "صورة الخريطة", "ينشئ صورة PNG للخريطة المعروضة مع سهم الشمال ومقياس الرسم وعنوان اختياري (من تبويب «الصور والمشروع»). مناسبة للتقارير. قد تمنع بعض المتصفحات التقاط صور الخرائط."], "en": ["for reports", "Map image", "Creates a PNG of the map in view with a north arrow, scale bar and an optional title (set in the Imagery and project tab). Suitable for reports. Some browsers may block capturing map images."]}, "tbPanel": {"ar": ["إخفاء/إظهار", "اللوحة الجانبية", "يخفي اللوحة الجانبية أو يظهرها لتوسيع الخريطة. يضيء الزر عندما تكون اللوحة ظاهرة."], "en": ["show/hide", "Side panel", "Hides or shows the side panel to give the map more room. The button is highlighted while the panel is visible."]}, "tbHelp": {"ar": ["شرح الأزرار", "الدليل", ""], "en": ["guide", "Guide", ""]}, "zoomIn": {"ar": ["", "تكبير", "يقرّب الخريطة مستوى واحدًا. يمكنك أيضًا استخدام عجلة الفأرة أو التقريب بإصبعين. أقصى تفصيل للصور الجوية حوالي المستوى 19–20."], "en": ["", "Zoom in", "Zooms in one level. You can also use the mouse wheel or pinch with two fingers. The most detailed aerial imagery is around zoom level 19–20."]}, "zoomOut": {"ar": ["", "تصغير", "يبعّد الخريطة مستوى واحدًا."], "en": ["", "Zoom out", "Zooms out one level."]}, "loc": {"ar": ["", "موقعي الحالي (على الخريطة)", "نفس زر «موقعي» في الشريط العلوي: يحدد موقعك الحالي بدقة متحسنة ويرسم دائرة الدقة."], "en": ["", "My location (on the map)", "The same as the My location button in the ribbon: finds your position with improving accuracy and draws the accuracy circle."]}, "bmBtn": {"ar": ["", "قائمة الخرائط", "يفتح قائمة خرائط الأساس: صورة Esri، صورة Google، Google هجين، OpenStreetMap، شوارع Esri، طبوغرافية Esri. تحت كل خيار سطر شرح قصير، وزر «تفاصيل» يعرض شرحًا أوسع. في وضع الدليل اضغط أي خيار لقراءة تفاصيله."], "en": ["", "Maps menu", "Opens the basemap list: Esri imagery, Google imagery, Google hybrid, OpenStreetMap, Esri streets, Esri topographic. Each option has a short description and a Details button for more. In guide mode click any option to read its details."]}, "namesBtn": {"ar": ["", "أسماء الأماكن", "يضيف أسماء الأماكن فوق الصور الجوية (Esri وGoogle). يكون الزر معتمًا مع الخرائط التي تحتوي الأسماء أصلًا ويضيء عند التشغيل."], "en": ["", "Place names", "Adds place names over the aerial imagery (Esri and Google). The button is dimmed on maps that already contain names and is highlighted when on."]}, "tab_go": {"ar": ["", "تبويب الإحداثي", "إدخال الإحداثي والانتقال إليه، وسجل النقاط، وقراءة الإحداثي من صورة."], "en": ["", "Coordinate tab", "Enter a coordinate and jump to it, the points log, and reading a coordinate from a photo."]}, "tab_measure": {"ar": ["", "تبويب القياس", "أدوات المسافة والمساحة والنقطة إلى المسار، والرسومات المحفوظة وتصديرها، ونتائج القياس."], "en": ["", "Measure tab", "Distance, area and point-to-path tools, saved drawings and their export, and the measurement results."]}, "tab_data": {"ar": ["", "تبويب البيانات", "استيراد الملفات (Excel وغيره)، اختيار الأعمدة، الملصقات والتلوين والمسار والتجميع، فحص الجودة، التصدير، وجدول النقاط."], "en": ["", "Data tab", "Import files (Excel and others), choose columns, labels, colouring, path and clustering, quality check, export, and the points table."]}, "tab_img": {"ar": ["", "تبويب الصور والمشروع", "الصور الجوية التاريخية (Wayback)، حفظ المشروع وفتحه، وتصدير صورة الخريطة."], "en": ["", "Imagery and project tab", "Historical imagery (Wayback), saving and opening projects, and exporting the map image."]}, "mode": {"ar": ["", "صيغة الإحداثي", "اختر طريقة الإدخال: Lat/Long (عشري أو درجات ودقائق وثوانٍ) أو UTM (منطقة وشرق وشمال)."], "en": ["", "Coordinate format", "Choose how you enter coordinates: Lat/Long (decimal or degrees-minutes-seconds) or UTM (zone, easting, northing)."]}, "ll": {"ar": ["", "خانة Lat, Long", "اكتب الإحداثي: <span dir=\"ltr\">30.5081, 47.7835</span> أو بالدرجات <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span>. الأول خط العرض ثم خط الطول. يمكنك لصق عدة أسطر دفعة واحدة فتُضاف كلها إلى السجل. تقبل الخانة أيضًا إحداثي UTM إذا كتبت رقمين كبيرين."], "en": ["", "Lat, Long box", "Enter the coordinate: <span dir=\"ltr\">30.5081, 47.7835</span> or in degrees <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span>. Latitude comes first, then longitude. You can paste several lines at once and all are added to the log. The box also accepts a UTM coordinate if you type two large numbers."]}, "zone": {"ar": ["", "المنطقة (Zone)", "منطقة UTM. العراق غالبًا في 38 (37 غربًا و39 شرقًا). اختيار منطقة خاطئة يزيح الموقع مئات الكيلومترات."], "en": ["", "Zone", "The UTM zone. Iraq is mostly in 38 (37 in the west, 39 in the east). A wrong zone shifts the location by hundreds of kilometres."]}, "e": {"ar": ["", "Easting (X)", "الإحداثي الشرقي بالمتر، من 6 أرقام عادةً (مثل 766000). يمكنك لصق الإحداثيين معًا في هذه الخانة."], "en": ["", "Easting (X)", "The easting in metres, usually 6 digits (e.g. 766000). You can paste both values together into this box."]}, "n": {"ar": ["", "Northing (Y)", "الإحداثي الشمالي بالمتر، من 7 أرقام (مثل 3375000). إذا عكست الشرق والشمال يصحح التطبيق ذلك تلقائيًا."], "en": ["", "Northing (Y)", "The northing in metres, 7 digits (e.g. 3375000). If you swap easting and northing the app corrects it automatically."]}, "go": {"ar": ["", "انتقل", "ينتقل إلى الإحداثي المُدخل، ويضع دبوسًا مرقّمًا، ويحفظه في السجل، ويعرض إحداثياته بكل الصيغ (عشري وDMS وUTM) في نافذة الدبوس."], "en": ["", "Go", "Jumps to the entered coordinate, drops a numbered pin, saves it in the log and shows its coordinates in every format (decimal, DMS, UTM) in the pin popup."]}, "addm": {"ar": ["", "أضف للقياس", "يضيف الإحداثي المُدخل كنقطة قياس دون الحاجة إلى النقر على الخريطة."], "en": ["", "Add to measurement", "Adds the entered coordinate as a measurement point without clicking on the map."]}, "camb": {"ar": ["", "زر الكاميرا", "يختار صورة لقراءة الإحداثي منها (OCR)، مثل زر «كاميرا» في الشريط. ارسم مربعًا حول الإحداثي المطلوب."], "en": ["", "Camera button", "Chooses a photo to read the coordinate from (OCR), like the Camera button in the ribbon. Draw a box around the coordinate you want."]}, "vprev": {"ar": ["", "السابق", "ينتقل إلى النقطة السابقة في سجل الإحداثيات ويكبّر عليها. مفيد عند فحص عدة نقاط متتالية."], "en": ["", "Previous", "Moves to the previous point in the coordinate log and zooms to it. Useful when checking several points in a row."]}, "vnext": {"ar": ["", "التالي", "ينتقل إلى النقطة التالية في سجل الإحداثيات ويكبّر عليها."], "en": ["", "Next", "Moves to the next point in the coordinate log and zooms to it."]}, "vlist": {"ar": ["", "قائمة السجل", "اضغط على صف للانتقال إلى نقطته، وعلى ✕ لحذفها من السجل."], "en": ["", "Log list", "Click a row to jump to its point and ✕ to remove it from the log."]}, "vcsv": {"ar": ["", "تصدير السجل CSV", "ينزّل السجل ملف CSV بالإحداثيات بصيغتي Lat/Long وUTM."], "en": ["", "Export log as CSV", "Downloads the log as a CSV file with coordinates in both Lat/Long and UTM."]}, "vkml": {"ar": ["", "تصدير السجل KML", "ينزّل السجل ملف KML يُفتح في Google Earth مع نقطة لكل إحداثي."], "en": ["", "Export log as KML", "Downloads the log as a KML file that opens in Google Earth with one placemark per coordinate."]}, "vtbl": {"ar": ["", "فتح السجل كجدول", "يفتح السجل كجدول في تبويب «البيانات» لتستخدم أدوات الملصقات والتلوين وفحص الجودة والتصدير عليه."], "en": ["", "Open log as table", "Opens the log as a table in the Data tab so you can use labels, colouring, quality check and export on it."]}, "vclr": {"ar": ["", "مسح السجل", "يمسح السجل بالكامل. اضغط مرتين للتأكيد حتى لا تحذفه بالخطأ."], "en": ["", "Clear log", "Clears the whole log. Press twice to confirm so you do not delete it by accident."]}, "ocrsel": {"ar": ["", "اقرأ المربع المحدد", "يقرأ ما داخل المربع الذي رسمته فقط، وهو الأدق. إن لم تنجح القراءة جرّب مربعًا أكبر قليلًا أو أصغر."], "en": ["", "Read selected box", "Reads only what is inside the box you drew, which is the most accurate. If it fails try a slightly larger or smaller box."]}, "ocrall": {"ar": ["", "اقرأ الصورة كاملة", "يقرأ الصورة كلها. قد يخلط الأرقام إذا كانت فيها نصوص كثيرة، فالمربع المحدد أفضل."], "en": ["", "Read whole image", "Reads the whole image. It may mix up numbers when there is a lot of text, so the selected box works better."]}, "ocrtxt": {"ar": ["", "النص المقروء", "النص كما قرأه البرنامج. صحّحه يدويًا إذا كان ناقصًا أو فيه خطأ ثم اضغط «استخرج الإحداثي من النص»."], "en": ["", "Recognised text", "The text as the program read it. Correct it by hand if something is missing or wrong, then press Extract coordinate from text."]}, "ocrgo": {"ar": ["", "استخرج الإحداثي من النص", "يستخرج الإحداثي من النص (UTM أو Lat/Long) ويملأ الخانات وينتقل إليه ويحفظه في السجل."], "en": ["", "Extract coordinate from text", "Extracts the coordinate from the text (UTM or Lat/Long), fills the boxes, jumps to it and saves it in the log."]}, "camclose": {"ar": ["", "إغلاق لوحة الصورة", "يغلق لوحة قراءة الصورة ويفرّغ الصورة من الذاكرة."], "en": ["", "Close photo panel", "Closes the photo-reading panel and releases the image."]}, "mmode": {"ar": ["", "نوع أداة القياس", "مسافة (خط)، مساحة (مضلع)، أو نقطة إلى المسار. يمكنك أيضًا اختيارها من الشريط العلوي."], "en": ["", "Measuring tool", "Distance (line), area (polygon) or point to path. You can also pick it from the ribbon."]}, "mtoggle": {"ar": ["", "بدء القياس بالنقر", "يشغّل القياس بالنقر على الخريطة أو يوقفه. يضيء الزر باللون البرتقالي عندما يكون القياس فعالًا."], "en": ["", "Start measuring by clicking", "Turns click-to-measure on or off. The button turns orange while measuring is active."]}, "mclear": {"ar": ["", "مسح", "يمسح القياس الجاري ويبدأ من جديد."], "en": ["", "Clear", "Clears the current measurement so you can start again."]}, "msave": {"ar": ["", "احفظ الرسم للتصدير", "يثبّت الخط أو المضلع الحالي كرسم محفوظ (برتقالي) يبقى على الخريطة ويُصدَّر ويُحفظ مع المشروع."], "en": ["", "Save drawing for export", "Keeps the current line or polygon as a saved (orange) drawing that stays on the map, can be exported and is saved with the project."]}, "mclrsaved": {"ar": ["", "مسح المحفوظ", "يحذف كل الرسومات المحفوظة من الخريطة ومن التصدير."], "en": ["", "Clear saved", "Deletes all saved drawings from the map and from the export."]}, "mexp": {"ar": ["", "تصدير الرسومات KML", "يصدّر الرسومات المحفوظة (خطوط ومضلعات) إلى ملف KML يفتح في Google Earth. هذا غير تصدير النقاط المستوردة الذي تجده في تبويب «البيانات»."], "en": ["", "Export drawings KML", "Exports the saved drawings (lines and polygons) to a KML file that opens in Google Earth. This is separate from exporting imported points, which is in the Data tab."]}, "file": {"ar": ["", "ملف النقاط", "اختر ملف Excel أو CSV أو KML أو KMZ أو GeoJSON أو Shapefile مضغوطًا (ZIP). بعد القراءة تظهر خيارات الأعمدة والعرض."], "en": ["", "Points file", "Choose an Excel, CSV, KML, KMZ, GeoJSON or zipped Shapefile. After reading, the column and display options appear."]}, "tpl": {"ar": ["", "تحميل قالب Excel", "ينزّل ملف Excel جاهزًا فيه الأعمدة المعتمدة (Name, Latitude, Longitude, Zone, Easting, Northing) وصفّان مثاليان، لتملأه بنقاطك."], "en": ["", "Download Excel template", "Downloads a ready Excel file with the supported columns (Name, Latitude, Longitude, Zone, Easting, Northing) and two example rows for you to fill with your points."]}, "clrpts": {"ar": ["", "مسح النقاط", "يمسح النقاط المستوردة والجدول والمسار وفحص الجودة من الخريطة. لا يمسح السجل ولا الرسومات المحفوظة."], "en": ["", "Clear points", "Removes the imported points, the table, the path and the quality check from the map. It does not clear the log or the saved drawings."]}, "ctype": {"ar": ["", "نوع الإحداثي في الملف", "اختر ما إذا كان الملف يحتوي Lat/Long أو UTM. يحاول التطبيق اكتشافه من أسماء الأعمدة."], "en": ["", "Coordinate type in the file", "Choose whether the file holds Lat/Long or UTM. The app tries to detect it from the column names."]}, "cx": {"ar": ["", "عمود الإحداثي الأول", "Latitude (أو Easting مع UTM). اختر العمود الذي يحتوي القيمة الأولى."], "en": ["", "First coordinate column", "Latitude (or Easting for UTM). Pick the column that holds the first value."]}, "cy": {"ar": ["", "عمود الإحداثي الثاني", "Longitude (أو Northing مع UTM). اختر العمود الذي يحتوي القيمة الثانية."], "en": ["", "Second coordinate column", "Longitude (or Northing for UTM). Pick the column that holds the second value."]}, "cz": {"ar": ["", "عمود المنطقة (Zone)", "لإحداثيات UTM: عمود فيه رقم المنطقة لكل صف. إذا اخترت «منطقة اللوحة» تُستخدم المنطقة المحددة في تبويب «الإحداثي»."], "en": ["", "Zone column", "For UTM coordinates: a column holding the zone number of each row. If you choose Panel zone, the zone selected in the Coordinate tab is used."]}, "clab": {"ar": ["", "عمود الملصق (Label)", "القيمة التي تُعرض كنص فوق كل نقطة على الخريطة (مثل Tag أو رقم النقطة). فعّل «إظهار الملصقات» لرؤيتها عند التكبير."], "en": ["", "Label column", "The value shown as text over each point on the map (such as a tag or point number). Turn on Show labels to see them when zoomed in."]}, "ccol": {"ar": ["", "تلوين حسب عمود", "يلوّن النقاط بحسب قيم عمود (مثل النوع). يظهر دليل الألوان تحت الأزرار."], "en": ["", "Colour by column", "Colours the points by the values of a column (such as the type). A colour legend appears under the buttons."]}, "cpath": {"ar": ["", "رسم مسار", "«كل النقاط بترتيب الصفوف» يربط النقاط بخط واحد بترتيب الصفوف ويحسب أطوال المقاطع والمسافة التراكمية، وهو ما تحتاجه أداة «نقطة إلى المسار»."], "en": ["", "Draw path", "All points in row order joins the points into one line in row order and calculates segment lengths and chainage, which the Point to path tool needs."]}, "cfilt": {"ar": ["", "بحث / فلترة", "اكتب جزءًا من أي قيمة في الصف لإظهار الصفوف المطابقة فقط على الخريطة وفي الجدول."], "en": ["", "Search / filter", "Type part of any value in the row to show only matching rows on the map and in the table."]}, "clabon": {"ar": ["", "إظهار الملصقات", "يعرض ملصق كل نقطة على الخريطة عند التكبير الكافي حتى لا تزدحم الشاشة."], "en": ["", "Show labels", "Shows each point label on the map when zoomed in enough so the screen does not get crowded."]}, "cchain": {"ar": ["", "المسافة التراكمية في الملصق", "يضيف المسافة التراكمية على المسار إلى ملصق كل نقطة. يعمل مع مسار «كل النقاط بترتيب الصفوف»."], "en": ["", "Chainage in label", "Adds the chainage along the path to each point label. Works with the All points in row order path."]}, "cclust": {"ar": ["", "تجميع النقاط", "يجمع النقاط المتقاربة في دوائر مرقّمة عند التبعيد، وتنفصل عند التكبير. مفيد مع مئات النقاط."], "en": ["", "Cluster points", "Groups nearby points into numbered circles when zoomed out; they separate as you zoom in. Useful with hundreds of points."]}, "cdraw": {"ar": ["", "ارسم", "يرسم النقاط على الخريطة بحسب الأعمدة والإعدادات المختارة. اضغطه بعد أي تغيير في الأعمدة أو الفلتر."], "en": ["", "Draw", "Draws the points on the map using the chosen columns and settings. Press it after changing columns or the filter."]}, "cqc": {"ar": ["", "فحص الجودة", "يعرض عدد الصفوف المرفوضة والمكررة والشاذة والقفزات غير الطبيعية، مع روابط للنقاط على الخريطة. أرقام الصفوف كما في Excel."], "en": ["", "Quality check", "Shows the number of rejected, duplicate, outlier rows and unusual jumps, with links to the points on the map. Row numbers match Excel."]}, "cfmt": {"ar": ["", "صيغة التصدير", "Excel أو CSV أو KML (Google Earth) أو GeoJSON. يضاف إلى كل نقطة إحداثياتها بصيغتي Lat/Long وUTM."], "en": ["", "Export format", "Excel, CSV, KML (Google Earth) or GeoJSON. Each point also gets its coordinates in Lat/Long and UTM."]}, "cexp": {"ar": ["", "تصدير", "ينزّل النقاط الظاهرة بالصيغة المختارة مع كل أعمدتها الأصلية وإحداثياتها المحوّلة."], "en": ["", "Export", "Downloads the visible points in the chosen format with all their original columns and converted coordinates."]}, "wbload": {"ar": ["", "تحميل قائمة الإصدارات", "يحمّل قائمة إصدارات Esri Wayback من الإنترنت. بعدها اختر إصدارًا من القائمة."], "en": ["", "Load release list", "Loads the list of Esri Wayback releases from the internet. Then pick a release from the list."]}, "wbsel": {"ar": ["", "إصدار الصور", "اختر إصدارًا لعرضه فوق الخريطة. التاريخ هو تاريخ نشر الإصدار وليس تاريخ التقاط الصورة، وقد تتشابه الصور بين إصدارات متتالية."], "en": ["", "Imagery release", "Pick a release to show over the map. The date is the release date, not the capture date, and consecutive releases may look the same."]}, "wbop": {"ar": ["", "الشفافية", "حرّك المنزلق لتجعل الصورة التاريخية شفافة وترى الصورة الحالية تحتها للمقارنة."], "en": ["", "Opacity", "Move the slider to make the historical imagery transparent and see the current imagery beneath it for comparison."]}, "wboff": {"ar": ["", "إيقاف الصور التاريخية", "يزيل طبقة الصور التاريخية ويعود إلى الخريطة الأساسية."], "en": ["", "Turn off historical imagery", "Removes the historical imagery layer and returns to the basemap."]}, "psave": {"ar": ["", "حفظ المشروع", "ينزّل ملف مشروع (JSON) فيه النقاط المستوردة وإعداداتها والرسومات والسجل وموضع الخريطة."], "en": ["", "Save project", "Downloads a project file (JSON) containing the imported points and their settings, drawings, the log and the map view."]}, "pload": {"ar": ["", "فتح مشروع محفوظ", "اختر ملف مشروع حفظته سابقًا لاستعادة كل ما فيه."], "en": ["", "Open saved project", "Choose a project file you saved earlier to restore everything in it."]}, "mtitle": {"ar": ["", "عنوان الخريطة", "نص اختياري يظهر في أعلى صورة الخريطة المصدّرة."], "en": ["", "Map title", "Optional text shown at the top of the exported map image."]}, "imgexp": {"ar": ["", "تصدير صورة الخريطة PNG", "ينشئ صورة PNG للخريطة الحالية مع سهم الشمال ومقياس الرسم والعنوان. قد تمنع بعض المتصفحات التقاط صور الخرائط."], "en": ["", "Export map image PNG", "Creates a PNG of the current map with a north arrow, scale bar and the title. Some browsers may block capturing map images."]}};
+Object.assign(GUIDE,{
+"phIn":{ar:["صورة","اختيار صورة","يفتح الكاميرا أو معرض الصور لإرفاق صورة بالنقطة المحددة."],en:["Photo","Choose photo","Opens the camera or gallery to attach a photo to the selected point."]},
+"phPrev":{ar:["السابق","الصورة السابقة","ينتقل إلى الصورة السابقة لنفس النقطة."],en:["Previous","Previous photo","Goes to the previous photo of the same point."]},
+"phNext":{ar:["التالي","الصورة التالية","ينتقل إلى الصورة التالية لنفس النقطة."],en:["Next","Next photo","Goes to the next photo of the same point."]},
+"phDel":{ar:["حذف","حذف الصورة","يحذف الصورة المعروضة من هذا الجهاز. اضغط مرتين للتأكيد."],en:["Delete","Delete photo","Deletes the shown photo from this device. Press twice to confirm."]},
+"phX":{ar:["إغلاق","إغلاق الصورة","يغلق عارض الصور."],en:["Close","Close photo","Closes the photo viewer."]}
+});
+
+Object.assign(GUIDE,{
+"phZip":{ar:["ZIP","تصدير الصور","يجمع كل صور المشروع في ملف ZIP مع ملف photos.csv فيه اسم كل صورة ونقطتها وإحداثيها وتاريخها."],en:["ZIP","Export photos","Bundles all project photos in a ZIP with a photos.csv listing each photo's point, coordinates and date."]},
+"phClr":{ar:["حذف","حذف كل الصور","يحذف كل صور المشروع الحالي من هذا الجهاز. اضغط مرتين للتأكيد. صدّرها أولًا إن احتجتها."],en:["Delete","Delete all photos","Deletes all photos of the current project from this device. Press twice to confirm. Export them first if needed."]},
+"offZ":{ar:["تكبير إضافي","التكبير الإضافي","ينزّل الخريطة بمستوى التكبير الحالي وبمستويات أقرب بهذا العدد. كل مستوى إضافي يضاعف العدد نحو 4 مرات."],en:["Extra zoom","Extra zoom levels","Downloads the map at the current zoom and that many closer levels. Each extra level multiplies the count by about 4."]},
+"offDl":{ar:["تنزيل","تنزيل المنطقة الظاهرة","يخزّن صور الخريطة الجوية الظاهرة على هذا الجهاز لتعمل بدون إنترنت في الميدان. اضغط مرة ثانية للإيقاف. صور Google لا تدعم ذلك، استخدم صور Esri."],en:["Download","Download visible area","Stores the visible map tiles on this device so they work offline in the field. Press again to stop. Google imagery cannot be stored; use Esri imagery."]},
+"offClr":{ar:["مسح","مسح الخرائط المخزّنة","يحذف كل صور الخرائط المخزّنة للعمل بدون إنترنت. اضغط مرتين للتأكيد."],en:["Clear","Clear stored maps","Deletes all map tiles stored for offline use. Press twice to confirm."]},
+"offSt":{ar:["الحالة","حالة العمل بدون إنترنت","يعمل فقط عند فتح التطبيق من رابط GitHub Pages (وليس كملف). بعد أول زيارة متصلة يُحفظ التطبيق ويفتح بدون إنترنت."],en:["Status","Offline status","Works only when the app is opened from its GitHub Pages link (not as a file). After the first online visit the app is saved and opens without internet."]}
+});
+
 Object.assign(GUIDE,{
 "imgLeg":{ar:["Legend","وسيلة الإيضاح على الصورة","يضيف مربع وسيلة إيضاح أسفل يسار الصورة فيه الطبقات الظاهرة (نقاط، خطوط، مضلعات، Buffer) وألوان فئات النقاط إن اخترت عمود تلوين."],en:["Legend","Legend on the image","Adds a legend box at the bottom-left of the image listing the visible layers (points, lines, polygons, buffers) and the point category colors if a color column is chosen."]}
 });
@@ -2949,7 +3170,7 @@ syncTools();
 
 /* ---------- تطبيق اللغة على الواجهة ---------- */
 const ARRE=/[؀-ۿ]/,ORIG=new WeakMap();
-const SKIPSEL=['rpSt','cvRes','cvFrom','cvTo','cvOut','cfCrs','atBody','atInfo','atFill','atDel','atLayer','atFF','chRes','chSrc','bfRes','bfSrc','labFields','tbl','vlist','guide','bmenu','toast','msg','ocrtxt','cx','cy','cz','clab','ccol','ptinfo','pathinfo','qc','legend','wbst','imgst','ocrst','mres'].map(i=>'#'+i).join(',');
+const SKIPSEL=['phInfo','offSt','offInfo','phCap','rpSt','cvRes','cvFrom','cvTo','cvOut','cfCrs','atBody','atInfo','atFill','atDel','atLayer','atFF','chRes','chSrc','bfRes','bfSrc','labFields','tbl','vlist','guide','bmenu','toast','msg','ocrtxt','cx','cy','cz','clab','ccol','ptinfo','pathinfo','qc','legend','wbst','imgst','ocrst','mres'].map(i=>'#'+i).join(',');
 function trDom(root){
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName)||p.closest(SKIPSEL))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});
   const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
@@ -2979,6 +3200,7 @@ function applyLang(){
   trDom(document.body);
   try{if(!$('atp').hidden){atLayerOpts();atRender()}else atEdLabels()}catch(_){}
   try{crsOpts()}catch(_){}
+  try{phInfoRender();offStatus();offEstimate()}catch(_){}
   relabelOpts();ctypeUI();vRender();bmRender();syncTools();labSig='';updLabels();projStRender();
   $('mtoggle').textContent=measuring?T('إيقاف القياس'):T('ابدأ القياس بالنقر');
   updM();
