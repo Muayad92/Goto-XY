@@ -162,6 +162,8 @@ tr.pt{cursor:pointer}tr.pt:hover{background:var(--hover)}
 #atBody tr.sel td{background:var(--sel)}
 #status{flex:none;display:flex;align-items:center;gap:18px;height:26px;padding:0 12px;background:var(--bar);color:var(--bar-ink);font:11.5px var(--mono);direction:ltr;overflow:hidden;white-space:nowrap}
 #status span{opacity:.9}#status .ar{font-family:var(--font);direction:rtl}
+#status span{flex:none}#status #cur{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}#status #gps{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:640px){#status{gap:10px}#status #sttool{display:none}}
 #cur{min-width:0}
 .leaflet-bar a,.leaflet-bar a:hover{color:#333}
 #loc.busy svg{animation:pulse 1s ease-in-out infinite}
