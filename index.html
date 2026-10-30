@@ -107,7 +107,7 @@ input,select,textarea,button{font:inherit;font-size:13px;color:var(--ink)}
 input,select,textarea{padding:0 9px;min-height:34px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
 input,select{width:100%;direction:ltr;text-align:left}
 textarea{padding:6px 9px}
-input[type=checkbox]{min-height:0;accent-color:var(--acc)}
+input[type=checkbox],input[type=radio]{width:auto;min-height:0;accent-color:var(--acc)}
 input[type=range]{accent-color:var(--acc)}
 input[type=file]{padding:5px 6px;font-size:12px}
 button{padding:0 12px;min-height:34px;border:1px solid var(--acc);border-radius:4px;background:var(--acc);color:var(--acc-ink);cursor:pointer}
@@ -145,6 +145,13 @@ tr.pt{cursor:pointer}tr.pt:hover{background:var(--hover)}
 #phView img{flex:1;min-height:0;width:100%;object-fit:contain}
 .phbox{margin-top:6px}.phbox img{height:54px;width:54px;object-fit:cover;border-radius:4px;margin:2px;cursor:pointer;border:1px solid var(--line)}
 .phbox button{min-height:28px;padding:0 10px;font-size:12px}
+.layrow{display:flex;align-items:center;gap:6px;padding:4px;border-radius:4px;border:1px solid transparent}
+.layrow.act{background:var(--sel);border-color:var(--line)}
+.layrow .ln{flex:1;min-width:0;width:auto;min-height:28px;text-align:start}
+.layrow input[type=color]{width:30px;min-height:28px;padding:0;flex:none}
+.layrow input[type=checkbox]{flex:none}
+.layrow button{min-height:28px;padding:0 8px;flex:none}
+.lct{font-size:11px;color:var(--mute);white-space:nowrap}
 #atp{position:fixed;left:0;right:0;bottom:26px;height:42vh;z-index:2500;display:flex;flex-direction:column;background:var(--panel);border-top:2px solid var(--acc);box-shadow:var(--shadow)}
 #atp.big{height:78vh}
 .atbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line)}
@@ -212,9 +219,74 @@ html[dir=ltr] .bmenu{direction:ltr;text-align:left}
 html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 @media(max-width:760px){
  #work{flex-direction:column}
- #panel{order:2;width:100%;height:46%;border-inline-end:0;border-top:1px solid var(--line)}
  .datum{display:none}#qgoBox{max-width:none}
  .brand span{display:none}
+}
+
+/* ---- المرحلة D: لوحة بعرض متغيّر، أقسام قابلة للطي، شاشات صغيرة ---- */
+#panel{width:var(--pw,480px);max-width:70vw}
+#split{flex:none;width:7px;margin-inline-start:-4px;margin-inline-end:-3px;cursor:col-resize;position:relative;z-index:5;touch-action:none}
+#split:hover,#split.drag{background:color-mix(in srgb,var(--acc) 45%,transparent)}
+#work.collapsed #split{display:none}
+body.resizing{user-select:none;cursor:col-resize}
+#grab{display:none}
+#pnlTools{display:flex;justify-content:flex-end;margin-top:6px}
+#pnlTools button{min-height:26px;font-size:11.5px;padding:0 10px}
+.sec>h2{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;margin:10px 0 0;padding:9px 0 8px;border-top:1px solid var(--line)}
+.sec:first-of-type>h2{border-top:0}
+.sec>h2:hover{color:var(--ink)}
+.sec>h2::after{content:"▾";margin-inline-start:auto;font-size:12px;transition:transform .15s}
+.sec.closed>h2::after{transform:rotate(90deg)}
+html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
+.sec.closed>.secb{display:none}
+.sec>h2:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.secb{padding-bottom:6px}
+
+/* شريط التبويبات الطولي عند حافة الشاشة (حاسوب) */
+@media(min-width:761px){
+ #panel{flex-direction:row}
+ .tabs{flex-direction:column;flex:none;width:76px;border-bottom:0;border-inline-end:1px solid var(--line);overflow-y:auto;overflow-x:hidden}
+ button.tab{flex:none;width:100%;gap:6px;padding:16px 4px 14px;border-bottom:0;border-inline-end:3px solid transparent;font-size:11.5px;line-height:1.25;text-align:center;white-space:normal}
+ button.tab svg.ic{width:24px;height:24px}
+ button.tab.on{border-inline-end-color:var(--tc)}
+ .pbody{flex:1;min-width:0}
+ #work.collapsed #panel{display:flex;width:auto}
+ #work.collapsed .pbody{display:none}
+}
+@media(max-width:1280px){button.tb small{display:none}}
+@media(max-width:760px){
+ body{font-size:14px}
+ #titlebar{height:44px;gap:6px;padding:0 8px}
+ .brand{max-width:26px;overflow:hidden}
+ #qgoBox{min-width:60px}
+ .langbtn{padding:0 8px;flex:none}
+ #work{position:relative}
+ #panel{order:2;width:100%!important;max-width:none;height:52%;border-top:2px solid var(--acc);border-radius:14px 14px 0 0;box-shadow:0 -4px 16px rgba(0,0,0,.22);transition:height .22s ease}
+ #work.sh-full #panel{height:88%}
+ #work.collapsed #panel{display:flex;height:auto}
+ #work.collapsed .pbody{display:none}
+ #split{display:none}
+ #grab{display:flex;justify-content:center;align-items:center;height:22px;flex:none;cursor:grab;touch-action:none}
+ #grab i{width:44px;height:5px;border-radius:3px;background:var(--line)}
+ button.tab{padding:6px 2px;font-size:12.5px}
+ #ribbon{padding-top:4px}
+ .cap,button.tb small{display:none}
+ button.tb{min-width:56px;padding:7px 4px}
+ .grp{padding-top:4px}
+ input,select,textarea{font-size:16px;min-height:44px}
+ button{min-height:44px;font-size:14.5px}
+ label{font-size:13.5px;margin:12px 0 4px}
+ h2{font-size:13px}
+ .sec>h2{padding:13px 0 11px}
+ .row{gap:8px}.row>*{min-height:44px}
+ .vrow{padding:10px 8px;font-size:14px}
+ .layrow{padding:8px 4px}.layrow .ln,.layrow button,.layrow input[type=color]{min-height:40px}
+ .layrow input[type=color]{width:38px}
+ .expmenu{min-width:240px}.expmenu button{padding:13px 14px;font-size:15px}
+ .bmenu{width:min(310px,82vw);font-size:14px}.bm-row{padding:12px}
+ #atp{height:62vh}#atp.big{height:86vh}
+ .atbar button,.atbar select,.atbar input{min-height:40px;font-size:14px}
+ #pnlTools button{min-height:34px}
 }
 @media(prefers-reduced-motion:reduce){button.tb.busy svg.ic,#loc.busy svg{animation:none}}
 </style>
@@ -255,6 +327,7 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
  <div class="brand"><svg class="ic"><use href="#i-brand"/></svg>الانتقال إلى الإحداثي<span style="font:11.5px var(--mono);opacity:.65;direction:ltr">Go To XY</span></div>
  <div id="qgoBox"><svg class="ic"><use href="#i-search"/></svg><input id="qgo" type="text" dir="auto" placeholder="انتقال سريع: 30.5081, 47.7835" aria-label="انتقال سريع إلى إحداثي" autocomplete="off"></div>
  <div class="datum">WGS84 · UTM 37–39N</div>
+ <button type="button" id="themeBtn" class="langbtn" title="الوضع الليلي / النهاري" aria-label="الوضع الليلي / النهاري">◐</button>
  <button type="button" id="langBtn" class="langbtn" title="تبديل اللغة">English</button>
 </header>
 
@@ -301,6 +374,7 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 
 <div id="work">
 <aside id="panel">
+<div id="grab" role="button" tabindex="0" aria-label="سحب اللوحة"><i></i></div>
 <div class="tabs" role="tablist">
  <button type="button" class="tab on" role="tab" data-t="go"><svg class="ic"><use href="#i-go"/></svg>الإحداثي</button>
  <button type="button" class="tab" role="tab" data-t="measure"><svg class="ic"><use href="#i-line"/></svg>القياس</button>
@@ -308,6 +382,7 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
  <button type="button" class="tab" role="tab" data-t="img"><svg class="ic"><use href="#i-sat"/></svg>الصور والمشروع</button>
 </div>
 <div class="pbody">
+<div id="pnlTools"><button type="button" id="secToggle" class="alt" title="طيّ / فتح كل الأقسام">⇕ طيّ الكل</button></div>
 
 <section class="tabsec" data-tab="go">
 <h2>إدخال الإحداثي</h2>
@@ -364,10 +439,20 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 <section class="tabsec" data-tab="data" hidden>
 <h2>استيراد ملف</h2>
 <div class="note" style="margin-top:0">Excel / CSV / KML / KMZ / GeoJSON / GeoPackage (gpkg) أو Shapefile (ملف ZIP، أو حدّد .shp و .dbf و .prj معًا)</div>
+<label for="layName" style="margin-top:0">اسم الطبقة (اختياري)</label><input id="layName" dir="auto" style="text-align:start" placeholder="مثال: أنبوب البصرة 1">
 <label style="display:flex;gap:6px;align-items:center;margin-top:8px"><input type="checkbox" id="impAdd" checked style="width:auto"> إضافة إلى البيانات الحالية (بدل الاستبدال)</label>
 <input type="file" id="file" accept=".xlsx,.xls,.csv,.kml,.kmz,.geojson,.json,.zip,.gpkg,.shp,.dbf,.prj,.cpg,.shx" multiple style="margin-top:8px">
 <div class="row"><button id="tpl" class="alt">تحميل قالب Excel</button><button id="clrpts" class="alt">مسح النقاط</button></div>
 <div id="ptinfo" style="font-size:12.5px;margin-top:8px"></div>
+<div id="shPick" hidden class="note"><b>اختر الأوراق التي تريد إضافتها كطبقات</b><div id="shList"></div><div class="row"><button id="shOk">إضافة</button><button id="shNo" class="alt">إلغاء</button></div></div>
+<div id="laysec" hidden><h2>الطبقات</h2><div id="layList"></div></div>
+<div id="symsec" hidden><h2>رموز الطبقة: <span id="symName"></span></h2>
+<div class="grid2"><div><label for="symShape" style="margin-top:0">شكل النقطة</label><select id="symShape"><option value="circle">● دائرة</option><option value="square">■ مربع</option><option value="triangle">▲ مثلث</option><option value="diamond">◆ معيّن</option><option value="plus">+ زائد</option><option value="x">× علامة</option><option value="star">★ نجمة</option></select></div><div><label for="symSize" style="margin-top:0">حجم النقطة</label><input type="range" id="symSize" min="3" max="20" value="6"></div></div>
+<div class="grid2"><div><label for="symPtc">لون النقاط</label><input type="color" id="symPtc" value="#e03131"></div><div><label for="symLc">لون المسار/الخط</label><input type="color" id="symLc" value="#1971c2"></div></div>
+<div class="grid2"><div><label for="symW">سُمك الخط</label><input type="range" id="symW" min="1" max="10" value="3"></div><div><label for="symDash">نمط الخط</label><select id="symDash"><option value="">متصل</option><option value="8 6">متقطع</option><option value="2 6">منقّط</option></select></div></div>
+<label for="symFill">تعبئة المضلعات</label><input type="range" id="symFill" min="0" max="100" value="15">
+<canvas id="symPrev" width="300" height="44" style="max-width:100%;margin-top:6px"></canvas>
+</div>
 <div id="cfg" hidden>
 <h2>الأعمدة</h2>
 <label for="ctype" style="margin-top:0">نوع الإحداثي في الملف</label>
@@ -384,6 +469,7 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 <label><input type="checkbox" id="cclust" style="width:auto"> تجميع النقاط (Clustering)</label>
 <div class="row"><button id="cdraw">ارسم</button><button id="cqc" class="alt">فحص الجودة</button></div>
 <h2>التصدير</h2>
+<label for="cexpL" style="margin-top:0">نطاق التصدير</label><select id="cexpL"></select>
 <div class="row" style="margin-top:0"><select id="cfmt"><option value="xlsx">Excel (xlsx)</option><option value="csv">CSV</option><option value="kml">KML (Google Earth)</option><option value="kmz">KMZ (Google Earth)</option><option value="geojson">GeoJSON</option><option value="shp">Shapefile (ZIP, WGS84)</option><option value="shpu">Shapefile (ZIP, UTM 38N)</option><option value="gpx">GPX (GPS)</option></select><button id="cexp" class="alt">تصدير</button></div>
 <div id="qc" class="note"></div>
 <div id="legend" style="font-size:12px;margin-top:6px"></div>
@@ -477,6 +563,7 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 
 </div>
 </aside>
+<div id="split" role="separator" aria-orientation="vertical" title="اسحب لتغيير عرض اللوحة"></div>
 <div id="mapwrap"><div id="map"></div><div id="toast" hidden role="status"></div><div id="guide" hidden role="dialog" aria-label="الدليل"></div></div>
 </div>
 <input type="file" id="phIn" accept="image/*" capture="environment" multiple hidden>
@@ -486,6 +573,7 @@ html[dir=ltr] .bm-row.act{box-shadow:inset -4px 0 0 var(--c-map)}
 </div>
 <div id="atp" hidden>
  <div class="atbar">
+  <select id="atLf"></select>
   <select id="atLayer"></select>
   <input id="atQ" dir="auto" placeholder="بحث، أو شرط مثل: Length_m>500" style="flex:1;min-width:150px">
   <button type="button" id="atZoom" class="alt">انتقال للمحدد</button>
@@ -787,7 +875,7 @@ const EN={
 "أسماء الأماكن": "Place names",
 "موقعي الحالي": "My current location"
 };
-Object.assign(EN,{"إضافة إلى البيانات الحالية (بدل الاستبدال)":"Add to current data (instead of replacing)","الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
+Object.assign(EN,{"الوضع الليلي / النهاري":"Dark / light mode","طيّ / فتح كل الأقسام":"Collapse / expand all sections","⇕ طيّ الكل":"⇕ Collapse all","⇕ فتح الكل":"⇕ Expand all","سحب اللوحة":"Drag the panel","اسحب لتغيير عرض اللوحة":"Drag to resize the panel","نطاق التصدير":"Export scope","كل الطبقات":"All layers","لون النقاط":"Point color","لون المسار/الخط":"Path/line color","رموز الطبقة: ":"Layer symbols: ","رموز الطبقة:":"Layer symbols:","الطبقة":"Layer","شكل النقطة":"Point shape","حجم النقطة":"Point size","سُمك الخط":"Line width","نمط الخط":"Line style","تعبئة المضلعات":"Polygon fill","● دائرة":"● Circle","■ مربع":"■ Square","▲ مثلث":"▲ Triangle","◆ معيّن":"◆ Diamond","+ زائد":"+ Plus","× علامة":"× Cross","★ نجمة":"★ Star","متصل":"Solid","متقطع":"Dashed","منقّط":"Dotted","اسم الطبقة (اختياري)":"Layer name (optional)","مثال: أنبوب البصرة 1":"Example: Basra pipeline 1","الطبقات":"Layers","اختر الأوراق التي تريد إضافتها كطبقات":"Choose the sheets to add as layers","إضافة":"Add","إلغاء":"Cancel","حسب الطبقة":"By layer","إضافة إلى البيانات الحالية (بدل الاستبدال)":"Add to current data (instead of replacing)","الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
 const RUNRE=/[\u0600-\u06FF]+(?:[ \u00A0«»()…،:؟.\-—\/]*[\u0600-\u06FF]+)*/g;
 function T(s,v){
   let r=s;
@@ -1186,15 +1274,179 @@ const ptsPlain=L.layerGroup().addTo(map),pathL=L.layerGroup().addTo(map),rend=L.
 const ptsCluster=(L.markerClusterGroup?L.markerClusterGroup({maxClusterRadius:45,disableClusteringAtZoom:17,chunkedLoading:true}):null);
 let pts=ptsPlain,impGeo=[];
 let rows=[],cols=[],shown=[];
+let layers=[],activeL=null,impBase='',impPart='',impMulti=false;
 const PAL=['#e03131','#1971c2','#2f9e44','#f08c00','#9c36b5','#0c8599','#c2255c','#5f3dc4','#66a80f','#868e96'];
 const K={name:['name','id','point','الاسم','اسم'],lat:['lat','latitude','خط العرض'],lon:['lon','lng','long','longitude','خط الطول'],e:['e','x','easting','east','الشرق'],n:['n','y','northing','north','الشمال'],zone:['zone','المنطقة']};
 const esc=v=>String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const opt=(id,list,none)=>{$(id).innerHTML=(none?'<option value="">— '+none+' —</option>':'')+list.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')};
+/* ---------- رموز النقاط ---------- */
+function pathShape(ctx,sh,x,y,r){
+  ctx.beginPath();
+  if(sh==='square')ctx.rect(x-r,y-r,2*r,2*r);
+  else if(sh==='triangle'){ctx.moveTo(x,y-r*1.2);ctx.lineTo(x+r*1.1,y+r*.8);ctx.lineTo(x-r*1.1,y+r*.8);ctx.closePath()}
+  else if(sh==='diamond'){ctx.moveTo(x,y-r*1.3);ctx.lineTo(x+r*1.3,y);ctx.lineTo(x,y+r*1.3);ctx.lineTo(x-r*1.3,y);ctx.closePath()}
+  else if(sh==='plus'){ctx.moveTo(x-r*1.2,y);ctx.lineTo(x+r*1.2,y);ctx.moveTo(x,y-r*1.2);ctx.lineTo(x,y+r*1.2)}
+  else if(sh==='x'){const d=r*.95;ctx.moveTo(x-d,y-d);ctx.lineTo(x+d,y+d);ctx.moveTo(x+d,y-d);ctx.lineTo(x-d,y+d)}
+  else if(sh==='star'){for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.55:r*1.35;i?ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr):ctx.moveTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}ctx.closePath()}
+  else ctx.arc(x,y,r,0,Math.PI*2);
+}
+const isLineShape=sh=>sh==='plus'||sh==='x';
+/* رسم رمز في سياق canvas عادي (وسيلة الإيضاح والمعاينة) */
+function fillShape(g,sh,x,y,r,col,u){
+  g.save();pathShape(g,sh||'circle',x,y,r);
+  if(isLineShape(sh)){g.strokeStyle=col;g.lineWidth=Math.max(2,r*.4)*(u||1)/ (u||1);g.stroke()}
+  else{g.fillStyle=col;g.fill();g.strokeStyle='#fff';g.lineWidth=1.5*(u||1);g.stroke()}
+  g.restore();
+}
+try{
+  if(L.Canvas&&L.Canvas.include&&L.CircleMarker){
+    L.Canvas.include({_updateShape(layer){
+      if(!this._drawing||layer._empty())return;
+      const p=layer._point,r=Math.max(Math.round(layer._radius),1);
+      pathShape(this._ctx,layer.options.shape,p.x,p.y,r);
+      this._fillStroke(this._ctx,layer);
+    }});
+    L.ShapeMarker=L.CircleMarker.extend({_updatePath(){this._renderer._updateShape(this)}});
+  }
+}catch(_){}
+function mkPt(c,col,ly){
+  const sh=ly?ly.sym.shape:'circle',r=ly?ly.sym.size:6;
+  if(sh!=='circle'&&typeof L.ShapeMarker==='function'){
+    try{return isLineShape(sh)?new L.ShapeMarker(c,{renderer:rend,radius:r,shape:sh,color:col,weight:3,fill:false}):new L.ShapeMarker(c,{renderer:rend,radius:r,shape:sh,color:'#fff',weight:1.5,fillColor:col,fillOpacity:1})}catch(_){}
+  }
+  return L.circleMarker(c,{renderer:rend,radius:r,color:'#fff',weight:1.5,fillColor:col,fillOpacity:1});
+}
+/* ---------- الطبقات ---------- */
+const LAYPAL=['#e03131','#1971c2','#2f9e44','#f08c00','#9c36b5','#0c8599','#c2255c','#5f3dc4','#66a80f','#e8590c','#d6336c','#1098ad'];
+const layerByName=n=>layers.find(l=>l.name===n);
+const partOf=n=>baseName(n).replace(/\.[^.]+$/,'');
+function layUnique(n,self){const b=String(n||'').trim()||B('طبقة','Layer');let x=b,i=2;while(layers.some(l=>l!==self&&l.name===x))x=b+' ('+i+++')';return x}
+function layNextColor(){const used=new Set(layers.map(l=>String(l.color).toLowerCase()));return LAYPAL.find(c=>!used.has(c))||LAYPAL[layers.length%LAYPAL.length]}
+function ptCol(l){
+  if(!l)return '#0b5d7a';
+  if(!l.sym.ptColor){const used=new Set();layers.forEach(x=>{used.add(String(x.color).toLowerCase());if(x.sym&&x.sym.ptColor)used.add(String(x.sym.ptColor).toLowerCase())});
+    l.sym.ptColor=LAYPAL.slice().reverse().find(c=>!used.has(c))||LAYPAL[(layers.indexOf(l)+5)%LAYPAL.length]}
+  return l.sym.ptColor;
+}
+function layAdd(name){const l={name:layUnique(name),color:layNextColor(),visible:true,sym:{shape:'circle',size:6,weight:3,dash:'',fillOp:.15},cfg:null};layers.push(l);return l}
+function detectCfg(keys){
+  const g=k=>keys.find(c=>K[k].includes(String(c).trim().toLowerCase()))||'';
+  const ll=g('lat')&&g('lon');
+  return{ctype:ll?'ll':'utm',cx:ll?g('lat'):(g('e')||keys[0]||''),cy:ll?g('lon'):(g('n')||keys[1]||keys[0]||''),cz:g('zone'),crs:'u38'};
+}
+const domCfg=()=>({ctype:$('ctype').value,cx:$('cx').value,cy:$('cy').value,cz:$('cz').value,crs:$('cfCrs').value});
+function cfgOf(r){const l=r&&r.Layer!=null?layerByName(r.Layer):null;return(l&&l.cfg)||domCfg()}
+function cfgToUI(c){if(!c)return;setSel('ctype',c.ctype);setSel('cx',c.cx);setSel('cy',c.cy);setSel('cz',c.cz||'');setSel('cfCrs',c.crs);ctypeUI()}
+function impLayerName(){const t=impBase.trim();return impMulti?(t?t+' - '+impPart:impPart):(t||impPart)}
+function layCount(l){let p=0,li=0,po=0;rows.forEach(r=>{if(r.Layer===l.name)p++});impGeo.forEach(f=>{if(f.layer===l.name){if(f.t==='Line')li++;else po++}});return{p,li,po}}
+const layVisF=f=>{const l=layerByName(f.layer);return!l||l.visible};
+function layApply(){
+  if(rows.length)draw(false);
+  impL.clearLayers();impGeo.forEach(addImp);updLabels();markDirty();
+}
+function layRender(){
+  $('laysec').hidden=!layers.length;
+  $('layList').innerHTML=layers.map((l,i)=>{
+    const c=layCount(l),p=[];
+    if(c.p)p.push(c.p+' '+B('نقطة','pts'));if(c.li)p.push(c.li+' '+B('خط','lines'));if(c.po)p.push(c.po+' '+B('مضلع','polys'));
+    return`<div class="layrow${l.name===activeL?' act':''}" data-i="${i}"><input type="checkbox" class="lv"${l.visible?' checked':''} title="${B('إظهار/إخفاء','Show/hide')}"><input type="color" class="lc" value="${esc(l.color)}" title="${B('اللون','Color')}"><input class="ln" value="${esc(l.name)}" dir="auto" title="${B('اسم الطبقة','Layer name')}"><span class="lct">${p.join('، ')}</span><button type="button" class="lz alt" title="${B('تقريب إلى الطبقة','Zoom to layer')}">⌖</button><button type="button" class="lt alt" title="${B('جدول خصائص الطبقة','Layer attribute table')}">▦</button><button type="button" class="ld alt" title="${B('حذف الطبقة','Delete layer')}">🗑</button></div>`;
+  }).join('');
+  symSync();expOpts();
+}
+function layZoom(l){
+  const pts=[];
+  shown.forEach(x=>{if(x.r.Layer===l.name)pts.push(x.c)});
+  impGeo.forEach(f=>{if(f.layer===l.name)pts.push(...f.c)});
+  if(!pts.length){toast(B('لا توجد عناصر ظاهرة في هذه الطبقة.','No visible features in this layer.'),2500);return}
+  map.fitBounds(L.latLngBounds(pts).pad(.15),{maxZoom:18});
+}
+let layDelT=0,layDelI=-1;
+function layDelete(l){
+  rows=rows.filter(r=>r.Layer!==l.name);impGeo=impGeo.filter(f=>f.layer!==l.name);
+  layers=layers.filter(x=>x!==l);if(activeL===l.name)activeL=layers.length?layers[0].name:null;
+  if(rows.length)draw(false);else{shown=[];ptsPlain.clearLayers();if(ptsCluster)ptsCluster.clearLayers();pathL.clearLayers();$('cfg').hidden=true;$('tbl').innerHTML='';$('ptinfo').textContent='';$('pathinfo').textContent=''}
+  impL.clearLayers();impGeo.forEach(addImp);chSig='';bfSig='';updLabels();
+  const al=layerByName(activeL);if(al&&al.cfg)cfgToUI(al.cfg);
+  layRender();markDirty();
+}
+$('layList').addEventListener('change',e=>{
+  const row=e.target.closest('.layrow');if(!row)return;const l=layers[+row.dataset.i];if(!l)return;
+  if(e.target.classList.contains('lv')){l.visible=e.target.checked;layApply()}
+  else if(e.target.classList.contains('lc')){l.color=e.target.value;layApply()}
+  else if(e.target.classList.contains('ln')){
+    const old=l.name,nn=layUnique(e.target.value,l);
+    if(nn!==old){rows.forEach(r=>{if(r.Layer===old)r.Layer=nn});impGeo.forEach(f=>{if(f.layer===old)f.layer=nn});l.name=nn;if(activeL===old)activeL=nn;chSig='';bfSig='';layApply()}
+    e.target.value=l.name;
+  }
+});
+$('layList').addEventListener('input',e=>{if(e.target.classList.contains('lc')){const row=e.target.closest('.layrow'),l=layers[+row.dataset.i];if(l){l.color=e.target.value;layApply();if(l.name===activeL){$('symLc').value=l.color;symDraw()}}}});
+$('layList').addEventListener('click',e=>{
+  const row=e.target.closest('.layrow');if(!row)return;const i=+row.dataset.i,l=layers[i];if(!l)return;
+  if(e.target.classList.contains('lz')){layZoom(l);return}
+  if(e.target.classList.contains('lt')){atLF=l.name;const c=layCount(l);atOpen(c.p?'pts':c.li?'lines':c.po?'polys':'pts');return}
+  if(e.target.classList.contains('ld')){
+    if(layDelI!==i||Date.now()-layDelT>3500){layDelI=i;layDelT=Date.now();e.target.textContent=B('تأكيد؟','Sure?');return}
+    layDelI=-1;layDelete(l);return;
+  }
+  if(e.target.tagName==='INPUT')return;
+  activeL=l.name;if(l.cfg)cfgToUI(l.cfg);layRender();
+});
+['ctype','cx','cy','cz','cfCrs'].forEach(id=>$(id).addEventListener('change',()=>{const l=layerByName(activeL);if(l&&l.cfg){l.cfg=domCfg();markDirty()}}));
+/* واجهة الرموز */
+function symDraw(){
+  const l=layerByName(activeL),cv=$('symPrev');if(!cv)return;
+  const g=cv.getContext('2d');g.clearRect(0,0,cv.width,cv.height);
+  if(!l)return;
+  g.fillStyle='rgba(120,140,150,.12)';g.fillRect(0,0,cv.width,cv.height);
+  fillShape(g,l.sym.shape,24,22,l.sym.size,ptCol(l),1);
+  g.strokeStyle=l.color;g.lineWidth=l.sym.weight;g.setLineDash(l.sym.dash?l.sym.dash.split(' ').map(Number):[]);g.beginPath();g.moveTo(60,22);g.lineTo(160,22);g.stroke();g.setLineDash([]);
+  g.globalAlpha=l.sym.fillOp;g.fillStyle=l.color;g.fillRect(185,8,95,28);g.globalAlpha=1;g.strokeStyle=l.color;g.lineWidth=Math.min(l.sym.weight,4);g.setLineDash(l.sym.dash?l.sym.dash.split(' ').map(Number):[]);g.strokeRect(185,8,95,28);g.setLineDash([]);
+}
+function symSync(){
+  const l=layerByName(activeL);$('symsec').hidden=!l;if(!l)return;
+  $('symName').textContent=l.name;
+  $('symShape').value=l.sym.shape;$('symPtc').value=ptCol(l);$('symLc').value=l.color;$('symSize').value=l.sym.size;$('symW').value=l.sym.weight;$('symDash').value=l.sym.dash||'';$('symFill').value=Math.round(l.sym.fillOp*100);
+  symDraw();
+}
+let symRaf=0;
+function symChange(){
+  const l=layerByName(activeL);if(!l)return;
+  l.color=$('symLc').value;l.sym={ptColor:$('symPtc').value,shape:$('symShape').value,size:+$('symSize').value,weight:+$('symW').value,dash:$('symDash').value,fillOp:+$('symFill').value/100};
+  symDraw();cancelAnimationFrame(symRaf);symRaf=requestAnimationFrame(()=>{layApply();layRender()});
+}
+['symPtc','symLc','symShape','symSize','symW','symDash','symFill'].forEach(id=>{$(id).addEventListener('input',symChange);$(id).addEventListener('change',symChange)});
+/* اختيار أوراق Excel */
+function pickSheets(wb,names){
+  return new Promise(ok=>{
+    $('shList').innerHTML=names.map((n,i)=>`<label style="display:flex;gap:6px;align-items:center;margin:3px 0"><input type="checkbox" value="${i}" checked style="width:auto"> ${esc(n)} <small>(${XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:''}).length} ${B('صف','rows')})</small></label>`).join('');
+    $('shPick').hidden=false;
+    const done=v=>{$('shPick').hidden=true;$('shOk').onclick=$('shNo').onclick=null;ok(v)};
+    $('shOk').onclick=()=>done([...$('shList').querySelectorAll('input:checked')].map(i=>names[+i.value]));
+    $('shNo').onclick=()=>done([]);
+  });
+}
+/* إضافة صفوف نقاط كطبقة */
+function addPts(r,lay,add){
+  r=r.map(o=>{const q={};Object.keys(o).forEach(k=>{q[k==='Layer'?'Layer_src':k]=o[k]});q.Layer=lay.name;return q});
+  const own=Object.keys(r[0]||{}).filter(k=>k!=='Layer');
+  lay.cfg=detectCfg(own);
+  const had=add&&rows.length>0;
+  if(had)r=[...rows,...r];
+  const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
+  rows=r.map(o=>{const q={};keys.forEach(k=>{q[k]=o[k]===undefined||o[k]===null?'':o[k]});return q});
+  setup(had);
+  activeL=lay.name;cfgToUI(lay.cfg);
+  if($('cpath').value==='__all'&&layers.filter(l=>rows.some(x=>x.Layer===l.name)).length>1)$('cpath').value='__layer';
+  $('cclust').checked=rows.length>500;
+  draw(true);
+}
 function ctypeUI(){const t=$('ctype').value,u=!(t==='ll'||(t==='crs'&&typeof crsGeo==='function'&&crsGeo($('cfCrs').value)));$('crsRow').hidden=t!=='crs';$('lx').textContent=u?T('عمود Easting (X)'):T('عمود Latitude');$('ly').textContent=u?T('عمود Northing (Y)'):T('عمود Longitude')}
-function setup(){
+function setup(keep){
+  const prev=keep?{cx:$('cx').value,cy:$('cy').value,cz:$('cz').value,clab:$('clab').value,ccol:$('ccol').value,ctype:$('ctype').value,cpath:$('cpath').value}:null;
   cols=Object.keys(rows[0]||{});
   opt('cx',cols);opt('cy',cols);opt('cz',cols,T('منطقة اللوحة'));opt('clab',cols,T('بدون'));opt('ccol',cols,T('بدون'));
-  $('cpath').innerHTML='<option value="">'+T('بدون مسار')+'</option><option value="__all">'+T('كل النقاط بترتيب الصفوف')+'</option>';
+  $('cpath').innerHTML='<option value="">'+T('بدون مسار')+'</option><option value="__all">'+T('كل النقاط بترتيب الصفوف')+'</option><option value="__layer">'+T('حسب الطبقة')+'</option>';
+  if(keep){['cx','cy','cz','clab','ccol','cpath'].forEach(id=>setSel(id,prev[id]));setSel('ctype',prev.ctype);ctypeUI();$('cfg').hidden=false;return}
   const g=k=>cols.find(c=>K[k].includes(String(c).trim().toLowerCase()))||'';
   const ll=g('lat')&&g('lon');
   $('ctype').value=ll?'ll':'utm';
@@ -1210,16 +1462,16 @@ const num=v=>{
   const m=t.match(/-?\d+(?:\.\d+)?/);return m?parseFloat(m[0]):NaN;
 };
 function coord(r){
-  let a=num(r[$('cx').value]),b=num(r[$('cy').value]);
+  const cg=cfgOf(r);let a=num(r[cg.cx]),b=num(r[cg.cy]);
   if(!isFinite(a)||!isFinite(b))return null;
   let lat,lon;
-  if($('ctype').value==='crs'){const q=crsFrom($('cfCrs').value,a,b);if(!q)return null;[lat,lon]=q}
-  else if($('ctype').value==='ll'){lat=a;lon=b}
+  if(cg.ctype==='crs'){const q=crsFrom(cg.crs,a,b);if(!q)return null;[lat,lon]=q}
+  else if(cg.ctype==='ll'){lat=a;lon=b}
   else if(Math.abs(a)<=180&&Math.abs(b)<=90){lon=a;lat=b}
   else{
     if(a>=1e6&&b<1e6)[a,b]=[b,a];
     let z=+$('zone').value,s=$('hemi').value==='S';
-    const zm=($('cz').value?String(r[$('cz').value]):'').match(/^\s*(\d{1,2})\s*([NSns])?\s*$/);
+    const zm=(cg.cz?String(r[cg.cz]):'').match(/^\s*(\d{1,2})\s*([NSns])?\s*$/);
     if(zm&&+zm[1]>=1&&+zm[1]<=60){z=+zm[1];if(zm[2])s=zm[2].toUpperCase()==='S'}
     try{[lat,lon]=fromUTM(z,s,a,b)}catch(x){return null}
   }
@@ -1234,29 +1486,30 @@ function draw(fit){
   if(cc)[...new Set(rows.map(r=>String(r[cc])))].slice(0,10).forEach((v,i)=>cmap[v]=PAL[i]);
   rows.forEach((r,i)=>{
     if(q&&!Object.values(r).some(v=>String(v).toLowerCase().includes(q)))return;
+    const ly=layerByName(r.Layer);if(ly&&!ly.visible)return;
     const c=coord(r);if(!c){bad++;return}
-    const col=cc?(cmap[String(r[cc])]||PAL[9]):'#0b5d7a',lab=lc?r[lc]:T('نقطة ')+(i+1);
+    const col=cc?(cmap[String(r[cc])]||PAL[9]):(ly?ptCol(ly):'#0b5d7a'),lab=lc?r[lc]:T('نقطة ')+(i+1);
     const x={r,c,lab,i,m:null};
-    x.m=L.circleMarker(c,{renderer:rend,radius:6,color:'#fff',weight:1.5,fillColor:col,fillOpacity:1}).addTo(pts);
+    x.m=mkPt(c,col,ly).addTo(pts);
     x.m.bindPopup(()=>'<div dir="auto" style="max-height:220px;overflow:auto;font:12px sans-serif"><b>'+esc(lab)+'</b><table>'+cols.map(k=>`<tr><td>${esc(k)}</td><td dir="ltr">${esc(r[k])}</td></tr>`).join('')+'</table>'+(x.chain!=null?T('المسافة التراكمية: ')+fmt(x.chain)+T('<br>المقطع السابق: ')+fmt(x.seg):'')+'</div>'+phHTML(c)+info(c[0],c[1]),{maxWidth:320});
     shown.push(x);
   });
-  if($('cpath').value==='__all'){let acc=0;shown.forEach((x,i)=>{x.seg=i?L.latLng(shown[i-1].c).distanceTo(x.c):0;acc+=x.seg;x.chain=acc})}
-  $('legend').innerHTML=cc?Object.entries(cmap).map(([v,c])=>`<span style="margin-inline-end:10px"><i class="sw" style="background:${c}"></i>${esc(v)}</span>`).join('')+(Object.keys(cmap).length>=10?' …':''):'';
+  {const pcv=$('cpath').value;if(pcv==='__all'||pcv==='__layer'){let acc=0;shown.forEach((x,i)=>{const same=i&&(pcv==='__all'||String(shown[i-1].r.Layer)===String(x.r.Layer));x.seg=same?L.latLng(shown[i-1].c).distanceTo(x.c):0;acc=same?acc+x.seg:0;x.chain=acc})}}
+  $('legend').innerHTML=cc?Object.entries(cmap).map(([v,c])=>`<span style="margin-inline-end:10px"><i class="sw" style="background:${c}"></i>${esc(v)}</span>`).join('')+(Object.keys(cmap).length>=10?' …':''):(layers.length>1?layers.filter(l=>l.visible).map(l=>`<span style="margin-inline-end:10px"><i class="sw" style="background:${esc(l.color)}"></i>${esc(l.name)}</span>`).join(''):'');
   const pc=$('cpath').value;
   if(pc&&shown.length>1){
-    const g={};shown.forEach(x=>{const k=pc==='__all'?'all':String(x.r[pc]);(g[k]=g[k]||[]).push(x.c)});
+    const g={};shown.forEach(x=>{const k=pc==='__all'?'all':pc==='__layer'?String(x.r.Layer):String(x.r[pc]);(g[k]=g[k]||[]).push(x.c)});
     let tot=0;const lines=[];
     Object.entries(g).forEach(([k,a])=>{
       if(a.length<2)return;
-      L.polyline(a,{color:'#ffd43b',weight:3,interactive:false}).addTo(pathL);
+      L.polyline(a,{color:pc==='__layer'?((layerByName(k)||{}).color||'#ffd43b'):'#ffd43b',weight:3,interactive:false}).addTo(pathL);
       let d=0;for(let j=1;j<a.length;j++)d+=L.latLng(a[j-1]).distanceTo(a[j]);
       tot+=d;lines.push((pc==='__all'?'':esc(k)+': ')+fmt(d)+' ('+a.length+T(' نقطة)'));
     });
     $('pathinfo').innerHTML=lines.slice(0,10).join('<br>')+(lines.length>10?'<br>'+T('… و{n} مسارات أخرى',{n:lines.length-10}):'')+'<br><b>'+T('الإجمالي: {t}',{t:fmt(tot)})+'</b>';
   }else $('pathinfo').textContent='';
   $('ptinfo').innerHTML=T('يعرض {a} من {b} صف',{a:shown.length,b:rows.length})+(bad?' — '+T('{n} صف بإحداثي غير صالح',{n:bad}):'')+(bad&&!shown.length?'<br><span dir="ltr" style="font-size:12px">'+T('أول صف: ')+esc(rows[0][$('cx').value])+' | '+esc(rows[0][$('cy').value])+'</span>':'');
-  const oc=cols.filter(c=>c!==$('cx').value&&c!==$('cy').value&&c!==lc).slice(0,2);
+  const oc=cols.filter(c=>c!==$('cx').value&&c!==$('cy').value&&c!==lc&&c!=='Layer').slice(0,2);
   const hc=shown.length&&shown[0].chain!=null;
   $('tbl').innerHTML=shown.length?'<table><tr><th>'+T('الملصق')+'</th>'+oc.map(c=>`<th>${esc(c)}</th>`).join('')+(hc?'<th>'+T('تراكمي (م)')+'</th>':'')+'</tr>'+shown.slice(0,200).map((x,i)=>`<tr class="pt" data-i="${i}"><td>${esc(x.lab)}</td>${oc.map(c=>`<td>${esc(x.r[c])}</td>`).join('')}${hc?'<td>'+x.chain.toFixed(1)+'</td>':''}</tr>`).join('')+'</table>'+(shown.length>200?'<div style="font-size:12px">'+T('يعرض الجدول أول 200 صف؛ استخدم البحث للتضييق.')+'</div>':''):'';
   $('tbl').querySelectorAll('tr.pt').forEach(tr=>tr.onclick=()=>{const x=shown[tr.dataset.i];map.setView(x.c,18);x.m.openPopup()});
@@ -1339,7 +1592,7 @@ function updLabels(){
       x.m.bindTooltip(labHTML(t),{permanent:true,direction:'top',offset:[0,-4],className:'xylab'});n++}}
   if(nw){let n=0;
     impGeo.forEach((f,i)=>{
-      if(n>=300||!(f.t==='Line'?$('labLines').checked:$('labPolys').checked))return;
+      if(n>=300||!layVisF(f)||!(f.t==='Line'?$('labLines').checked:$('labPolys').checked))return;
       const g=labGeo(f);if(!b.contains(g.pos))return;
       const t=labText(null,g.pos[0],g.pos[1],{props:f.props||{},no:i+1,len:g.len,area:g.area});if(!t)return;
       L.tooltip({permanent:true,direction:'center',className:'xylab',opacity:1}).setLatLng(g.pos).setContent(labHTML(t)).addTo(labL);n++;
@@ -1388,30 +1641,33 @@ function geoToFeats(g){
   walk(g);return out;
 }
 function addImp(f){
-  const pr=Object.entries(f.props||{}),tip=f.props&&(f.props.name||f.props.Name||f.props.NAME);
+  const ly=layerByName(f.layer);if(ly&&!layVisF(f))return;
+  const col=ly?ly.color:'#e8590c',pr=Object.entries(f.props||{}),tip=f.props&&(f.props.name||f.props.Name||f.props.NAME);
   let extra='';
   if(f.t==='Line'){let len=0;for(let i=1;i<f.c.length;i++)len+=L.latLng(f.c[i-1]).distanceTo(f.c[i]);extra=T('<br>الطول: ')+fmt(len)}
   else{extra=T('<br>المساحة: ')+polyArea(planar(f.c)).toFixed(1)+T(' م²')}
   const html='<div dir="auto" style="max-height:220px;overflow:auto;font:12px sans-serif"><table>'+pr.map(([k,v])=>`<tr><td>${esc(k)}</td><td dir="ltr">${esc(v!==null&&typeof v==='object'?JSON.stringify(v):v)}</td></tr>`).join('')+'</table>'+extra+'</div>';
-  const lay=f.t==='Line'?L.polyline(f.c,{color:'#e8590c',weight:3}):L.polygon(f.c,{color:'#e8590c',weight:2,fillOpacity:.1});
+  const dash=ly&&ly.sym.dash?ly.sym.dash:null,wt=ly?ly.sym.weight:3;
+  const lay=f.t==='Line'?L.polyline(f.c,{color:col,weight:wt,dashArray:dash}):L.polygon(f.c,{color:col,weight:Math.min(wt,4),dashArray:dash,fillColor:col,fillOpacity:ly?ly.sym.fillOp:.1});
   lay._f=f;lay.bindPopup(html,{maxWidth:320});if(tip)lay.bindTooltip(String(tip),{sticky:true});
   lay.addTo(impL);
 }
-function ingest(feats){try{ingest0(feats)}finally{updLabels()}}
+function ingest(feats){try{ingest0(feats)}finally{updLabels();layRender()}}
 let impForce=false;
 function ingest0(feats){
   const P=feats.filter(f=>f.t==='Point'),O=feats.filter(f=>f.t!=='Point'),add=$('impAdd').checked||impForce;
+  if(!add){layers=[];activeL=null}
+  const lay=(P.length||O.length)?layAdd(impLayerName()):null;
+  O.forEach(f=>{f.layer=lay.name});
   impGeo=add?impGeo.concat(O):O;impL.clearLayers();impGeo.forEach(addImp);
   if(P.length){
-    let r=P.map(f=>{const o={};Object.entries(f.props||{}).forEach(([k,v])=>{o[k]=(v!==null&&typeof v==='object')?JSON.stringify(v):v});o.Latitude=+f.c[0];o.Longitude=+f.c[1];return o});
-    if(add&&rows.length)r=[...rows,...r];
-    const keys=[...new Set(r.flatMap(o=>Object.keys(o)))];
-    rows=r.map(o=>{const q={};keys.forEach(k=>{q[k]=o[k]===undefined||o[k]===null?'':o[k]});return q});
-    setup();$('cclust').checked=rows.length>500;draw(true);
-    if(impGeo.length)$('ptinfo').innerHTML+=' — '+T('{n} خط/مضلع',{n:impGeo.length});
+    const r=P.map(f=>{const o={};Object.entries(f.props||{}).forEach(([k,v])=>{o[k]=(v!==null&&typeof v==='object')?JSON.stringify(v):v});o.Latitude=+f.c[0];o.Longitude=+f.c[1];return o});
+    addPts(r,lay,add);
+    if(O.length)$('ptinfo').innerHTML+=' — '+T('{n} خط/مضلع',{n:O.length});
   }else if(O.length){
     if(!add||!rows.length){rows=[];shown=[];ptsPlain.clearLayers();if(ptsCluster)ptsCluster.clearLayers();$('cfg').hidden=true;$('tbl').innerHTML=''}
-    map.fitBounds(impL.getBounds().pad(.1));
+    activeL=lay.name;
+    try{if(impL.getLayers().length)map.fitBounds(impL.getBounds().pad(.1))}catch(_){}
     $('ptinfo').textContent=T('تم استيراد {n} خط/مضلع',{n:O.length})+(impGeo.length>O.length?B(' — الإجمالي '+impGeo.length,' — total '+impGeo.length):'');
   }else $('ptinfo').textContent=T('لا توجد كيانات صالحة في الملف');
 }
@@ -1554,9 +1810,10 @@ async function importFiles(all){
   const exts=files.map(f=>extOf(f.name));
   const isShapeSet=exts.some(e=>e==='shp');
   utmAssumed=false;
+  impBase=$('layName').value;
   if(isShapeSet||(exts.every(e=>['dbf','prj','cpg','shx'].includes(e)))){
     if(!isShapeSet)throw Error(B('اخترت ملفات مساعدة فقط. اختر ملف .shp معها (أو ضعها كلها في ZIP).','Only companion files were selected. Select the .shp too (or put all in a ZIP).'));
-    const feats=[];
+    const feats=[];impPart=partOf(files.find(f=>extOf(f.name)==='shp').name);
     for(const sf of files.filter(f=>extOf(f.name)==='shp')){
       const st=stemOf(sf.name),pick=e=>files.find(f=>extOf(f.name)===e&&stemOf(f.name)===st)||(files.filter(f=>extOf(f.name)===e).length===1&&files.filter(f=>extOf(f.name)==='shp').length===1?files.find(f=>extOf(f.name)===e):null);
       const rd=async e=>{const f=pick(e);return f?await f.arrayBuffer():null};
@@ -1572,11 +1829,11 @@ async function importFiles(all){
   }
   if(files.length>1){
     let n=0;
-    try{for(let i=0;i<files.length;i++){impForce=i>0;await importFiles([files[i]]);n++}}finally{impForce=false}
+    try{impMulti=true;for(let i=0;i<files.length;i++){impForce=i>0;await importFiles([files[i]]);n++}}finally{impForce=false;impMulti=false}
     $('ptinfo').innerHTML+='<br><small>'+B('تم استيراد '+n+' ملفات.','Imported '+n+' files.')+'</small>';
     return;
   }
-  const f=files[0],ext=extOf(f.name);
+  const f=files[0],ext=extOf(f.name);impPart=partOf(f.name);
   if(ext==='kml')ingest(parseKML(await f.text()));
   else if(ext==='kmz'||ext==='zip'){
     const feats=await readZip(f);ingest(feats);
@@ -1587,11 +1844,24 @@ async function importFiles(all){
   else if(ext==='xlsx'||ext==='xls'||ext==='csv'||ext==='txt'){
     if(f.size===0)throw Error(B('الملف فارغ (0 بايت)','The file is empty (0 bytes)'));
     const wb=XLSX.read(await f.arrayBuffer());
-    let nr=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
-    if(!nr.length){$('ptinfo').textContent=T('الملف فارغ');return}
-    if(($('impAdd').checked||impForce)&&rows.length){const all=[...rows,...nr],ks=[...new Set(all.flatMap(o=>Object.keys(o)))];nr=all.map(o=>{const q={};ks.forEach(k=>{q[k]=o[k]===undefined?'':o[k]});return q})}
-    rows=nr;
-    setup();$('cclust').checked=rows.length>500;draw(true);
+    const cnt=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:''}).length;
+    let sheets=wb.SheetNames.filter(n=>cnt(n)>0);
+    if(!sheets.length){$('ptinfo').textContent=T('الملف فارغ');return}
+    if(sheets.length>1)sheets=await pickSheets(wb,sheets);
+    if(!sheets.length){$('ptinfo').textContent=B('أُلغي الاستيراد.','Import cancelled.');return}
+    const stem=partOf(f.name),multiWb=wb.SheetNames.length>1,keepMulti=impMulti;
+    try{
+      for(let i=0;i<sheets.length;i++){
+        const add=i>0||$('impAdd').checked||impForce;
+        if(!add){layers=[];activeL=null;rows=[];impGeo=[];impL.clearLayers()}
+        impMulti=keepMulti||sheets.length>1;
+        impPart=multiWb?(keepMulti?stem+' - '+sheets[i]:sheets[i]):stem;
+        const nr=XLSX.utils.sheet_to_json(wb.Sheets[sheets[i]],{defval:''});
+        addPts(nr,layAdd(impLayerName()),add);
+      }
+    }finally{impMulti=keepMulti}
+    layRender();
+    if(sheets.length>1)$('ptinfo').innerHTML+='<br><small>'+B('أُضيفت '+sheets.length+' طبقات من الأوراق.','Added '+sheets.length+' layers from the sheets.')+'</small>';
   }
   else throw Error(B('صيغة غير مدعومة: .'+ext+' — المدعوم: xlsx, xls, csv, kml, kmz, geojson, json, zip (شيب), gpkg, أو shp+dbf+prj معًا','Unsupported format: .'+ext+' — supported: xlsx, xls, csv, kml, kmz, geojson, json, zip (shapefile), gpkg, or shp+dbf+prj together'));
   if(skipped.length)$('ptinfo').innerHTML+='<br><small>'+B('تم تجاهل ملفات macOS الوصفية: ','Ignored macOS metadata files: ')+esc(skipped.join(', '))+'</small>';
@@ -1602,9 +1872,10 @@ $('file').onchange=async e=>{
   try{
     $('ptinfo').textContent=T('جارٍ قراءة الملف…');
     await importFiles(fs);
+    $('layName').value='';
   }catch(x){$('ptinfo').textContent=T('تعذّر قراءة الملف')+(x&&x.message?' ('+x.message+')':'')}
 };
-$('clrpts').onclick=()=>{qcL.clearLayers();$('qc').innerHTML='';ptsPlain.clearLayers();if(ptsCluster)ptsCluster.clearLayers();impL.clearLayers();impGeo=[];pathL.clearLayers();rows=[];shown=[];$('cfg').hidden=true;$('tbl').innerHTML='';$('ptinfo').textContent='';$('file').value='';updLabels()};
+$('clrpts').onclick=()=>{layers=[];activeL=null;layRender();qcL.clearLayers();$('qc').innerHTML='';ptsPlain.clearLayers();if(ptsCluster)ptsCluster.clearLayers();impL.clearLayers();impGeo=[];pathL.clearLayers();rows=[];shown=[];$('cfg').hidden=true;$('tbl').innerHTML='';$('ptinfo').textContent='';$('file').value='';updLabels()};
 /* ---------- فحص الجودة ---------- */
 const qcL=L.layerGroup().addTo(map);
 const med=a=>{const t=[...a].sort((x,y)=>x-y),m=t.length>>1;return t.length%2?t[m]:(t[m-1]+t[m])/2};
@@ -1615,7 +1886,7 @@ function qcRun(){
   const rej=[],keys={},P=[];
   rows.forEach((r,i)=>{
     const c=coord(r);
-    if(!c){const a=num(r[$('cx').value]),b=num(r[$('cy').value]);rej.push({i,why:(!isFinite(a)||!isFinite(b))?T('قيمة فارغة أو غير رقمية'):T('إحداثي غير صالح'),v:r[$('cx').value]+' | '+r[$('cy').value]});return}
+    if(!c){const cg=cfgOf(r),a=num(r[cg.cx]),b=num(r[cg.cy]);rej.push({i,why:(!isFinite(a)||!isFinite(b))?T('قيمة فارغة أو غير رقمية'):T('إحداثي غير صالح'),v:r[cg.cx]+' | '+r[cg.cy]});return}
     const k=c[0].toFixed(7)+','+c[1].toFixed(7);(keys[k]=keys[k]||[]).push(i);P.push({i,c});
   });
   const dups=Object.values(keys).filter(v=>v.length>1),outl=[],jumps=[];
@@ -1642,10 +1913,15 @@ $('cqc').onclick=qcRun;
 /* ---------- التصدير ---------- */
 function download(name,text,type){const b=new Blob([text],{type}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
 const xe=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
-function buildOut(){return shown.map(x=>{const u=toUTM(x.c[0],x.c[1]),o={...x.r,Latitude_WGS84:+x.c[0].toFixed(8),Longitude_WGS84:+x.c[1].toFixed(8),UTM_Zone:u.z+(u.s?'S':'N'),UTM_E:+u.e.toFixed(2),UTM_N:+u.n.toFixed(2)};if(x.chain!=null){o.Chainage_m=+x.chain.toFixed(2);o.Segment_m=+x.seg.toFixed(2)}return o})}
-const items=out=>shown.map((x,i)=>({name:String(x.lab),c:x.c,props:out[i]}));
-const pathCoords=()=>($('cpath').value==='__all'&&shown.length>1)?shown.map(x=>x.c):null;
-const allDr=()=>[...drawn,...bufs.map(b=>({type:'poly',name:b.name,pts:b.ring,props:{Buffer_m:b.w,Source:b.srcName,Area_m2:+b.area.toFixed(1)}})),...impGeo.map(f=>({type:f.t==='Line'?'line':'poly',name:String((f.props&&(f.props.name||f.props.Name||f.props.NAME||f.props.layer))||'Feature'),pts:f.c,props:f.props||{}}))];
+let expLF='';
+const expSfx=()=>expLF?'_'+expLF.replace(/[^\w\u0600-\u06FF-]+/g,'_'):'';
+const expShown=()=>expLF?shown.filter(x=>x.r.Layer===expLF):shown;
+function expOpts(){const e=$('cexpL');if(!e)return;const sig=layers.map(l=>l.name).join('|')+'#'+expLF;if(e._sig===sig)return;e._sig=sig;if(expLF&&!layerByName(expLF))expLF='';
+  e.innerHTML='<option value="">'+B('كل الطبقات','All layers')+'</option>'+layers.map(l=>`<option value="${esc(l.name)}">${esc(l.name)}</option>`).join('');e.value=expLF;e.hidden=layers.length<2;const lb=document.querySelector('label[for=cexpL]');if(lb)lb.hidden=e.hidden}
+function buildOut(){return expShown().map(x=>{const u=toUTM(x.c[0],x.c[1]),o={...x.r,Latitude_WGS84:+x.c[0].toFixed(8),Longitude_WGS84:+x.c[1].toFixed(8),UTM_Zone:u.z+(u.s?'S':'N'),UTM_E:+u.e.toFixed(2),UTM_N:+u.n.toFixed(2)};if(x.chain!=null){o.Chainage_m=+x.chain.toFixed(2);o.Segment_m=+x.seg.toFixed(2)}return o})}
+const items=out=>expShown().map((x,i)=>({name:String(x.lab),c:x.c,props:out[i]}));
+const pathCoords=()=>{if(expLF)return null;return($('cpath').value==='__all'&&shown.length>1)?shown.map(x=>x.c):null};
+const allDr=()=>[...(expLF?[]:drawn),...(expLF?[]:bufs).map(b=>({type:'poly',name:b.name,pts:b.ring,props:{Buffer_m:b.w,Source:b.srcName,Area_m2:+b.area.toFixed(1)}})),...impGeo.filter(f=>!expLF||f.layer===expLF).map(f=>({type:f.t==='Line'?'line':'poly',name:String((f.props&&(f.props.name||f.props.Name||f.props.NAME||f.props.layer))||'Feature'),pts:f.c,props:f.layer?Object.assign({Layer:f.layer},f.props||{}):(f.props||{})}))];
 const flatProps=p=>{const o={};Object.entries(p||{}).forEach(([k,v])=>o[k]=(v!==null&&typeof v==='object')?JSON.stringify(v):v);return o};
 function toKML(it,path,dr){
   const co=c=>c[1]+','+c[0]+',0';
@@ -1708,7 +1984,7 @@ async function exportShapefile(utm){
   if(typeof JSZip==='undefined'){toast(B('مكتبة ZIP غير محمّلة','ZIP library not loaded'),4000);return}
   const out=buildOut(),tr=c=>utm?proj4(def(38,false),[c[1],c[0]]):[c[1],c[0]],prj=utm?PRJ_UTM38:PRJ_WGS;
   const sets={};
-  const pts=shown.map((x,i)=>({parts:[[tr(x.c)]],props:{Name:String(x.lab),...out[i]}}));
+  const pts=expShown().map((x,i)=>({parts:[[tr(x.c)]],props:{Name:String(x.lab),...out[i]}}));
   if(pts.length)sets.points=['Point',pts];
   const pc=pathCoords();if(pc)sets.path=['Line',[{parts:[pc.map(tr)],props:{Name:'path'}}]];
   const A=allDr(),dl=A.filter(d=>d.type==='line'),dp=A.filter(d=>d.type!=='line');
@@ -1729,24 +2005,28 @@ function toGPX(it,path,dr){
   return g+'</gpx>';
 }
 $('cexp').onclick=async()=>{
+  expLF=$('cexpL').value;
   const A=allDr();
-  if(!shown.length&&!A.length)return;
+  if(!expShown().length&&!A.length){toast(B('لا توجد بيانات في هذا النطاق.','No data in this scope.'),2500);return}
+  try{await cexpRun(A)}finally{expLF=''}
+};
+async function cexpRun(A){
   const out=buildOut(),f=$('cfmt').value;
   if(f==='shp'||f==='shpu'){exportShapefile(f==='shpu');return}
-  if(f==='gpx'){download('export.gpx',toGPX(items(out),pathCoords(),A),'application/gpx+xml');return}
+  if(f==='gpx'){download('export'+expSfx()+'.gpx',toGPX(items(out),pathCoords(),A),'application/gpx+xml');return}
   /* جدول: النقاط، وإلا خصائص الخطوط/المضلعات مع الطول والمساحة */
   const tableRows=()=>{if(out.length)return out;return A.map(d=>{const r={Name:d.name,Type:d.type==='line'?'Line':'Polygon',...flatProps(d.props)};
     if(d.type==='line'){let l=0;for(let i=1;i<d.pts.length;i++)l+=L.latLng(d.pts[i-1]).distanceTo(d.pts[i]);r.Length_m=+l.toFixed(2)}else r.Area_m2=+polyArea(planar(d.pts)).toFixed(2);r.Vertices=d.pts.length;return r})};
-  if(f==='xlsx'){const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(tableRows()),out.length?'Points':'Features');XLSX.writeFile(wb,'export.xlsx')}
-  else if(f==='csv')download('export.csv','\ufeff'+XLSX.utils.sheet_to_csv(XLSX.utils.json_to_sheet(tableRows())),'text/csv;charset=utf-8');
-  else if(f==='kml')download('export.kml',toKML(items(out),pathCoords(),A),'application/vnd.google-earth.kml+xml');
+  if(f==='xlsx'){const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(tableRows()),out.length?'Points':'Features');XLSX.writeFile(wb,'export'+expSfx()+'.xlsx')}
+  else if(f==='csv')download('export'+expSfx()+'.csv','\ufeff'+XLSX.utils.sheet_to_csv(XLSX.utils.json_to_sheet(tableRows())),'text/csv;charset=utf-8');
+  else if(f==='kml')download('export'+expSfx()+'.kml',toKML(items(out),pathCoords(),A),'application/vnd.google-earth.kml+xml');
   else if(f==='kmz'){
     if(typeof JSZip==='undefined'){toast(B('مكتبة ZIP غير محمّلة','ZIP library not loaded'),4000);return}
     const z=new JSZip();z.file('doc.kml',toKML(items(out),pathCoords(),A));
-    download('export.kmz',await z.generateAsync({type:'blob',compression:'DEFLATE'}),'application/vnd.google-earth.kmz');
+    download('export'+expSfx()+'.kmz',await z.generateAsync({type:'blob',compression:'DEFLATE'}),'application/vnd.google-earth.kmz');
   }
-  else download('export.geojson',JSON.stringify(toGeo(items(out),pathCoords(),A)),'application/geo+json');
-};
+  else download('export'+expSfx()+'.geojson',JSON.stringify(toGeo(items(out),pathCoords(),A)),'application/geo+json');
+}
 $('mexp').onclick=()=>{if(!drawn.length){$('mres').textContent=T('لا توجد رسومات محفوظة. ارسم ثم اضغط «احفظ الرسم للتصدير».');return}download('drawings.kml',toKML([],null,drawn),'application/vnd.google-earth.kml+xml')};
 /* ---------- صور تاريخية (Wayback) ---------- */
 let wbData=[],wbLayer=null;
@@ -1875,7 +2155,7 @@ function bfBuild(){
   if(nL)o.push(['L',B('كل الخطوط المستوردة','All imported lines')+' ('+nL+')']);
   if(nP)o.push(['P',B('كل المضلعات المستوردة','All imported polygons')+' ('+nP+')']);
   if(shown.length)o.push(['S',B('كل النقاط المعروضة','All shown points')+' ('+shown.length+')']);
-  impGeo.slice(0,200).forEach((f,i)=>o.push(['f:'+i,fname(f,i)+' — '+(f.t==='Line'?B('خط','line'):B('مضلع','polygon'))]));
+  impGeo.slice(0,200).forEach((f,i)=>o.push(['f:'+i,(f.layer?f.layer+' › ':'')+fname(f,i)+' — '+(f.t==='Line'?B('خط','line'):B('مضلع','polygon'))]));
   $('bfSrc').innerHTML=o.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join('');
   if(o.some(x=>x[0]===cur))$('bfSrc').value=cur;
 }
@@ -1965,7 +2245,7 @@ function chBuild(){
   const sig=impGeo.length+':'+LANG;if(sig===chSig)return;chSig=sig;
   $('chsec').hidden=!lines.length;if(!lines.length){chL.clearLayers();return}
   const cur=$('chSrc').value;
-  $('chSrc').innerHTML=lines.slice(0,300).map(x=>`<option value="${x.i}">${esc(fname(x.f,x.i))}</option>`).join('');
+  $('chSrc').innerHTML=lines.slice(0,300).map(x=>`<option value="${x.i}">${esc((x.f.layer?x.f.layer+' › ':'')+fname(x.f,x.i))}</option>`).join('');
   if(lines.some(x=>String(x.i)===cur))$('chSrc').value=cur;
 }
 function chDrawMarks(){
@@ -2034,17 +2314,18 @@ $('chXls').onclick=()=>{
 
 /* ---------- جدول الخصائص ---------- */
 const atHL=L.layerGroup().addTo(map);
-let atSort={c:null,d:1},atSel=new Set(),atCur=[],atCols=[],atL='pts',atSig='',atDelT=0;
+let atLF='',atSort={c:null,d:1},atSel=new Set(),atCur=[],atCols=[],atL='pts',atSig='',atDelT=0;
 const atLen=c=>{let l=0;for(let i=1;i<c.length;i++)l+=L.latLng(c[i-1]).distanceTo(c[i]);return l};
 const atNum=x=>x!==''&&x!=null&&isFinite(+x);
-function atCounts(){return[['pts',B('نقاط','Points'),rows.length],['lines',B('خطوط مستوردة','Imported lines'),impGeo.filter(f=>f.t==='Line').length],['polys',B('مضلعات مستوردة','Imported polygons'),impGeo.filter(f=>f.t!=='Line').length],['drawn',B('مرسوم (قياس)','Drawn (measure)'),drawn.length],['bufs','Buffer',bufs.length]]}
+const atLfOk=f=>!atLF||f.layer===atLF;
+function atCounts(){return[['pts',B('نقاط','Points'),rows.filter(r=>!atLF||r.Layer===atLF).length],['lines',B('خطوط مستوردة','Imported lines'),impGeo.filter(f=>f.t==='Line'&&atLfOk(f)).length],['polys',B('مضلعات مستوردة','Imported polygons'),impGeo.filter(f=>f.t!=='Line'&&atLfOk(f)).length],['drawn',B('مرسوم (قياس)','Drawn (measure)'),drawn.length],['bufs','Buffer',bufs.length]]}
 function atData(l){
-  if(l==='pts')return{cols:cols.slice(),ro:new Set(),items:rows.map((r,i)=>{const c=coord(r);return{k:i,v:r,g:c?{p:c}:null}})};
+  if(l==='pts')return{cols:cols.slice(),ro:new Set(['Layer']),items:rows.map((r,i)=>{if(atLF&&r.Layer!==atLF)return null;const c=coord(r);return{k:i,v:r,g:c?{p:c}:null}}).filter(Boolean)};
   if(l==='lines'||l==='polys'){
     const isL=l==='lines',items=[],ck=new Set(),ro=new Set();
-    impGeo.forEach((f,i)=>{if((f.t==='Line')!==isL)return;const p=f.props||{},v={};Object.keys(p).forEach(k=>{const x=p[k];v[k]=x!==null&&typeof x==='object'?JSON.stringify(x):x;ck.add(k)});items.push({k:i,v,f})});
-    const cs=[...ck];[isL?'Length_m':'Area_m2','Vertices'].forEach(e=>{if(!ck.has(e)){cs.push(e);ro.add(e)}});
-    items.forEach(it=>{const g=labGeo(it.f);if(ro.has('Length_m'))it.v.Length_m=+g.len.toFixed(2);if(ro.has('Area_m2'))it.v.Area_m2=+g.area.toFixed(2);if(ro.has('Vertices'))it.v.Vertices=it.f.c.length;it.g=isL?{l:it.f.c}:{pg:it.f.c}});
+    impGeo.forEach((f,i)=>{if((f.t==='Line')!==isL||!atLfOk(f))return;const p=f.props||{},v={};Object.keys(p).forEach(k=>{const x=p[k];v[k]=x!==null&&typeof x==='object'?JSON.stringify(x):x;ck.add(k)});items.push({k:i,v,f})});
+    const cs=[...ck];['Layer',isL?'Length_m':'Area_m2','Vertices'].forEach(e=>{if(!ck.has(e)){cs.push(e);ro.add(e)}});
+    items.forEach(it=>{const g=labGeo(it.f);if(ro.has('Layer'))it.v.Layer=it.f.layer||'';if(ro.has('Length_m'))it.v.Length_m=+g.len.toFixed(2);if(ro.has('Area_m2'))it.v.Area_m2=+g.area.toFixed(2);if(ro.has('Vertices'))it.v.Vertices=it.f.c.length;it.g=isL?{l:it.f.c}:{pg:it.f.c}});
     return{cols:cs,ro,items};
   }
   if(l==='drawn')return{cols:['Name','Type','Length_m','Area_m2','Vertices'],ro:new Set(['Type','Length_m','Area_m2','Vertices']),items:drawn.map((d,i)=>{const ln=d.type==='line';return{k:i,v:{Name:d.name,Type:ln?'Line':'Polygon',Length_m:ln?+atLen(d.pts).toFixed(2):'',Area_m2:ln?'':+polyArea(planar(d.pts)).toFixed(2),Vertices:d.pts.length},g:ln?{l:d.pts}:{pg:d.pts}}})};
@@ -2115,9 +2396,12 @@ function atRender(){
   h+='</table>';
   $('atBody').innerHTML=sh.length?h:'<div class="note" style="padding:14px">'+(d.items.length?B('لا توجد نتائج مطابقة للبحث.','No rows match the search.'):B('لا توجد عناصر في هذه الطبقة.','This layer is empty.'))+'</div>';
   atEdLabels();
-  atSig=atCounts().map(x=>x[2]).join('|');
+  atSig=atSigNow();
 }
+const atSigNow=()=>atCounts().map(x=>x[2]).join('|')+'#'+layers.map(l=>l.name).join('|')+'#'+atLF;
 function atLayerOpts(){
+  if(atLF&&!layerByName(atLF))atLF='';
+  const lf=$('atLf');lf.innerHTML='<option value="">'+B('كل الطبقات','All layers')+'</option>'+layers.map(l=>`<option value="${esc(l.name)}">${esc(l.name)}</option>`).join('');lf.value=atLF;lf.hidden=!layers.length;lf.title=lf.setAttribute('aria-label',B('الطبقة','Layer'))||B('الطبقة','Layer');
   const c=atCounts(),sel=$('atLayer');
   sel.innerHTML=c.map(([v,t,n])=>`<option value="${v}">${esc(t)} (${n})</option>`).join('');
   sel.value=atL;
@@ -2130,7 +2414,7 @@ function atOpen(l){
 function atClose(){$('atp').hidden=true;atHL.clearLayers();atSel.clear()}
 function atSync(){
   if($('atp').hidden)return;
-  const sig=atCounts().map(x=>x[2]).join('|');
+  const sig=atSigNow();
   if(sig===atSig)return;
   const a=document.activeElement;if(a&&$('atBody').contains(a))return;
   atSel.clear();atHL.clearLayers();atLayerOpts();atRender();
@@ -2183,6 +2467,7 @@ atBodyEl.addEventListener('focusout',e=>{
   const tr=td.closest('tr'),k=+tr.dataset.k,col=atCols[+td.dataset.ci];
   atPut(atL,k,col,t);atAfter(atL);atFlash(td);
 });
+$('atLf').onchange=()=>{atLF=$('atLf').value;atSel.clear();atSort={c:null,d:1};atHL.clearLayers();const c=atCounts();if(!c.find(x=>x[0]===atL&&x[2]))atL=(c.find(x=>x[2])||c[0])[0];atLayerOpts();atRender()};
 $('atLayer').onchange=()=>{atL=$('atLayer').value;atSel.clear();atSort={c:null,d:1};atHL.clearLayers();atRender()};
 $('atQ').addEventListener('input',()=>{atSel.clear();atHL.clearLayers();atRender()});
 $('atClose').onclick=atClose;
@@ -2238,7 +2523,7 @@ $('atXls').onclick=()=>{
   const items=atSel.size?atCur.filter(x=>atSel.has(x.k)):atCur;
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(items.map(x=>{const o={};atCols.forEach(c=>{o[c]=x.v[c]==null?'':x.v[c]});return o}),{header:atCols.map(String)}),atL.slice(0,30));
-  XLSX.writeFile(wb,'attributes_'+atL+'.xlsx');
+  XLSX.writeFile(wb,'attributes_'+(atLF?atLF.replace(/[^\w\u0600-\u06FF-]+/g,'_')+'_':'')+atL+'.xlsx');
 };
 $('tbAt').addEventListener('click',()=>{
   if(!$('atp').hidden){atClose();return}
@@ -2328,15 +2613,22 @@ crsOpts();
 /* وسيلة الإيضاح: عناصر الطبقات الظاهرة + ألوان فئات النقاط */
 function legendItems(){
   const st=rpStats(),a=[];
-  if(st.pts){
-    const sw=[...$('legend').querySelectorAll('i.sw')];
-    if(sw.length)sw.forEach(i=>a.push(['dot',i.style.backgroundColor||'#0b5d7a',(i.parentElement.textContent||'').trim()]));
-    else a.push(['dot','#0b5d7a',B('نقاط','Points')+' ('+st.pts+')']);
+  const sw=[...$('legend').querySelectorAll('i.sw')],cat=$('ccol').value&&sw.length;
+  if(layers.length){
+    layers.filter(l=>l.visible).forEach(l=>{
+      const c=layCount(l),np=shown.filter(x=>x.r.Layer===l.name).length,types=(np?1:0)+(c.li?1:0)+(c.po?1:0);
+      const nm=(k,w)=>l.name+(types>1?' — '+w:'')+' ('+k+')';
+      if(np&&!cat)a.push(['dot',ptCol(l),nm(np,B('نقاط','points')),l.sym.shape]);
+      if(c.li)a.push(['line',l.color,nm(c.li,B('خطوط','lines')),'']);
+      if(c.po)a.push(['box',l.color,nm(c.po,B('مضلعات','polygons')),'']);
+    });
+    if(cat)sw.forEach(i=>a.push(['dot',i.style.backgroundColor||'#0b5d7a',(i.parentElement.textContent||'').trim(),'circle']));
+  }else if(st.pts){
+    if(sw.length)sw.forEach(i=>a.push(['dot',i.style.backgroundColor||'#0b5d7a',(i.parentElement.textContent||'').trim(),'circle']));
+    else a.push(['dot','#0b5d7a',B('نقاط','Points')+' ('+st.pts+')','circle']);
   }
-  if(st.lines)a.push(['line','#e8590c',B('خطوط','Lines')+' ('+st.lines+')']);
-  if(st.polys)a.push(['box','#e8590c',B('مضلعات','Polygons')+' ('+st.polys+')']);
-  if(st.dl+st.dp)a.push(['line','#f08c00',B('مرسوم','Drawn')+' ('+(st.dl+st.dp)+')']);
-  if(st.bufs)a.push(['box','#e8590c',B('منطقة Buffer','Buffer')+' ('+st.bufs+')']);
+  if(st.dl+st.dp)a.push(['line','#f08c00',B('مرسوم','Drawn')+' ('+(st.dl+st.dp)+')','']);
+  if(st.bufs)a.push(['box','#e8590c',B('منطقة Buffer','Buffer')+' ('+st.bufs+')','']);
   return a;
 }
 function drawLegend(g,u,x,yBottom,W){
@@ -2349,10 +2641,10 @@ function drawLegend(g,u,x,yBottom,W){
   g.direction=ar?'rtl':'ltr';g.textAlign=ar?'right':'left';g.fillStyle='#14262e';g.font='bold '+16*u+'px '+F;
   g.fillText(ttl,ar?bx+bw-10*u:bx+10*u,by+rh/2+6*u);
   g.font=15*u+'px '+F;
-  it.forEach(([t,c,txt],i)=>{
+  it.forEach(([t,c,txt,sh],i)=>{
     const y=by+rh*(i+1)+rh/2+6*u,sx=ar?bx+bw-10*u-28*u:bx+10*u;
     g.fillStyle=c;g.strokeStyle=c;g.lineWidth=4*u;
-    if(t==='dot'){g.beginPath();g.arc(sx+14*u,y,7*u,0,7);g.fill();g.strokeStyle='#fff';g.lineWidth=1.5*u;g.stroke()}
+    if(t==='dot'){if(isLineShape(sh)){pathShape(g,sh,sx+14*u,y,7*u);g.strokeStyle=c;g.lineWidth=3*u;g.stroke()}else{pathShape(g,sh||'circle',sx+14*u,y,7*u);g.fill();g.strokeStyle='#fff';g.lineWidth=1.5*u;g.stroke()}}
     else if(t==='line'){g.beginPath();g.moveTo(sx,y);g.lineTo(sx+28*u,y);g.stroke()}
     else{g.globalAlpha=.3;g.fillRect(sx,y-8*u,28*u,16*u);g.globalAlpha=1;g.lineWidth=2*u;g.strokeRect(sx,y-8*u,28*u,16*u)}
     g.fillStyle='#14262e';g.fillText(txt,ar?sx-10*u:sx+38*u,y);
@@ -2375,6 +2667,10 @@ function rpBook(){
    ['Drawn lines',st.dl],['Drawn lines total length (km)',+(st.dlen/1000).toFixed(3)],['Drawn polygons',st.dp],['Drawn polygons total area (ha)',+(st.darea/10000).toFixed(4)],
    ['Buffers',st.bufs],['Buffers total area (ha)',+(st.barea/10000).toFixed(4)]].map(([Item,Value])=>({Item,Value}));
   add('Summary',sum);
+  if(layers.length){
+    add('Layers',layers.map(l=>{const c=layCount(l),fs=impGeo.filter(f=>f.layer===l.name),len=fs.filter(f=>f.t==='Line').reduce((a,f)=>a+labGeo(f).len,0),ar=fs.filter(f=>f.t!=='Line').reduce((a,f)=>a+labGeo(f).area,0);
+      return{Layer:l.name,Visible:l.visible?'Yes':'No',Points:rows.filter(r=>r.Layer===l.name).length,Lines:c.li,Lines_length_km:+(len/1000).toFixed(3),Polygons:c.po,Polygons_area_ha:+(ar/10000).toFixed(4)}}));
+  }
   const mk=(rowsA,cs)=>rowsA;
   const L=[],P=[];
   impGeo.forEach((f,i)=>{
@@ -2384,6 +2680,9 @@ function rpBook(){
   });
   add('Lines',L);add('Polygons',P);
   if(shown.length)add('Points',buildOut());
+  if(layers.length>1){const used=new Set(wb.SheetNames.map(n=>n.toLowerCase()));layers.forEach(l=>{const sub=shown.filter(x=>x.r.Layer===l.name);if(!sub.length)return;
+    let nm=('Pts_'+l.name).replace(/[\\\/?*\[\]:]/g,'_').slice(0,31),k=2;while(used.has(nm.toLowerCase())){nm=nm.slice(0,28)+'_'+k++}used.add(nm.toLowerCase());
+    const sv=expLF;expLF=l.name;try{add(nm,buildOut())}finally{expLF=sv}})}
   add('Drawn',atData('drawn').items.map(x=>x.v));
   add('Buffers',atData('bufs').items.map(x=>x.v));
   if(bfOut.length)add('Buffer analysis',bfOut.map(r=>({Buffer:r.buf,Type:r.type,Name:r.name,Distance_m:+r.dist.toFixed(2),Lat:r.c?+(+r.c[0]).toFixed(8):'',Lon:r.c?+(+r.c[1]).toFixed(8):''})));
@@ -2442,10 +2741,10 @@ async function rpCompose(){
   g.direction=dir;g.textAlign=al;g.fillStyle=INK;g.font='bold '+22*u+'px '+F;g.fillText(B('وسيلة الإيضاح','Legend'),tx,y);y+=14*u;
   const leg=legendItems();
   g.font=20*u+'px '+F;
-  leg.forEach(([t,c,txt])=>{
+  leg.forEach(([t,c,txt,sh])=>{
     y+=32*u;const sx0=ar?pr-30*u:px,tx2=ar?pr-42*u:px+42*u;
     g.fillStyle=c;g.strokeStyle=c;g.lineWidth=5*u;
-    if(t==='dot'){g.beginPath();g.arc(sx0+15*u,y,8*u,0,7);g.fill()}
+    if(t==='dot'){pathShape(g,sh||'circle',sx0+15*u,y,8*u);if(isLineShape(sh)){g.strokeStyle=c;g.lineWidth=3*u;g.stroke()}else g.fill()}
     else if(t==='line'){g.beginPath();g.moveTo(sx0,y);g.lineTo(sx0+30*u,y);g.stroke()}
     else{g.globalAlpha=.3;g.fillRect(sx0,y-9*u,30*u,18*u);g.globalAlpha=1;g.lineWidth=2.5*u;g.strokeRect(sx0,y-9*u,30*u,18*u)}
     g.fillStyle=INK;g.fillText(txt,tx2,y);
@@ -2458,7 +2757,9 @@ async function rpCompose(){
     if(st.dl)rowsT.push([B('أطوال المرسوم','Drawn length'),fmt(st.dlen)]);
     if(st.dp)rowsT.push([B('مساحة المرسوم','Drawn area'),(st.darea/10000).toFixed(2)+' ha']);
     if(st.bufs)rowsT.push([B('مساحة Buffer','Buffer area'),(st.barea/10000).toFixed(2)+' ha']);
-    const line=impGeo.filter(f=>f.t==='Line').slice(0,12);
+    if(layers.length>1)layers.filter(l=>l.visible).slice(0,10).forEach(l=>{const c=layCount(l),np=shown.filter(x=>x.r.Layer===l.name).length,fs=impGeo.filter(f=>f.layer===l.name),len=fs.filter(f=>f.t==='Line').reduce((a,f)=>a+labGeo(f).len,0),ar=fs.filter(f=>f.t!=='Line').reduce((a,f)=>a+labGeo(f).area,0);
+      const parts=[];if(np)parts.push(np+' '+B('نقطة','pts'));if(c.li)parts.push(fmt(len));if(c.po)parts.push((ar/10000).toFixed(2)+' ha');rowsT.push([l.name,parts.join(' · ')])});
+    const line=layers.length>1?[]:impGeo.filter(f=>f.t==='Line').slice(0,12);
     if(line.length>1)line.forEach((f,i)=>rowsT.push([fname(f,impGeo.indexOf(f)),fmt(labGeo(f).len)]));
   }
   if(rowsT.length){
@@ -2695,7 +2996,7 @@ function projSnapshot(){
   ['clabon','cchain','cclust'].forEach(id=>cfg[id]=$(id).checked);
   const c=map.getCenter();
   const lab={sel:[...labSel],sep:$('labSep').value,z:$('labZ').value,size:$('labSize').value,color:$('labColor').value,halo:$('labHalo').checked,pts:$('labPts').checked,lines:$('labLines').checked,polys:$('labPolys').checked};
-  return{v:1,rows,cfg,lab,buf:bufs,ch:{src:$('chSrc').value,start:$('chStart').value,step:$('chStep').value,rev:$('chRev').checked,marks:$('chMarks').checked,max:$('chMax').value},zone:$('zone').value,drawn,imp:impGeo,visits,view:{c:[c.lat,c.lng],z:map.getZoom()}};
+  return{v:1,rows,cfg,layers:layers.map(l=>({name:l.name,color:l.color,visible:l.visible,sym:l.sym,cfg:l.cfg})),activeL,lab,buf:bufs,ch:{src:$('chSrc').value,start:$('chStart').value,step:$('chStep').value,rev:$('chRev').checked,marks:$('chMarks').checked,max:$('chMax').value},zone:$('zone').value,drawn,imp:impGeo,visits,view:{c:[c.lat,c.lng],z:map.getZoom()}};
 }
 function applyProject(o,silent){
   if(!o||o.v!==1)throw Error(T('ملف مشروع غير صالح'));
@@ -2704,6 +3005,18 @@ function applyProject(o,silent){
   rows=o.rows||[];
   const c=o.cfg||{};
   if(c.cvCustom)$('cvCustom').value=c.cvCustom;
+  layers=Array.isArray(o.layers)?o.layers.map(l=>({name:String(l.name),color:l.color||'#1971c2',visible:l.visible!==false,sym:Object.assign({shape:'circle',size:6,weight:3,dash:'',fillOp:.15},l.sym||{}),cfg:l.cfg||null})):[];
+  activeL=o.activeL||null;
+  {const imp0=o.imp||[];
+   if(!layers.length&&(rows.length||imp0.length)){
+     const l=layAdd(curName||B('طبقة 1','Layer 1'));
+     l.cfg=rows.length?{ctype:c.ctype||'ll',cx:c.cx||'',cy:c.cy||'',cz:c.cz||'',crs:c.cfCrs||'u38'}:null;
+     rows.forEach(r=>{r.Layer=l.name});imp0.forEach(f=>{f.layer=l.name});activeL=l.name;
+   }
+   const need=new Set();rows.forEach(r=>{if(r.Layer!=null)need.add(r.Layer)});imp0.forEach(f=>{if(f.layer)need.add(f.layer)});
+   need.forEach(n=>{if(!layerByName(n)){const l=layAdd(n);l.name=n;if(rows.some(r=>r.Layer===n))l.cfg=detectCfg(Object.keys(rows[0]||{}).filter(k=>k!=='Layer'))}});
+   if(!layerByName(activeL))activeL=layers.length?layers[0].name:null;
+  }
   $('clabon').checked=!!c.clabon;$('cchain').checked=!!c.cchain;$('cclust').checked=!!c.cclust;
   if(rows.length){
     setup();
@@ -2719,6 +3032,7 @@ function applyProject(o,silent){
   if(o.ch){setSel('chSrc',o.ch.src);$('chStart').value=o.ch.start||'0';$('chStep').value=o.ch.step||100;$('chRev').checked=!!o.ch.rev;$('chMarks').checked=!!o.ch.marks;$('chMax').value=o.ch.max||50}
   chHL.clearLayers();chOut=[];try{chDrawMarks()}catch(_){}
   bufs=Array.isArray(o.buf)?o.buf:[];bfOut=[];bfHL.clearLayers();$('bfRes').textContent='';bfSig='';drawBufs();
+  {const al=layerByName(activeL);if(al&&al.cfg)cfgToUI(al.cfg);layRender()}
   updLabels();
   visits=(o.visits||[]).filter(v=>v&&isFinite(v.lat)&&isFinite(v.lon));vi=-1;vSave();vRender();
   if(o.view)map.setView(o.view.c,o.view.z);
@@ -2883,7 +3197,74 @@ function togglePanel(show){
   w.classList.toggle('collapsed',!want);$('tbPanel').classList.toggle('on',want);
   setTimeout(()=>map.invalidateSize(),30);
 }
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>openTab(b.dataset.t));
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{if(isMob()&&b.classList.contains('on')&&!$('work').classList.contains('collapsed')){togglePanel(false);return}openTab(b.dataset.t)});
+/* ---------- المرحلة D: أقسام قابلة للطي، عرض اللوحة، ورقة الجوال، السمة ---------- */
+const isMob=()=>matchMedia('(max-width:760px)').matches;
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
+(function(){
+  const CLOSED=/Labeling|أنظمة الإحداثيات|Coordinate systems|^\s*Buffer|Chainage|Wayback|صور جوية تاريخية|نسخة احتياطية|Backup|بدون إنترنت|Offline/i;
+  let st={},all=false;const raw=lsGet('gx_sec');if(raw==='open')all=true;else{try{st=JSON.parse(raw||'{}')||{}}catch(_){st={}}}
+  const save=()=>{if(!all)lsSet('gx_sec',JSON.stringify(st))};
+  function setup(sec,h,key){
+    sec.dataset.k=key;h.tabIndex=0;h.setAttribute('role','button');
+    const closed=all?false:(key in st?!!st[key]:CLOSED.test(h.textContent));
+    sec.classList.toggle('closed',closed);h.setAttribute('aria-expanded',!closed);
+    const tg=()=>{const c=!sec.classList.contains('closed');sec.classList.toggle('closed',c);h.setAttribute('aria-expanded',!c);st[key]=c?1:0;all=false;save()};
+    h.addEventListener('click',tg);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}});
+  }
+  document.querySelectorAll('.tabsec,#cfg').forEach(ts=>{
+    let n=0,cur=null;const tk=ts.dataset.tab||'cfg';
+    [...ts.children].forEach(el=>{
+      if(el.id==='cfg'){cur=null;return}
+      if(el.tagName==='H2'){n++;const sec=document.createElement('div');sec.className='sec';ts.insertBefore(sec,el);sec.appendChild(el);cur=document.createElement('div');cur.className='secb';sec.appendChild(cur);setup(sec,el,tk+n)}
+      else if(el.id&&el.firstElementChild&&el.firstElementChild.tagName==='H2'){n++;cur=null;const h=el.firstElementChild,b=document.createElement('div');b.className='secb';[...el.children].slice(1).forEach(c=>b.appendChild(c));el.appendChild(b);el.classList.add('sec');setup(el,h,tk+n)}
+      else if(cur)cur.appendChild(el);
+    });
+  });
+  window.secReveal=el=>{let s=el&&el.closest&&el.closest('.sec.closed');while(s){s.classList.remove('closed');const h=s.querySelector(':scope>h2');if(h)h.setAttribute('aria-expanded','true');s=s.parentElement&&s.parentElement.closest&&s.parentElement.closest('.sec.closed')}};
+  const sv=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(){secReveal(this);return sv.apply(this,arguments)};
+  const fc=HTMLElement.prototype.focus;HTMLElement.prototype.focus=function(){secReveal(this);return fc.apply(this,arguments)};
+  $('secToggle').addEventListener('click',()=>{
+    const ts=document.querySelector('.tabsec:not([hidden])'),secs=[...ts.querySelectorAll('.sec')],anyOpen=secs.some(x=>!x.classList.contains('closed'));
+    secs.forEach(x=>{x.classList.toggle('closed',anyOpen);const h=x.querySelector(':scope>h2');h.setAttribute('aria-expanded',!anyOpen);st[x.dataset.k]=anyOpen?1:0});all=false;save();secBtn();
+  });
+  window.secBtn=()=>{const ts=document.querySelector('.tabsec:not([hidden])');if(!ts)return;const any=[...ts.querySelectorAll('.sec')].some(x=>!x.classList.contains('closed'));$('secToggle').textContent=any?B('⇕ طيّ الكل','⇕ Collapse all'):B('⇕ فتح الكل','⇕ Expand all')};
+  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>setTimeout(secBtn,0)));
+  document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.sec>h2'))setTimeout(secBtn,0)});
+  secBtn();
+})();
+/* عرض اللوحة */
+(function(){
+  const sp=$('split'),pn=$('panel');
+  const w0=+lsGet('gx_pw');if(w0>=300&&w0<=900)document.documentElement.style.setProperty('--pw',w0+'px');
+  let drag=false;
+  const move=e=>{if(!drag)return;const r=pn.getBoundingClientRect(),rtl=document.documentElement.dir==='rtl',w=Math.max(300,Math.min(innerWidth*.7,rtl?r.right-e.clientX:e.clientX-r.left));document.documentElement.style.setProperty('--pw',Math.round(w)+'px')};
+  sp.addEventListener('pointerdown',e=>{drag=true;sp.setPointerCapture(e.pointerId);sp.classList.add('drag');document.body.classList.add('resizing')});
+  sp.addEventListener('pointermove',move);
+  const end=()=>{if(!drag)return;drag=false;sp.classList.remove('drag');document.body.classList.remove('resizing');lsSet('gx_pw',parseInt(getComputedStyle(pn).width));try{map.invalidateSize()}catch(_){}};
+  sp.addEventListener('pointerup',end);sp.addEventListener('pointercancel',end);
+  sp.addEventListener('dblclick',()=>{document.documentElement.style.removeProperty('--pw');lsSet('gx_pw','');try{map.invalidateSize()}catch(_){}});
+})();
+/* ورقة الجوال السفلية */
+(function(){
+  const w=$('work'),g=$('grab');
+  const state=()=>w.classList.contains('collapsed')?0:w.classList.contains('sh-full')?2:1;
+  window.setSheet=n=>{w.classList.toggle('collapsed',n===0);w.classList.toggle('sh-full',n===2);$('tbPanel').classList.toggle('on',n>0);setTimeout(()=>{try{map.invalidateSize()}catch(_){}},260)};
+  let y0=null;
+  g.addEventListener('pointerdown',e=>{y0=e.clientY;g.setPointerCapture(e.pointerId)});
+  g.addEventListener('pointerup',e=>{if(y0==null)return;const dy=e.clientY-y0;y0=null;const s=state();
+    if(dy<-25)setSheet(Math.min(2,s+1));else if(dy>25)setSheet(Math.max(0,s-1));else setSheet((s+1)%3)});
+  g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setSheet((state()+1)%3)}});
+  if(isMob())setSheet(0);
+})();
+/* السمة */
+(function(){
+  const root=document.documentElement,b=$('themeBtn');
+  const t0=lsGet('gx_theme');if(t0==='dark'||t0==='light')root.setAttribute('data-theme',t0);
+  const dark=()=>root.getAttribute('data-theme')?root.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+  const ic=()=>{b.textContent=dark()?'☀':'☾'};ic();
+  b.addEventListener('click',()=>{const n=dark()?'light':'dark';root.setAttribute('data-theme',n);lsSet('gx_theme',n);ic()});
+})();
 if(window.ResizeObserver)new ResizeObserver(()=>map.invalidateSize()).observe($('map'));
 
 const on=(id,fn)=>$(id).addEventListener('click',fn);
@@ -2970,6 +3351,28 @@ bmRender();
 
 /* ---------- الدليل: سطر قصير تحت كل زر + شرح مفصّل لكل زر وقائمة في وضع الدليل ---------- */
 const GUIDE={"qgo": {"ar": ["", "الانتقال السريع", "اكتب أو الصق إحداثيًا ثم اضغط Enter للانتقال إليه فورًا.<br>• Lat, Long عشري: <span dir=\"ltr\">30.5081, 47.7835</span><br>• DMS: <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span><br>• UTM: الشرق ثم الشمال (مثل <span dir=\"ltr\">766000 3375000</span>)، والمنطقة تؤخذ من خانة «المنطقة» في تبويب الإحداثي.<br>يُحفظ كل إحداثي في السجل. إذا لم تُفهم الصيغة تظهر رسالة خطأ."], "en": ["", "Quick go-to", "Type or paste a coordinate and press Enter to jump straight to it.<br>• Decimal Lat, Long: <span dir=\"ltr\">30.5081, 47.7835</span><br>• DMS: <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span><br>• UTM: Easting then Northing (e.g. <span dir=\"ltr\">766000 3375000</span>); the zone comes from the Zone box in the Coordinate tab.<br>Every coordinate is saved to the log. If the format is not understood an error message appears."]}, "langBtn": {"ar": ["", "تبديل اللغة", "يبدّل لغة الواجهة بين العربية والإنجليزية ويقلب الاتجاه (يمين-يسار أو يسار-يمين). يشمل الأزرار والقوائم والرسائل وهذا الدليل. يُحفظ اختيارك في المتصفح."], "en": ["", "Switch language", "Switches the interface between Arabic and English and flips the layout direction (right-to-left or left-to-right). It covers buttons, menus, messages and this guide. Your choice is remembered in the browser."]}, "tbGo": {"ar": ["إلى إحداثي", "الانتقال إلى إحداثي", "يفتح تبويب «الإحداثي» ويضع المؤشر في خانة الإدخال.<br>1) اختر الصيغة (Lat/Long أو UTM).<br>2) اكتب الإحداثي أو الصقه.<br>3) اضغط «انتقل» أو Enter: تقفز الخريطة إلى النقطة ويظهر دبوس مرقّم.<br>تُحفظ النقطة في السجل تلقائيًا."], "en": ["to coordinate", "Go to coordinate", "Opens the Coordinate tab and puts the cursor in the input box.<br>1) Pick the format (Lat/Long or UTM).<br>2) Type or paste the coordinate.<br>3) Press Go or Enter: the map jumps to the point and a numbered pin appears.<br>The point is saved to the log automatically."]}, "tbLoc": {"ar": ["GPS", "موقعي الحالي", "يحدد موقعك الحالي. يتابع القراءات ويعتمد الأدق، ويتوقف تلقائيًا عند ±5 م أو بعد 30 ثانية. تظهر دائرة الدقة حول موقعك.<br>• يحتاج إلى إذن الموقع في المتصفح.<br>• على حاسوب بلا GPS تكون الدقة عشرات الأمتار أو أكثر لأن الموقع يأتي من Wi-Fi والشبكة.<br>• اضغط الزر مرة ثانية أثناء التحديد لاعتماد أفضل قراءة الآن."], "en": ["GPS", "My current location", "Finds your current position. It keeps collecting readings, uses the most accurate one, and stops automatically at ±5 m or after 30 seconds. An accuracy circle is drawn around you.<br>• Needs the browser location permission.<br>• On a computer without GPS the accuracy is tens of metres or worse because the position comes from Wi-Fi and the network.<br>• Press the button again while it is working to accept the best reading now."]}, "tbCam": {"ar": ["من صورة", "قراءة إحداثي من صورة", "يقرأ إحداثيًا مكتوبًا في صورة (OCR).<br>1) اختر صورة أو التقطها.<br>2) ارسم مربعًا حول الإحداثي المطلوب فقط.<br>3) اضغط «اقرأ المربع المحدد» وصحّح النص إن لزم.<br>4) اضغط «استخرج الإحداثي من النص».<br>تنبيه: يقرأ الأرقام اللاتينية (1 2 3) فقط. راجع الأرقام قبل الاعتماد عليها."], "en": ["from photo", "Read a coordinate from a photo", "Reads a coordinate written in a photo (OCR).<br>1) Choose or take a photo.<br>2) Draw a box around only the coordinate you want.<br>3) Press Read selected box and correct the text if needed.<br>4) Press Extract coordinate from text.<br>Note: it reads Latin digits (1 2 3) only. Check the numbers before relying on them."]}, "tbLog": {"ar": ["نقاطك", "سجل الإحداثيات", "يفتح سجل الإحداثيات: كل نقطة انتقلت إليها تُحفظ تلقائيًا في متصفحك. تنتقل بينها بزري السابق والتالي أو بالنقر على الصف، وتصدّرها CSV أو KML أو تفتحها كجدول. يبقى السجل بعد إغلاق الصفحة."], "en": ["your points", "Coordinate log", "Opens the coordinate log: every point you jump to is saved automatically in your browser. Move through them with Previous and Next or by clicking a row, export them as CSV or KML, or open them as a table. The log stays after you close the page."]}, "tlPan": {"ar": ["تنقّل", "تحريك الخريطة", "الوضع العادي: اسحب الخريطة، قرّب وبعّد، وانقر على النقاط لفتح تفاصيلها. زر Esc يعيدك إليه من أي أداة.<br>يضيء الزر عندما لا تكون أي أداة قياس مفعّلة."], "en": ["navigate", "Pan the map", "Normal mode: drag the map, zoom, and click points to open their details. Esc returns you here from any tool.<br>The button is highlighted when no measuring tool is active."]}, "tlLine": {"ar": ["بين نقاط", "قياس مسافة", "انقر نقطتين أو أكثر على الخريطة. يظهر طول كل مقطع والاتجاه والإجمالي في تبويب «القياس». يمكنك النقر على دبوس ليُقاس من مركزه تمامًا (لا تُفتح نافذته أثناء القياس). لإنهاء القياس اضغط «تحريك» أو Esc."], "en": ["between points", "Measure distance", "Click two or more points on the map. The length of each segment, the bearing and the total appear in the Measure tab. You can click a pin to measure from its exact centre (its popup does not open while measuring). To finish press Pan or Esc."]}, "tlPoly": {"ar": ["ومحيط", "قياس مساحة", "انقر ثلاث نقاط أو أكثر. تظهر المساحة بالمتر المربع والهكتار والدونم مع المحيط. المساحة تُحسب على إسقاط UTM فهي دقيقة لمنطقتك."], "en": ["and perimeter", "Measure area", "Click three or more points. The area is shown in square metres, hectares and dunums, together with the perimeter. The area is computed on a UTM projection so it is accurate for your region."]}, "tlP2L": {"ar": ["أقرب مسافة", "نقطة إلى المسار", "يحسب أقصر مسافة بين نقطة تنقر عليها ومسار مرسوم من ملف Excel. ارسم المسار أولًا من تبويب «البيانات» (اختر «كل النقاط بترتيب الصفوف» ثم «ارسم»). تظهر المسافة والمسافة التراكمية على المسار للنقطة الأقرب."], "en": ["nearest", "Point to path", "Calculates the shortest distance between a point you click and a path drawn from an Excel file. Draw the path first from the Data tab (choose All points in row order, then Draw). The distance and the chainage along the path of the nearest point are shown."]}, "tbSaveDraw": {"ar": ["للتصدير", "حفظ الرسم", "يثبّت الخط أو المضلع الحالي كرسم محفوظ: يبقى على الخريطة ويدخل في تصدير KML للرسومات ويُحفظ مع المشروع."], "en": ["to export", "Save drawing", "Keeps the current line or polygon as a saved drawing: it stays on the map, is included in the drawings KML export and is saved with the project."]}, "tbClearDraw": {"ar": ["القياس", "مسح القياس", "يمسح القياس الجاري فقط. الرسومات المحفوظة لا تتأثر، وتُمسح من تبويب «القياس» بزر «مسح المحفوظ»."], "en": ["measure", "Clear measurement", "Clears only the measurement in progress. Saved drawings are not affected; delete them with Clear saved in the Measure tab."]}, "tbWb": {"ar": ["صور قديمة", "صور جوية تاريخية", "صور جوية تاريخية من Esri Wayback. يفتح تبويب «الصور والمشروع» ويحمّل قائمة الإصدارات. اختر إصدارًا لعرضه وغيّر الشفافية لمقارنته بالصورة الحالية. التاريخ المعروض هو تاريخ نشر الإصدار وليس تاريخ التقاط الصورة. يضيء الزر عندما تكون صورة تاريخية معروضة."], "en": ["past imagery", "Historical imagery", "Historical aerial imagery from Esri Wayback. Opens the Imagery and project tab and loads the list of releases. Pick a release to show it and change the opacity to compare it with current imagery. The date shown is the release date, not the capture date. The button is highlighted while a historical layer is shown."]}, "tbExt": {"ar": ["كل النقاط", "المدى الكامل", "يكبّر الخريطة لتشمل كل النقاط المستوردة والسجل والرسومات المحفوظة."], "en": ["all points", "Zoom to all", "Zooms the map to include all imported points, the log and the saved drawings."]}, "tbImp": {"ar": ["ملف نقاط", "استيراد ملف", "يستورد نقاطًا من ملف: Excel (xlsx/xls) أو CSV أو KML أو KMZ أو GeoJSON أو GeoPackage (gpkg) أو Shapefile (ملف ZIP، أو حدّد .shp و .dbf و .prj معًا). بعد الاستيراد اختر عمودي الإحداثي ونوعه (Lat/Long أو UTM) ثم «ارسم». يمكنك استخدام أي عمود كملصق أو للتلوين، وتجميع النقاط وفلترتها."], "en": ["points file", "Import file", "Imports points from a file: Excel (xlsx/xls), CSV, KML, KMZ, GeoJSON or Shapefile (ZIP). After importing, choose the coordinate columns and their type (Lat/Long or UTM) then press Draw. Any column can be used as a label or for colouring, and points can be clustered and filtered."]}, "tbQc": {"ar": ["تدقيق", "فحص الجودة", "يفحص جودة النقاط المستوردة: الصفوف غير الصالحة والنقاط المكررة والنقاط الشاذة البعيدة والقفزات غير الطبيعية بين نقطتين متتاليتين، مع روابط للصفوف المعنية. يحتاج إلى ملف مستورد."], "en": ["check", "Quality check", "Checks the quality of the imported points: invalid rows, duplicate points, distant outliers and unusual jumps between consecutive points, with links to the rows concerned. Needs an imported file."]}, "tbExp": {"ar": ["النقاط", "تصدير النقاط", "يصدّر النقاط المستوردة إلى Excel أو CSV أو KML أو GeoJSON مع إحداثياتها بصيغتي Lat/Long وUTM. اختر الصيغة من تبويب «البيانات» قبل الضغط."], "en": ["points", "Export points", "Exports the imported points to Excel, CSV, KML or GeoJSON with their coordinates in both Lat/Long and UTM. Choose the format in the Data tab before pressing."]}, "tbPsave": {"ar": ["المشروع", "حفظ المشروع", "يحفظ كل شيء في ملف JSON: النقاط المستوردة وإعداداتها والرسومات والسجل وموضع الخريطة، لتفتحه لاحقًا بزر «فتح»."], "en": ["project", "Save project", "Saves everything into a JSON file: imported points and their settings, drawings, the log and the map view, so you can reopen it later with Open."]}, "tbPopen": {"ar": ["مشروع", "فتح مشروع", "يفتح ملف مشروع حفظته سابقًا ويعيد النقاط والرسومات والسجل وموضع الخريطة."], "en": ["project", "Open project", "Opens a project file you saved earlier and restores the points, drawings, log and map view."]}, "tbImg": {"ar": ["للتقارير", "صورة الخريطة", "ينشئ صورة PNG للخريطة المعروضة مع سهم الشمال ومقياس الرسم وعنوان اختياري (من تبويب «الصور والمشروع»). مناسبة للتقارير. قد تمنع بعض المتصفحات التقاط صور الخرائط."], "en": ["for reports", "Map image", "Creates a PNG of the map in view with a north arrow, scale bar and an optional title (set in the Imagery and project tab). Suitable for reports. Some browsers may block capturing map images."]}, "tbPanel": {"ar": ["إخفاء/إظهار", "اللوحة الجانبية", "يخفي اللوحة الجانبية أو يظهرها لتوسيع الخريطة. يضيء الزر عندما تكون اللوحة ظاهرة."], "en": ["show/hide", "Side panel", "Hides or shows the side panel to give the map more room. The button is highlighted while the panel is visible."]}, "tbHelp": {"ar": ["شرح الأزرار", "الدليل", ""], "en": ["guide", "Guide", ""]}, "zoomIn": {"ar": ["", "تكبير", "يقرّب الخريطة مستوى واحدًا. يمكنك أيضًا استخدام عجلة الفأرة أو التقريب بإصبعين. أقصى تفصيل للصور الجوية حوالي المستوى 19–20."], "en": ["", "Zoom in", "Zooms in one level. You can also use the mouse wheel or pinch with two fingers. The most detailed aerial imagery is around zoom level 19–20."]}, "zoomOut": {"ar": ["", "تصغير", "يبعّد الخريطة مستوى واحدًا."], "en": ["", "Zoom out", "Zooms out one level."]}, "loc": {"ar": ["", "موقعي الحالي (على الخريطة)", "نفس زر «موقعي» في الشريط العلوي: يحدد موقعك الحالي بدقة متحسنة ويرسم دائرة الدقة."], "en": ["", "My location (on the map)", "The same as the My location button in the ribbon: finds your position with improving accuracy and draws the accuracy circle."]}, "bmBtn": {"ar": ["", "قائمة الخرائط", "يفتح قائمة خرائط الأساس: صورة Esri، صورة Google، Google هجين، OpenStreetMap، شوارع Esri، طبوغرافية Esri. تحت كل خيار سطر شرح قصير، وزر «تفاصيل» يعرض شرحًا أوسع. في وضع الدليل اضغط أي خيار لقراءة تفاصيله."], "en": ["", "Maps menu", "Opens the basemap list: Esri imagery, Google imagery, Google hybrid, OpenStreetMap, Esri streets, Esri topographic. Each option has a short description and a Details button for more. In guide mode click any option to read its details."]}, "namesBtn": {"ar": ["", "أسماء الأماكن", "يضيف أسماء الأماكن فوق الصور الجوية (Esri وGoogle). يكون الزر معتمًا مع الخرائط التي تحتوي الأسماء أصلًا ويضيء عند التشغيل."], "en": ["", "Place names", "Adds place names over the aerial imagery (Esri and Google). The button is dimmed on maps that already contain names and is highlighted when on."]}, "tab_go": {"ar": ["", "تبويب الإحداثي", "إدخال الإحداثي والانتقال إليه، وسجل النقاط، وقراءة الإحداثي من صورة."], "en": ["", "Coordinate tab", "Enter a coordinate and jump to it, the points log, and reading a coordinate from a photo."]}, "tab_measure": {"ar": ["", "تبويب القياس", "أدوات المسافة والمساحة والنقطة إلى المسار، والرسومات المحفوظة وتصديرها، ونتائج القياس."], "en": ["", "Measure tab", "Distance, area and point-to-path tools, saved drawings and their export, and the measurement results."]}, "tab_data": {"ar": ["", "تبويب البيانات", "استيراد الملفات (Excel وغيره)، اختيار الأعمدة، الملصقات والتلوين والمسار والتجميع، فحص الجودة، التصدير، وجدول النقاط."], "en": ["", "Data tab", "Import files (Excel and others), choose columns, labels, colouring, path and clustering, quality check, export, and the points table."]}, "tab_img": {"ar": ["", "تبويب الصور والمشروع", "الصور الجوية التاريخية (Wayback)، حفظ المشروع وفتحه، وتصدير صورة الخريطة."], "en": ["", "Imagery and project tab", "Historical imagery (Wayback), saving and opening projects, and exporting the map image."]}, "mode": {"ar": ["", "صيغة الإحداثي", "اختر طريقة الإدخال: Lat/Long (عشري أو درجات ودقائق وثوانٍ) أو UTM (منطقة وشرق وشمال)."], "en": ["", "Coordinate format", "Choose how you enter coordinates: Lat/Long (decimal or degrees-minutes-seconds) or UTM (zone, easting, northing)."]}, "ll": {"ar": ["", "خانة Lat, Long", "اكتب الإحداثي: <span dir=\"ltr\">30.5081, 47.7835</span> أو بالدرجات <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span>. الأول خط العرض ثم خط الطول. يمكنك لصق عدة أسطر دفعة واحدة فتُضاف كلها إلى السجل. تقبل الخانة أيضًا إحداثي UTM إذا كتبت رقمين كبيرين."], "en": ["", "Lat, Long box", "Enter the coordinate: <span dir=\"ltr\">30.5081, 47.7835</span> or in degrees <span dir=\"ltr\">30°30'29\"N 47°47'00\"E</span>. Latitude comes first, then longitude. You can paste several lines at once and all are added to the log. The box also accepts a UTM coordinate if you type two large numbers."]}, "zone": {"ar": ["", "المنطقة (Zone)", "منطقة UTM. العراق غالبًا في 38 (37 غربًا و39 شرقًا). اختيار منطقة خاطئة يزيح الموقع مئات الكيلومترات."], "en": ["", "Zone", "The UTM zone. Iraq is mostly in 38 (37 in the west, 39 in the east). A wrong zone shifts the location by hundreds of kilometres."]}, "e": {"ar": ["", "Easting (X)", "الإحداثي الشرقي بالمتر، من 6 أرقام عادةً (مثل 766000). يمكنك لصق الإحداثيين معًا في هذه الخانة."], "en": ["", "Easting (X)", "The easting in metres, usually 6 digits (e.g. 766000). You can paste both values together into this box."]}, "n": {"ar": ["", "Northing (Y)", "الإحداثي الشمالي بالمتر، من 7 أرقام (مثل 3375000). إذا عكست الشرق والشمال يصحح التطبيق ذلك تلقائيًا."], "en": ["", "Northing (Y)", "The northing in metres, 7 digits (e.g. 3375000). If you swap easting and northing the app corrects it automatically."]}, "go": {"ar": ["", "انتقل", "ينتقل إلى الإحداثي المُدخل، ويضع دبوسًا مرقّمًا، ويحفظه في السجل، ويعرض إحداثياته بكل الصيغ (عشري وDMS وUTM) في نافذة الدبوس."], "en": ["", "Go", "Jumps to the entered coordinate, drops a numbered pin, saves it in the log and shows its coordinates in every format (decimal, DMS, UTM) in the pin popup."]}, "addm": {"ar": ["", "أضف للقياس", "يضيف الإحداثي المُدخل كنقطة قياس دون الحاجة إلى النقر على الخريطة."], "en": ["", "Add to measurement", "Adds the entered coordinate as a measurement point without clicking on the map."]}, "camb": {"ar": ["", "زر الكاميرا", "يختار صورة لقراءة الإحداثي منها (OCR)، مثل زر «كاميرا» في الشريط. ارسم مربعًا حول الإحداثي المطلوب."], "en": ["", "Camera button", "Chooses a photo to read the coordinate from (OCR), like the Camera button in the ribbon. Draw a box around the coordinate you want."]}, "vprev": {"ar": ["", "السابق", "ينتقل إلى النقطة السابقة في سجل الإحداثيات ويكبّر عليها. مفيد عند فحص عدة نقاط متتالية."], "en": ["", "Previous", "Moves to the previous point in the coordinate log and zooms to it. Useful when checking several points in a row."]}, "vnext": {"ar": ["", "التالي", "ينتقل إلى النقطة التالية في سجل الإحداثيات ويكبّر عليها."], "en": ["", "Next", "Moves to the next point in the coordinate log and zooms to it."]}, "vlist": {"ar": ["", "قائمة السجل", "اضغط على صف للانتقال إلى نقطته، وعلى ✕ لحذفها من السجل."], "en": ["", "Log list", "Click a row to jump to its point and ✕ to remove it from the log."]}, "vcsv": {"ar": ["", "تصدير السجل CSV", "ينزّل السجل ملف CSV بالإحداثيات بصيغتي Lat/Long وUTM."], "en": ["", "Export log as CSV", "Downloads the log as a CSV file with coordinates in both Lat/Long and UTM."]}, "vkml": {"ar": ["", "تصدير السجل KML", "ينزّل السجل ملف KML يُفتح في Google Earth مع نقطة لكل إحداثي."], "en": ["", "Export log as KML", "Downloads the log as a KML file that opens in Google Earth with one placemark per coordinate."]}, "vtbl": {"ar": ["", "فتح السجل كجدول", "يفتح السجل كجدول في تبويب «البيانات» لتستخدم أدوات الملصقات والتلوين وفحص الجودة والتصدير عليه."], "en": ["", "Open log as table", "Opens the log as a table in the Data tab so you can use labels, colouring, quality check and export on it."]}, "vclr": {"ar": ["", "مسح السجل", "يمسح السجل بالكامل. اضغط مرتين للتأكيد حتى لا تحذفه بالخطأ."], "en": ["", "Clear log", "Clears the whole log. Press twice to confirm so you do not delete it by accident."]}, "ocrsel": {"ar": ["", "اقرأ المربع المحدد", "يقرأ ما داخل المربع الذي رسمته فقط، وهو الأدق. إن لم تنجح القراءة جرّب مربعًا أكبر قليلًا أو أصغر."], "en": ["", "Read selected box", "Reads only what is inside the box you drew, which is the most accurate. If it fails try a slightly larger or smaller box."]}, "ocrall": {"ar": ["", "اقرأ الصورة كاملة", "يقرأ الصورة كلها. قد يخلط الأرقام إذا كانت فيها نصوص كثيرة، فالمربع المحدد أفضل."], "en": ["", "Read whole image", "Reads the whole image. It may mix up numbers when there is a lot of text, so the selected box works better."]}, "ocrtxt": {"ar": ["", "النص المقروء", "النص كما قرأه البرنامج. صحّحه يدويًا إذا كان ناقصًا أو فيه خطأ ثم اضغط «استخرج الإحداثي من النص»."], "en": ["", "Recognised text", "The text as the program read it. Correct it by hand if something is missing or wrong, then press Extract coordinate from text."]}, "ocrgo": {"ar": ["", "استخرج الإحداثي من النص", "يستخرج الإحداثي من النص (UTM أو Lat/Long) ويملأ الخانات وينتقل إليه ويحفظه في السجل."], "en": ["", "Extract coordinate from text", "Extracts the coordinate from the text (UTM or Lat/Long), fills the boxes, jumps to it and saves it in the log."]}, "camclose": {"ar": ["", "إغلاق لوحة الصورة", "يغلق لوحة قراءة الصورة ويفرّغ الصورة من الذاكرة."], "en": ["", "Close photo panel", "Closes the photo-reading panel and releases the image."]}, "mmode": {"ar": ["", "نوع أداة القياس", "مسافة (خط)، مساحة (مضلع)، أو نقطة إلى المسار. يمكنك أيضًا اختيارها من الشريط العلوي."], "en": ["", "Measuring tool", "Distance (line), area (polygon) or point to path. You can also pick it from the ribbon."]}, "mtoggle": {"ar": ["", "بدء القياس بالنقر", "يشغّل القياس بالنقر على الخريطة أو يوقفه. يضيء الزر باللون البرتقالي عندما يكون القياس فعالًا."], "en": ["", "Start measuring by clicking", "Turns click-to-measure on or off. The button turns orange while measuring is active."]}, "mclear": {"ar": ["", "مسح", "يمسح القياس الجاري ويبدأ من جديد."], "en": ["", "Clear", "Clears the current measurement so you can start again."]}, "msave": {"ar": ["", "احفظ الرسم للتصدير", "يثبّت الخط أو المضلع الحالي كرسم محفوظ (برتقالي) يبقى على الخريطة ويُصدَّر ويُحفظ مع المشروع."], "en": ["", "Save drawing for export", "Keeps the current line or polygon as a saved (orange) drawing that stays on the map, can be exported and is saved with the project."]}, "mclrsaved": {"ar": ["", "مسح المحفوظ", "يحذف كل الرسومات المحفوظة من الخريطة ومن التصدير."], "en": ["", "Clear saved", "Deletes all saved drawings from the map and from the export."]}, "mexp": {"ar": ["", "تصدير الرسومات KML", "يصدّر الرسومات المحفوظة (خطوط ومضلعات) إلى ملف KML يفتح في Google Earth. هذا غير تصدير النقاط المستوردة الذي تجده في تبويب «البيانات»."], "en": ["", "Export drawings KML", "Exports the saved drawings (lines and polygons) to a KML file that opens in Google Earth. This is separate from exporting imported points, which is in the Data tab."]}, "file": {"ar": ["", "ملف النقاط", "اختر ملف Excel أو CSV أو KML أو KMZ أو GeoJSON أو Shapefile مضغوطًا (ZIP). بعد القراءة تظهر خيارات الأعمدة والعرض."], "en": ["", "Points file", "Choose an Excel, CSV, KML, KMZ, GeoJSON or zipped Shapefile. After reading, the column and display options appear."]}, "tpl": {"ar": ["", "تحميل قالب Excel", "ينزّل ملف Excel جاهزًا فيه الأعمدة المعتمدة (Name, Latitude, Longitude, Zone, Easting, Northing) وصفّان مثاليان، لتملأه بنقاطك."], "en": ["", "Download Excel template", "Downloads a ready Excel file with the supported columns (Name, Latitude, Longitude, Zone, Easting, Northing) and two example rows for you to fill with your points."]}, "clrpts": {"ar": ["", "مسح النقاط", "يمسح النقاط المستوردة والجدول والمسار وفحص الجودة من الخريطة. لا يمسح السجل ولا الرسومات المحفوظة."], "en": ["", "Clear points", "Removes the imported points, the table, the path and the quality check from the map. It does not clear the log or the saved drawings."]}, "ctype": {"ar": ["", "نوع الإحداثي في الملف", "اختر ما إذا كان الملف يحتوي Lat/Long أو UTM. يحاول التطبيق اكتشافه من أسماء الأعمدة."], "en": ["", "Coordinate type in the file", "Choose whether the file holds Lat/Long or UTM. The app tries to detect it from the column names."]}, "cx": {"ar": ["", "عمود الإحداثي الأول", "Latitude (أو Easting مع UTM). اختر العمود الذي يحتوي القيمة الأولى."], "en": ["", "First coordinate column", "Latitude (or Easting for UTM). Pick the column that holds the first value."]}, "cy": {"ar": ["", "عمود الإحداثي الثاني", "Longitude (أو Northing مع UTM). اختر العمود الذي يحتوي القيمة الثانية."], "en": ["", "Second coordinate column", "Longitude (or Northing for UTM). Pick the column that holds the second value."]}, "cz": {"ar": ["", "عمود المنطقة (Zone)", "لإحداثيات UTM: عمود فيه رقم المنطقة لكل صف. إذا اخترت «منطقة اللوحة» تُستخدم المنطقة المحددة في تبويب «الإحداثي»."], "en": ["", "Zone column", "For UTM coordinates: a column holding the zone number of each row. If you choose Panel zone, the zone selected in the Coordinate tab is used."]}, "clab": {"ar": ["", "عمود الملصق (Label)", "القيمة التي تُعرض كنص فوق كل نقطة على الخريطة (مثل Tag أو رقم النقطة). فعّل «إظهار الملصقات» لرؤيتها عند التكبير."], "en": ["", "Label column", "The value shown as text over each point on the map (such as a tag or point number). Turn on Show labels to see them when zoomed in."]}, "ccol": {"ar": ["", "تلوين حسب عمود", "يلوّن النقاط بحسب قيم عمود (مثل النوع). يظهر دليل الألوان تحت الأزرار."], "en": ["", "Colour by column", "Colours the points by the values of a column (such as the type). A colour legend appears under the buttons."]}, "cpath": {"ar": ["", "رسم مسار", "«كل النقاط بترتيب الصفوف» يربط النقاط بخط واحد بترتيب الصفوف ويحسب أطوال المقاطع والمسافة التراكمية، وهو ما تحتاجه أداة «نقطة إلى المسار»."], "en": ["", "Draw path", "All points in row order joins the points into one line in row order and calculates segment lengths and chainage, which the Point to path tool needs."]}, "cfilt": {"ar": ["", "بحث / فلترة", "اكتب جزءًا من أي قيمة في الصف لإظهار الصفوف المطابقة فقط على الخريطة وفي الجدول."], "en": ["", "Search / filter", "Type part of any value in the row to show only matching rows on the map and in the table."]}, "clabon": {"ar": ["", "إظهار الملصقات", "يعرض ملصق كل نقطة على الخريطة عند التكبير الكافي حتى لا تزدحم الشاشة."], "en": ["", "Show labels", "Shows each point label on the map when zoomed in enough so the screen does not get crowded."]}, "cchain": {"ar": ["", "المسافة التراكمية في الملصق", "يضيف المسافة التراكمية على المسار إلى ملصق كل نقطة. يعمل مع مسار «كل النقاط بترتيب الصفوف»."], "en": ["", "Chainage in label", "Adds the chainage along the path to each point label. Works with the All points in row order path."]}, "cclust": {"ar": ["", "تجميع النقاط", "يجمع النقاط المتقاربة في دوائر مرقّمة عند التبعيد، وتنفصل عند التكبير. مفيد مع مئات النقاط."], "en": ["", "Cluster points", "Groups nearby points into numbered circles when zoomed out; they separate as you zoom in. Useful with hundreds of points."]}, "cdraw": {"ar": ["", "ارسم", "يرسم النقاط على الخريطة بحسب الأعمدة والإعدادات المختارة. اضغطه بعد أي تغيير في الأعمدة أو الفلتر."], "en": ["", "Draw", "Draws the points on the map using the chosen columns and settings. Press it after changing columns or the filter."]}, "cqc": {"ar": ["", "فحص الجودة", "يعرض عدد الصفوف المرفوضة والمكررة والشاذة والقفزات غير الطبيعية، مع روابط للنقاط على الخريطة. أرقام الصفوف كما في Excel."], "en": ["", "Quality check", "Shows the number of rejected, duplicate, outlier rows and unusual jumps, with links to the points on the map. Row numbers match Excel."]}, "cfmt": {"ar": ["", "صيغة التصدير", "Excel أو CSV أو KML (Google Earth) أو GeoJSON. يضاف إلى كل نقطة إحداثياتها بصيغتي Lat/Long وUTM."], "en": ["", "Export format", "Excel, CSV, KML (Google Earth) or GeoJSON. Each point also gets its coordinates in Lat/Long and UTM."]}, "cexp": {"ar": ["", "تصدير", "ينزّل النقاط الظاهرة بالصيغة المختارة مع كل أعمدتها الأصلية وإحداثياتها المحوّلة."], "en": ["", "Export", "Downloads the visible points in the chosen format with all their original columns and converted coordinates."]}, "wbload": {"ar": ["", "تحميل قائمة الإصدارات", "يحمّل قائمة إصدارات Esri Wayback من الإنترنت. بعدها اختر إصدارًا من القائمة."], "en": ["", "Load release list", "Loads the list of Esri Wayback releases from the internet. Then pick a release from the list."]}, "wbsel": {"ar": ["", "إصدار الصور", "اختر إصدارًا لعرضه فوق الخريطة. التاريخ هو تاريخ نشر الإصدار وليس تاريخ التقاط الصورة، وقد تتشابه الصور بين إصدارات متتالية."], "en": ["", "Imagery release", "Pick a release to show over the map. The date is the release date, not the capture date, and consecutive releases may look the same."]}, "wbop": {"ar": ["", "الشفافية", "حرّك المنزلق لتجعل الصورة التاريخية شفافة وترى الصورة الحالية تحتها للمقارنة."], "en": ["", "Opacity", "Move the slider to make the historical imagery transparent and see the current imagery beneath it for comparison."]}, "wboff": {"ar": ["", "إيقاف الصور التاريخية", "يزيل طبقة الصور التاريخية ويعود إلى الخريطة الأساسية."], "en": ["", "Turn off historical imagery", "Removes the historical imagery layer and returns to the basemap."]}, "psave": {"ar": ["", "حفظ المشروع", "ينزّل ملف مشروع (JSON) فيه النقاط المستوردة وإعداداتها والرسومات والسجل وموضع الخريطة."], "en": ["", "Save project", "Downloads a project file (JSON) containing the imported points and their settings, drawings, the log and the map view."]}, "pload": {"ar": ["", "فتح مشروع محفوظ", "اختر ملف مشروع حفظته سابقًا لاستعادة كل ما فيه."], "en": ["", "Open saved project", "Choose a project file you saved earlier to restore everything in it."]}, "mtitle": {"ar": ["", "عنوان الخريطة", "نص اختياري يظهر في أعلى صورة الخريطة المصدّرة."], "en": ["", "Map title", "Optional text shown at the top of the exported map image."]}, "imgexp": {"ar": ["", "تصدير صورة الخريطة PNG", "ينشئ صورة PNG للخريطة الحالية مع سهم الشمال ومقياس الرسم والعنوان. قد تمنع بعض المتصفحات التقاط صور الخرائط."], "en": ["", "Export map image PNG", "Creates a PNG of the current map with a north arrow, scale bar and the title. Some browsers may block capturing map images."]}};
+Object.assign(GUIDE,{
+"symShape":{ar:["الشكل","شكل النقطة","اختر شكل نقاط هذه الطبقة: دائرة أو مربع أو مثلث أو معيّن أو علامة + أو × أو نجمة. مناسب لتمييز التقاطعات عن غيرها."],en:["Shape","Point shape","Choose the shape of this layer's points: circle, square, triangle, diamond, +, × or star. Useful to tell crossings from other points."]},
+"symPtc":{ar:["لون النقاط","لون النقاط","لون رموز نقاط هذه الطبقة، مستقل عن لون المسار. يُختار تلقائيًا لونًا مختلفًا ويمكنك تغييره."],en:["Point color","Point color","Color of this layer's point symbols, independent of the path color. A different color is chosen automatically; change it freely."]},
+"symLc":{ar:["لون المسار","لون المسار والخط","لون خط المسار والخطوط والمضلعات لهذه الطبقة."],en:["Path color","Path/line color","Color of this layer's path, lines and polygons."]},
+"cexpL":{ar:["النطاق","نطاق التصدير","صدّر كل الطبقات معًا أو طبقة واحدة فقط (نقاطها وخطوطها ومضلعاتها). عند اختيار طبقة لا تُصدَّر الرسومات والـ Buffer."],en:["Scope","Export scope","Export all layers together or just one layer (its points, lines and polygons). Drawings and buffers are exported only with All layers."]},
+"themeBtn":{ar:["السمة","الوضع الليلي / النهاري","يبدّل بين المظهر الفاتح والداكن، ويتذكّر اختيارك."],en:["Theme","Dark / light mode","Switches between the light and dark look and remembers your choice."]},
+"secToggle":{ar:["طيّ الكل","طيّ / فتح الأقسام","يطوي أو يفتح كل أقسام التبويب الحالي. اضغط على عنوان أي قسم لطيّه أو فتحه، ويُحفظ اختيارك. الخيارات المتقدمة مطويّة افتراضيًا."],en:["Collapse all","Collapse / expand sections","Collapses or expands every section of the current tab. Click any section title to toggle it; your choice is remembered. Advanced options start collapsed."]},
+"symSize":{ar:["الحجم","حجم النقطة","يكبّر أو يصغّر رمز نقاط هذه الطبقة."],en:["Size","Point size","Makes this layer's point symbols larger or smaller."]},
+"symW":{ar:["السُمك","سُمك الخط","سُمك خطوط هذه الطبقة وحدود مضلعاتها."],en:["Width","Line width","Width of this layer's lines and polygon outlines."]},
+"symDash":{ar:["النمط","نمط الخط","متصل أو متقطع أو منقّط لخطوط الطبقة وحدود مضلعاتها."],en:["Style","Line style","Solid, dashed or dotted lines and polygon outlines."]},
+"symFill":{ar:["التعبئة","تعبئة المضلعات","درجة تعبئة مضلعات الطبقة بلونها: 0 شفاف تمامًا."],en:["Fill","Polygon fill","How strongly polygons are filled with the layer color: 0 is fully transparent."]},
+"symPrev":{ar:["معاينة","معاينة الرمز","تعرض شكل النقطة والخط والمضلع بالإعدادات الحالية للطبقة."],en:["Preview","Symbol preview","Shows the point, line and polygon with the layer's current settings."]},
+"atLf":{ar:["الطبقة","تصفية بالطبقة","اعرض جدول طبقة واحدة، أو «كل الطبقات». زر ▦ في قائمة الطبقات يفتح الجدول لطبقته مباشرة."],en:["Layer","Filter by layer","Show the table of one layer, or All layers. The ▦ button in the layers list opens the table for its layer directly."]}
+});
+
+Object.assign(GUIDE,{
+"layName":{ar:["اسم الطبقة","اسم الطبقة","اكتب اسمًا للطبقة قبل اختيار الملف. بدونه يُستخدم اسم الملف (أو الورقة). عند اختيار عدة ملفات تأخذ كل طبقة اسم ملفها، ويُضاف اسمك قبله إن كتبته."],en:["Layer name","Layer name","Type a name before choosing the file. Without it the file (or sheet) name is used. With several files each layer takes its file name, prefixed by your name if you typed one."]},
+"shOk":{ar:["إضافة","إضافة الأوراق","يضيف الأوراق المحددة، كل ورقة طبقة مستقلة."],en:["Add","Add sheets","Adds the ticked sheets, each as its own layer."]},
+"shNo":{ar:["إلغاء","إلغاء الاستيراد","يلغي استيراد هذا الملف."],en:["Cancel","Cancel import","Cancels importing this file."]},
+"layList":{ar:["الطبقات","قائمة الطبقات","كل ملف أو ورقة تضيفها طبقة مستقلة. علامة الصح تُظهر/تُخفي الطبقة، ومربع اللون يغيّر لونها، والاسم قابل للتعديل، وزر ⌖ يقرّب الخريطة إليها، وزر 🗑 يحذفها وحدها (اضغط مرتين). اضغط الطبقة لتصبح الحالية فتظهر إعدادات أعمدتها."],en:["Layers","Layers list","Each file or sheet you add is its own layer. The checkbox shows/hides it, the color box changes its color, the name is editable, ⌖ zooms to it and 🗑 deletes only it (press twice). Click a layer to make it current and show its column settings."]}
+});
+
 Object.assign(GUIDE,{
 "impAdd":{ar:["إضافة","إضافة بدل الاستبدال","عند التفعيل يُضاف الملف المستورد إلى ما هو موجود (خطوط ومضلعات ونقاط)، فتجمع عدة أنابيب في مشروع واحد. عند إلغائه يحل الملف محل البيانات الحالية. لمسح كل شيء استخدم «مسح». لا تستورد الملف نفسه مرتين حتى لا يتكرر."],en:["Add","Add instead of replace","When on, an imported file is added to the existing data (lines, polygons and points), so several pipelines can be combined in one project. When off, the file replaces the current data. To clear everything use Clear. Do not import the same file twice or it will be duplicated."]}
 });
@@ -3188,7 +3591,7 @@ syncTools();
 
 /* ---------- تطبيق اللغة على الواجهة ---------- */
 const ARRE=/[؀-ۿ]/,ORIG=new WeakMap();
-const SKIPSEL=['phInfo','offSt','offInfo','phCap','rpSt','cvRes','cvFrom','cvTo','cvOut','cfCrs','atBody','atInfo','atFill','atDel','atLayer','atFF','chRes','chSrc','bfRes','bfSrc','labFields','tbl','vlist','guide','bmenu','toast','msg','ocrtxt','cx','cy','cz','clab','ccol','ptinfo','pathinfo','qc','legend','wbst','imgst','ocrst','mres'].map(i=>'#'+i).join(',');
+const SKIPSEL=['cexpL','atLf','layList','shList','phInfo','offSt','offInfo','phCap','rpSt','cvRes','cvFrom','cvTo','cvOut','cfCrs','atBody','atInfo','atFill','atDel','atLayer','atFF','chRes','chSrc','bfRes','bfSrc','labFields','tbl','vlist','guide','bmenu','toast','msg','ocrtxt','cx','cy','cz','clab','ccol','ptinfo','pathinfo','qc','legend','wbst','imgst','ocrst','mres'].map(i=>'#'+i).join(',');
 function trDom(root){
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName)||p.closest(SKIPSEL))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});
   const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
@@ -3209,7 +3612,7 @@ function trDom(root){
 }
 function relabelOpts(){
   [['clab','بدون'],['ccol','بدون'],['cz','منطقة اللوحة']].forEach(([id,k])=>{const o=$(id).options[0];if(o&&o.value==='')o.textContent='— '+T(k)+' —'});
-  const p=$('cpath').options;if(p.length>1&&p[0].value===''){p[0].textContent=T('بدون مسار');p[1].textContent=T('كل النقاط بترتيب الصفوف')}
+  const p=$('cpath').options;if(p.length>1&&p[0].value===''){p[0].textContent=T('بدون مسار');p[1].textContent=T('كل النقاط بترتيب الصفوف');if(p.length>2)p[2].textContent=T('حسب الطبقة')}
 }
 function applyLang(){
   document.documentElement.lang=LANG;document.documentElement.dir=LANG==='en'?'ltr':'rtl';
@@ -3224,7 +3627,7 @@ function applyLang(){
   updM();
   if(helpOn){if(gCur)guideCard(gCur);else guideOverview()}
 }
-$('langBtn').addEventListener('click',()=>{
+$('langBtn').addEventListener('click',()=>{setTimeout(()=>window.secBtn&&secBtn(),50);
   LANG=LANG==='en'?'ar':'en';
   try{localStorage.setItem('gotoxy_lang',LANG)}catch(_){}
   applyLang();
