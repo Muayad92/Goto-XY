@@ -253,6 +253,15 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
  #work.collapsed #panel{display:flex;width:auto}
  #work.collapsed .pbody{display:none}
 }
+
+.symdlg{position:fixed;z-index:2600;top:150px;inset-inline-end:calc(var(--pw,480px) + 22px);width:340px;max-height:72vh;overflow:auto;padding:10px 14px 14px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-top:3px solid var(--c-data);border-radius:6px;box-shadow:var(--shadow)}
+#work.collapsed~.symdlg,#work.collapsed .symdlg{inset-inline-end:100px}
+.symhd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.symhd button{min-height:28px;padding:0 9px}
+.layrow input.lc[type=color]{pointer-events:none;width:16px;min-height:16px;height:16px;border-radius:50%;padding:0;border:0;appearance:none;-webkit-appearance:none;background:none}
+.layrow input.lc::-webkit-color-swatch-wrapper{padding:0}.layrow input.lc::-webkit-color-swatch{border:1px solid var(--line);border-radius:50%}
+.layrow{cursor:pointer}
+@media(max-width:760px){.symdlg{top:auto;bottom:8px;left:8px;right:8px;inset-inline-end:8px;width:auto;max-height:62vh}}
 @media(max-width:1280px){button.tb small{display:none}}
 @media(max-width:760px){
  body{font-size:14px}
@@ -445,14 +454,7 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 <div class="row"><button id="tpl" class="alt">تحميل قالب Excel</button><button id="clrpts" class="alt">مسح النقاط</button></div>
 <div id="ptinfo" style="font-size:12.5px;margin-top:8px"></div>
 <div id="shPick" hidden class="note"><b>اختر الأوراق التي تريد إضافتها كطبقات</b><div id="shList"></div><div class="row"><button id="shOk">إضافة</button><button id="shNo" class="alt">إلغاء</button></div></div>
-<div id="laysec" hidden><h2>الطبقات</h2><div id="layList"></div></div>
-<div id="symsec" hidden><h2>رموز الطبقة: <span id="symName"></span></h2>
-<div class="grid2"><div><label for="symShape" style="margin-top:0">شكل النقطة</label><select id="symShape"><option value="circle">● دائرة</option><option value="square">■ مربع</option><option value="triangle">▲ مثلث</option><option value="diamond">◆ معيّن</option><option value="plus">+ زائد</option><option value="x">× علامة</option><option value="star">★ نجمة</option></select></div><div><label for="symSize" style="margin-top:0">حجم النقطة</label><input type="range" id="symSize" min="3" max="20" value="6"></div></div>
-<div class="grid2"><div><label for="symPtc">لون النقاط</label><input type="color" id="symPtc" value="#e03131"></div><div><label for="symLc">لون المسار/الخط</label><input type="color" id="symLc" value="#1971c2"></div></div>
-<div class="grid2"><div><label for="symW">سُمك الخط</label><input type="range" id="symW" min="1" max="10" value="3"></div><div><label for="symDash">نمط الخط</label><select id="symDash"><option value="">متصل</option><option value="8 6">متقطع</option><option value="2 6">منقّط</option></select></div></div>
-<label for="symFill">تعبئة المضلعات</label><input type="range" id="symFill" min="0" max="100" value="15">
-<canvas id="symPrev" width="300" height="44" style="max-width:100%;margin-top:6px"></canvas>
-</div>
+<div id="laysec" hidden><h2>الطبقات</h2><div id="layList"></div><div class="note">انقر مرّتين على الطبقة لتعديل رموزها (اللون والشكل والحجم).</div></div>
 <div id="cfg" hidden>
 <h2>الأعمدة</h2>
 <label for="ctype" style="margin-top:0">نوع الإحداثي في الملف</label>
@@ -563,6 +565,13 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 
 </div>
 </aside>
+<div id="symsec" class="symdlg" hidden role="dialog"><div class="symhd"><b>رموز الطبقة: <span id="symName"></span></b><button type="button" id="symX" class="alt" title="إغلاق" aria-label="إغلاق">✕</button></div>
+<div class="grid2"><div><label for="symShape" style="margin-top:0">شكل النقطة</label><select id="symShape"><option value="circle">● دائرة</option><option value="square">■ مربع</option><option value="triangle">▲ مثلث</option><option value="diamond">◆ معيّن</option><option value="plus">+ زائد</option><option value="x">× علامة</option><option value="star">★ نجمة</option></select></div><div><label for="symSize" style="margin-top:0">حجم النقطة</label><input type="range" id="symSize" min="3" max="20" value="6"></div></div>
+<div class="grid2"><div><label for="symPtc">لون النقاط</label><input type="color" id="symPtc" value="#e03131"></div><div><label for="symLc">لون المسار/الخط</label><input type="color" id="symLc" value="#1971c2"></div></div>
+<div class="grid2"><div><label for="symW">سُمك الخط</label><input type="range" id="symW" min="1" max="10" value="3"></div><div><label for="symDash">نمط الخط</label><select id="symDash"><option value="">متصل</option><option value="8 6">متقطع</option><option value="2 6">منقّط</option></select></div></div>
+<label for="symFill">تعبئة المضلعات</label><input type="range" id="symFill" min="0" max="100" value="15">
+<canvas id="symPrev" width="300" height="44" style="max-width:100%;margin-top:6px"></canvas>
+</div>
 <div id="split" role="separator" aria-orientation="vertical" title="اسحب لتغيير عرض اللوحة"></div>
 <div id="mapwrap"><div id="map"></div><div id="toast" hidden role="status"></div><div id="guide" hidden role="dialog" aria-label="الدليل"></div></div>
 </div>
@@ -875,7 +884,7 @@ const EN={
 "أسماء الأماكن": "Place names",
 "موقعي الحالي": "My current location"
 };
-Object.assign(EN,{"الوضع الليلي / النهاري":"Dark / light mode","طيّ / فتح كل الأقسام":"Collapse / expand all sections","⇕ طيّ الكل":"⇕ Collapse all","⇕ فتح الكل":"⇕ Expand all","سحب اللوحة":"Drag the panel","اسحب لتغيير عرض اللوحة":"Drag to resize the panel","نطاق التصدير":"Export scope","كل الطبقات":"All layers","لون النقاط":"Point color","لون المسار/الخط":"Path/line color","رموز الطبقة: ":"Layer symbols: ","رموز الطبقة:":"Layer symbols:","الطبقة":"Layer","شكل النقطة":"Point shape","حجم النقطة":"Point size","سُمك الخط":"Line width","نمط الخط":"Line style","تعبئة المضلعات":"Polygon fill","● دائرة":"● Circle","■ مربع":"■ Square","▲ مثلث":"▲ Triangle","◆ معيّن":"◆ Diamond","+ زائد":"+ Plus","× علامة":"× Cross","★ نجمة":"★ Star","متصل":"Solid","متقطع":"Dashed","منقّط":"Dotted","اسم الطبقة (اختياري)":"Layer name (optional)","مثال: أنبوب البصرة 1":"Example: Basra pipeline 1","الطبقات":"Layers","اختر الأوراق التي تريد إضافتها كطبقات":"Choose the sheets to add as layers","إضافة":"Add","إلغاء":"Cancel","حسب الطبقة":"By layer","إضافة إلى البيانات الحالية (بدل الاستبدال)":"Add to current data (instead of replacing)","الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
+Object.assign(EN,{"انقر مرّتين على الطبقة لتعديل رموزها (اللون والشكل والحجم).":"Double-click a layer to edit its symbols (color, shape, size).","الوضع الليلي / النهاري":"Dark / light mode","طيّ / فتح كل الأقسام":"Collapse / expand all sections","⇕ طيّ الكل":"⇕ Collapse all","⇕ فتح الكل":"⇕ Expand all","سحب اللوحة":"Drag the panel","اسحب لتغيير عرض اللوحة":"Drag to resize the panel","نطاق التصدير":"Export scope","كل الطبقات":"All layers","لون النقاط":"Point color","لون المسار/الخط":"Path/line color","رموز الطبقة: ":"Layer symbols: ","رموز الطبقة:":"Layer symbols:","الطبقة":"Layer","شكل النقطة":"Point shape","حجم النقطة":"Point size","سُمك الخط":"Line width","نمط الخط":"Line style","تعبئة المضلعات":"Polygon fill","● دائرة":"● Circle","■ مربع":"■ Square","▲ مثلث":"▲ Triangle","◆ معيّن":"◆ Diamond","+ زائد":"+ Plus","× علامة":"× Cross","★ نجمة":"★ Star","متصل":"Solid","متقطع":"Dashed","منقّط":"Dotted","اسم الطبقة (اختياري)":"Layer name (optional)","مثال: أنبوب البصرة 1":"Example: Basra pipeline 1","الطبقات":"Layers","اختر الأوراق التي تريد إضافتها كطبقات":"Choose the sheets to add as layers","إضافة":"Add","إلغاء":"Cancel","حسب الطبقة":"By layer","إضافة إلى البيانات الحالية (بدل الاستبدال)":"Add to current data (instead of replacing)","الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
 const RUNRE=/[\u0600-\u06FF]+(?:[ \u00A0«»()…،:؟.\-—\/]*[\u0600-\u06FF]+)*/g;
 function T(s,v){
   let r=s;
@@ -1389,8 +1398,15 @@ $('layList').addEventListener('click',e=>{
     layDelI=-1;layDelete(l);return;
   }
   if(e.target.tagName==='INPUT')return;
-  activeL=l.name;if(l.cfg)cfgToUI(l.cfg);layRender();
+  laySelect(l);
 });
+function laySelect(l){activeL=l.name;if(l.cfg)cfgToUI(l.cfg);document.querySelectorAll('#layList .layrow').forEach(r=>r.classList.toggle('act',layers[+r.dataset.i]===l));symSync()}
+$('layList').addEventListener('dblclick',e=>{
+  const row=e.target.closest('.layrow');if(!row||e.target.closest('button')||e.target.classList.contains('lv'))return;
+  const l=layers[+row.dataset.i];if(!l)return;symOpen=true;laySelect(l);
+});
+$('symX').addEventListener('click',()=>{symOpen=false;$('symsec').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&symOpen){symOpen=false;$('symsec').hidden=true}});
 ['ctype','cx','cy','cz','cfCrs'].forEach(id=>$(id).addEventListener('change',()=>{const l=layerByName(activeL);if(l&&l.cfg){l.cfg=domCfg();markDirty()}}));
 /* واجهة الرموز */
 function symDraw(){
@@ -1402,8 +1418,9 @@ function symDraw(){
   g.strokeStyle=l.color;g.lineWidth=l.sym.weight;g.setLineDash(l.sym.dash?l.sym.dash.split(' ').map(Number):[]);g.beginPath();g.moveTo(60,22);g.lineTo(160,22);g.stroke();g.setLineDash([]);
   g.globalAlpha=l.sym.fillOp;g.fillStyle=l.color;g.fillRect(185,8,95,28);g.globalAlpha=1;g.strokeStyle=l.color;g.lineWidth=Math.min(l.sym.weight,4);g.setLineDash(l.sym.dash?l.sym.dash.split(' ').map(Number):[]);g.strokeRect(185,8,95,28);g.setLineDash([]);
 }
+let symOpen=false;
 function symSync(){
-  const l=layerByName(activeL);$('symsec').hidden=!l;if(!l)return;
+  const l=layerByName(activeL);$('symsec').hidden=!(symOpen&&l);if(!l)return;
   $('symName').textContent=l.name;
   $('symShape').value=l.sym.shape;$('symPtc').value=ptCol(l);$('symLc').value=l.color;$('symSize').value=l.sym.size;$('symW').value=l.sym.weight;$('symDash').value=l.sym.dash||'';$('symFill').value=Math.round(l.sym.fillOp*100);
   symDraw();
@@ -3197,7 +3214,7 @@ function togglePanel(show){
   w.classList.toggle('collapsed',!want);$('tbPanel').classList.toggle('on',want);
   setTimeout(()=>map.invalidateSize(),30);
 }
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{if(isMob()&&b.classList.contains('on')&&!$('work').classList.contains('collapsed')){togglePanel(false);return}openTab(b.dataset.t)});
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{if(b.classList.contains('on')&&!$('work').classList.contains('collapsed')){isMob()?setSheet(0):togglePanel(false);return}openTab(b.dataset.t)});
 /* ---------- المرحلة D: أقسام قابلة للطي، عرض اللوحة، ورقة الجوال، السمة ---------- */
 const isMob=()=>matchMedia('(max-width:760px)').matches;
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
@@ -3358,6 +3375,7 @@ Object.assign(GUIDE,{
 "cexpL":{ar:["النطاق","نطاق التصدير","صدّر كل الطبقات معًا أو طبقة واحدة فقط (نقاطها وخطوطها ومضلعاتها). عند اختيار طبقة لا تُصدَّر الرسومات والـ Buffer."],en:["Scope","Export scope","Export all layers together or just one layer (its points, lines and polygons). Drawings and buffers are exported only with All layers."]},
 "themeBtn":{ar:["السمة","الوضع الليلي / النهاري","يبدّل بين المظهر الفاتح والداكن، ويتذكّر اختيارك."],en:["Theme","Dark / light mode","Switches between the light and dark look and remembers your choice."]},
 "secToggle":{ar:["طيّ الكل","طيّ / فتح الأقسام","يطوي أو يفتح كل أقسام التبويب الحالي. اضغط على عنوان أي قسم لطيّه أو فتحه، ويُحفظ اختيارك. الخيارات المتقدمة مطويّة افتراضيًا."],en:["Collapse all","Collapse / expand sections","Collapses or expands every section of the current tab. Click any section title to toggle it; your choice is remembered. Advanced options start collapsed."]},
+"symX":{ar:["إغلاق","إغلاق قائمة الرموز","يغلق نافذة رموز الطبقة (أو اضغط Esc)."],en:["Close","Close symbols","Closes the layer symbols window (or press Esc)."]},
 "symSize":{ar:["الحجم","حجم النقطة","يكبّر أو يصغّر رمز نقاط هذه الطبقة."],en:["Size","Point size","Makes this layer's point symbols larger or smaller."]},
 "symW":{ar:["السُمك","سُمك الخط","سُمك خطوط هذه الطبقة وحدود مضلعاتها."],en:["Width","Line width","Width of this layer's lines and polygon outlines."]},
 "symDash":{ar:["النمط","نمط الخط","متصل أو متقطع أو منقّط لخطوط الطبقة وحدود مضلعاتها."],en:["Style","Line style","Solid, dashed or dotted lines and polygon outlines."]},
