@@ -34,22 +34,22 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 /* التخطيط: شريط عنوان + شريط أدوات (Ribbon) بمجموعات + لوحة جانبية بتبويبات + الخريطة + شريط حالة، على نسق برامج GIS المكتبية */
 :root{
  --bg:#e4eaed;--panel:#f4f7f8;--surface:#ffffff;--ink:#14262e;--mute:#566a73;--line:#c9d5da;
  --acc:#0a6a8a;--acc-ink:#ffffff;--hot:#c7410b;--bar:#0f3340;--bar-ink:#e7f1f4;--bar-field:rgba(255,255,255,.1);--bar-line:rgba(255,255,255,.22);
- --on:#ffffff;--c-nav:#1c6dd0;--c-meas:#d2570a;--c-map:#2b8a3e;--c-data:#7048c9;--c-proj:#0a8a82;--c-help:#a8700f;
+ --on:#ffffff;--c-nav:#1c6dd0;--c-meas:#d2570a;--c-map:#2b8a3e;--c-data:#7048c9;--c-proj:#0a8a82;--c-help:#a8700f;--c-an:#c2255c;
  --hover:#dde9ee;--sel:#cde4ee;--err:#b42318;--shadow:0 2px 10px rgba(10,30,40,.28);
- --font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+ --font:"Inter","IBM Plex Sans Arabic","Segoe UI",system-ui,Tahoma,Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
  --bg:#0d171c;--panel:#142229;--surface:#1b2d36;--ink:#e2edf1;--mute:#93a9b2;--line:#2b414b;
- --acc:#4fb4d6;--acc-ink:#05212b;--hot:#d9531a;--bar:#09141a;--hover:#223641;--on:#06141b;--c-nav:#6aa8ff;--c-meas:#ff9a4d;--c-map:#5fd07a;--c-data:#b79cff;--c-proj:#3fd0c7;--c-help:#f0b84a;--sel:#1d4455;--err:#ff8f85;--shadow:0 2px 10px rgba(0,0,0,.6);color-scheme:dark}}
+ --acc:#4fb4d6;--acc-ink:#05212b;--hot:#d9531a;--bar:#09141a;--hover:#223641;--on:#06141b;--c-nav:#6aa8ff;--c-meas:#ff9a4d;--c-map:#5fd07a;--c-data:#b79cff;--c-proj:#3fd0c7;--c-help:#f0b84a;--c-an:#ff7aa8;--sel:#1d4455;--err:#ff8f85;--shadow:0 2px 10px rgba(0,0,0,.6);color-scheme:dark}}
 :root[data-theme="dark"]{
  --bg:#0d171c;--panel:#142229;--surface:#1b2d36;--ink:#e2edf1;--mute:#93a9b2;--line:#2b414b;
- --acc:#4fb4d6;--acc-ink:#05212b;--hot:#d9531a;--bar:#09141a;--hover:#223641;--on:#06141b;--c-nav:#6aa8ff;--c-meas:#ff9a4d;--c-map:#5fd07a;--c-data:#b79cff;--c-proj:#3fd0c7;--c-help:#f0b84a;--sel:#1d4455;--err:#ff8f85;--shadow:0 2px 10px rgba(0,0,0,.6);color-scheme:dark}
+ --acc:#4fb4d6;--acc-ink:#05212b;--hot:#d9531a;--bar:#09141a;--hover:#223641;--on:#06141b;--c-nav:#6aa8ff;--c-meas:#ff9a4d;--c-map:#5fd07a;--c-data:#b79cff;--c-proj:#3fd0c7;--c-help:#f0b84a;--c-an:#ff7aa8;--sel:#1d4455;--err:#ff8f85;--shadow:0 2px 10px rgba(0,0,0,.6);color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -254,7 +254,7 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
  #work.collapsed .pbody{display:none}
 }
 
-.symdlg{position:fixed;z-index:2600;top:150px;inset-inline-end:calc(var(--pw,480px) + 22px);width:340px;max-height:72vh;overflow:auto;padding:10px 14px 14px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-top:3px solid var(--c-data);border-radius:6px;box-shadow:var(--shadow)}
+.symdlg{position:fixed;z-index:2600;top:250px;inset-inline-end:calc(var(--pw,480px) + 22px);width:340px;max-height:72vh;overflow:auto;padding:10px 14px 14px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-top:3px solid var(--c-data);border-radius:6px;box-shadow:var(--shadow)}
 #work.collapsed~.symdlg,#work.collapsed .symdlg{inset-inline-end:100px}
 .symhd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
 .symhd button{min-height:28px;padding:0 9px}
@@ -262,7 +262,115 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 .layrow input.lc::-webkit-color-swatch-wrapper{padding:0}.layrow input.lc::-webkit-color-swatch{border:1px solid var(--line);border-radius:50%}
 .layrow{cursor:pointer}
 @media(max-width:760px){.symdlg{top:auto;bottom:8px;left:8px;right:8px;inset-inline-end:8px;width:auto;max-height:62vh}}
-@media(max-width:1280px){button.tb small{display:none}}
+
+/* تبويبات Ribbon (على نسق Word / Excel) */
+#rtabs{flex:none;display:flex;gap:2px;padding:4px 8px 0;background:var(--panel);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+#rtabs::-webkit-scrollbar{display:none}
+.rtab{flex:none;background:transparent;color:var(--mute);border:0;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;padding:5px 14px 4px;font:600 13px/1.2 inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
+.rtab:hover{background:var(--hover);color:var(--ink)}
+.rtab.on{color:var(--ink);border-bottom-color:var(--gc,var(--c-nav));background:color-mix(in srgb,var(--gc,var(--c-nav)) 10%,var(--panel))}
+.rtab[data-rt=home]{--gc:var(--c-nav)}.rtab[data-rt=data]{--gc:var(--c-data)}.rtab[data-rt=lab]{--gc:var(--c-map)}.rtab[data-rt=bf]{--gc:var(--c-an)}.rtab[data-rt=ch]{--gc:var(--c-an)}.rtab[data-rt=crs]{--gc:var(--c-an)}.rtab[data-rt=proj]{--gc:var(--c-proj)}.rtab[data-rt=rep]{--gc:var(--c-proj)}.cg.eg{display:none}.rtab[data-rt=help]{--gc:var(--c-help)}
+#ctx{display:none!important}
+.rtp{display:none;flex-wrap:wrap;align-items:stretch;flex:1 1 100%;min-width:0}
+.rtp.on{display:flex}
+.rtp .cg{flex:0 1 auto;min-width:0}.rtp .cr{flex-wrap:wrap}.rtp .cc{white-space:normal}
+.rtp .cg[data-lly] b,.rtp [data-lly]{font-size:13px;color:var(--c-map);white-space:nowrap}
+@media(min-width:761px){.rtp .ctxp{display:contents}}
+@media(max-width:760px){.rtp.on{flex-wrap:nowrap}.rtp .ctxp{display:flex;flex-direction:row}}
+@media(min-width:761px){#ribbon.ctxopen>.grp{display:none}#ribbon>#ctx{flex:1 1 0;min-width:0}#ribbon>#ctx>.ctxp{flex:1 1 0;min-width:0;flex-wrap:wrap}#ribbon>#ctx .cg{flex:0 1 auto;min-width:0}#ribbon>#ctx .cr{flex-wrap:wrap}#ribbon>#ctx .cc{white-space:normal}#ribbon>#ctx{overflow:visible;border:0;border-inline-start:1px solid var(--line);margin-top:-5px;margin-inline-start:4px}}
+/* الشريط السياقي (على نسق التبويبات السياقية في ArcGIS Pro) */
+#ctx{flex:none;display:flex;align-items:stretch;overflow-x:auto;background:color-mix(in srgb,var(--cc,var(--c-data)) 9%,var(--panel));border-bottom:1px solid var(--line);border-top:3px solid var(--cc,var(--c-data));scrollbar-width:thin}
+#ctx[data-k=lab]{--cc:var(--c-map)}#ctx[data-k=exp],#ctx[data-k=imp]{--cc:var(--c-data)}
+.ctxt{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:6px 14px;border-inline-end:1px solid var(--line);color:var(--cc,var(--c-data))}
+.ctxt b{font-size:13px;white-space:nowrap}
+.ctxt button{min-height:24px;padding:0 9px;font-size:12px}
+.ctxp{display:flex;align-items:stretch}.ctxp[hidden]{display:none}
+.cg{flex:none;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:7px 14px;border-inline-end:1px solid var(--line)}
+.cr{display:flex;align-items:center;gap:10px}
+.cc{font-size:10.5px;color:var(--mute);text-align:center;white-space:nowrap;letter-spacing:.03em}
+.cl{display:flex;align-items:center;gap:6px;margin:0;font-size:12.5px;color:var(--ink);white-space:nowrap}
+#ctx input,#ctx select{width:auto;min-height:30px;max-width:230px}
+#ctx input[type=number]{width:66px}
+#ctx input[type=color]{width:42px;padding:2px}
+#ctx input[type=checkbox]{width:auto;min-height:0}
+#ctx input[type=file]{width:250px;font-size:12px}
+#ctx button{min-height:30px;padding:0 12px}
+.labpop{position:fixed;z-index:2700;width:270px;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);padding:6px}
+.labpop .labbox{max-height:260px;border:0}
+@media(max-width:760px){
+ #ctx{position:fixed;left:8px;right:8px;bottom:8px;z-index:2450;flex-direction:column;max-height:62vh;overflow:auto;border:1px solid var(--line);border-top:3px solid var(--cc,var(--c-data));border-radius:10px;box-shadow:var(--shadow)}
+ .ctxt{flex-direction:row;justify-content:space-between;border-inline-end:0;border-bottom:1px solid var(--line)}
+ .ctxp{flex-direction:column}
+ .cg{border-inline-end:0;border-bottom:1px solid var(--line)}
+ .cr{flex-wrap:wrap}
+ #ctx input[type=file]{width:100%;max-width:none}
+ #ctx input,#ctx select{font-size:16px;min-height:44px}
+ #ctx button{min-height:44px}
+ .labpop{left:8px!important;right:8px;width:auto;bottom:80px;top:auto!important}
+}
+
+.g-an{--gc:var(--c-an)}
+#ctx[data-k=bf],#ctx[data-k=ch],#ctx[data-k=crs]{--cc:var(--c-an)}
+.cres{margin:0;min-width:200px;max-width:340px;max-height:74px;overflow:auto;font-size:12px;line-height:1.55;white-space:pre-line}
+#ctx input#chAt{width:90px}#ctx input#chStart{width:90px}#ctx input#bfW{width:76px}#ctx input#cvA,#ctx input#cvB{width:130px}#ctx input#cvCustom{width:300px}
+
+#lpanel{flex:none;display:flex;flex-direction:row;min-height:0;background:var(--panel);border-inline-start:1px solid var(--line);order:3}
+#lpanel .lbody{width:280px;display:flex;flex-direction:column;overflow:auto;padding:0 12px 14px}
+#lpanel.collapsed .lbody{display:none}
+.lhd{font-size:13px;font-weight:600;color:var(--ink);padding:12px 0 6px;border-bottom:1px solid var(--line)}
+.lh2{border-top:0!important;margin-top:10px!important;padding-top:4px!important}
+#lpanel .ltabs{display:flex;flex-direction:column;width:76px;border-inline-start:1px solid var(--line);background:var(--bg)}
+#lpanel .ltabs button.tab{flex:none;width:100%;gap:6px;padding:16px 4px 14px;border:0;border-inline-start:3px solid transparent;font-size:11.5px;--tc:var(--c-map);color:var(--mute)}
+#lpanel .ltabs button.tab.on{color:var(--tc);border-inline-start-color:var(--tc);background:color-mix(in srgb,var(--tc) 14%,var(--panel));font-weight:600}
+#lpanel .ltabs button.tab svg.ic{width:24px;height:24px;color:var(--tc)}
+.coldlg{top:270px;border-top-color:var(--c-data)}
+button.tb.dis{opacity:.45}
+@media(max-width:760px){
+ #lpanel{position:fixed;z-index:2300;right:8px;left:auto;top:300px;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);max-height:60vh}
+ #lpanel .ltabs{width:auto;border:0}
+ #lpanel .ltabs button.tab{padding:8px 10px;font-size:11px}
+ #lpanel .lbody{width:min(300px,calc(100vw - 110px))}
+}
+
+#work.nopins #panel,#work.nopins #split{display:none}
+#pnlTools{display:none}
+.pinh{margin:10px 0 4px!important;padding-top:4px!important;border-top:0!important;color:var(--ink)!important;font-size:13px!important}
+.pinsec .ctxp{display:flex;flex-direction:column;align-items:stretch}
+.pinsec .cg{flex:none;border-inline-end:0;border-bottom:1px solid var(--line);padding:10px 0}
+.pinsec .cc{order:-1;text-align:start;font-weight:600;color:var(--mute);font-size:11.5px}
+.pinsec .cr{flex-wrap:wrap}
+.pinsec .cl{white-space:normal}
+.pinsec input,.pinsec select{width:auto;max-width:100%}
+.pinsec .cres{max-width:none}
+button.tb.pinned::after{content:"";position:absolute;top:2px;inset-inline-end:3px;width:7px;height:7px;border-radius:50%;background:var(--hot,#d9453a)}
+button.tb{position:relative}
+.rbhide{display:none!important}
+#qat{display:flex;gap:2px;align-items:center}#qat[hidden]{display:none}
+#qat .qb{min-height:28px;width:30px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--bar-line);border-radius:4px;background:var(--bar-field);color:var(--bar-ink)}
+#qat .qb svg.ic{width:17px;height:17px}
+#qfmt{width:auto;min-height:30px;height:30px;padding:0 6px;border:1px solid var(--bar-line);border-radius:4px;background:var(--bar-field);color:var(--bar-ink);font:12px var(--mono);flex:none}
+#qfmt option{color:#111}
+.rcm{direction:inherit;text-align:start}.rcm button{text-align:start}
+.wdlg{width:380px}
+#camPanel.symdlg{width:420px}
+#shPick.symdlg{top:270px}
+#qcDlg #qc,#qcDlg #pathinfo{margin-top:6px}
+#mcard{position:absolute;z-index:1000;bottom:34px;left:50%;transform:translateX(-50%);max-width:min(560px,86%);min-width:220px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-top:3px solid var(--c-meas);border-radius:6px;box-shadow:var(--shadow);padding:8px 12px 8px 36px}
+html[dir=rtl] #mcard{padding:8px 36px 8px 12px}
+#mcard #mres{margin:0;padding:0;border:0;background:none}
+#mcardX{position:absolute;top:6px;inset-inline-start:6px;min-height:22px;padding:0 7px;font-size:11px}
+#lpanel .lbody{width:var(--lw,300px)!important}
+#lsplit{flex:none;width:7px;margin-inline-end:-4px;margin-inline-start:-3px;cursor:col-resize;position:relative;z-index:5;touch-action:none;order:2}
+#lsplit:hover,#lsplit.drag{background:color-mix(in srgb,var(--c-map) 45%,transparent)}
+#legBox,#drBox{margin-top:4px}
+.laylg{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 12px;padding:0 24px 2px;font-size:11.5px;color:var(--mute)}.lg{display:flex;align-items:center;gap:5px}.lg b{font-size:13px;line-height:1}.lgl{display:inline-block;width:20px;height:0}.lgp{display:inline-block;width:14px;height:10px;border:1.5px solid}
+#drBox .row button{min-height:28px;font-size:12px}
+@media(max-width:760px){#lsplit{display:none}#qfmt{display:none}#qat{display:none}}
+@media(max-width:1500px){button.tb small{display:none}}
+#lpanel .lbody{width:300px}
+#lpanel .layrow{flex-wrap:wrap;row-gap:4px}
+#lpanel .layrow .ln{flex:1 1 150px}
+#lpanel .layrow .lct{flex:1 1 auto}
 @media(max-width:760px){
  body{font-size:14px}
  #titlebar{height:44px;gap:6px;padding:0 8px}
@@ -298,81 +406,409 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
  #pnlTools button{min-height:34px}
 }
 @media(prefers-reduced-motion:reduce){button.tb.busy svg.ic,#loc.busy svg{animation:none}}
+
+/* ===== نظام التصميم الموحّد (Design System): رموز + مكونات مشتركة لسطح المكتب ===== */
+html[lang=en] body{letter-spacing:-.003em}
+.cap,.cc,h2,.ctxt b{letter-spacing:0}
+html[dir=ltr] .cap,html[dir=ltr] .cc{letter-spacing:.015em}
+svg.ic{stroke:none;fill:none}
+.brand{font-weight:700;font-size:14.5px;letter-spacing:0}
+.rtab::after{content:"";position:absolute;inset-inline:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:transparent;transition:background .15s}
+.rtab:hover{background:var(--hover);color:var(--ink)}
+.rtab.on{background:var(--panel);color:var(--ink);box-shadow:0 -1px 0 var(--line) inset,1px 0 0 var(--line),-1px 0 0 var(--line)}
+.rtab.on::after{background:var(--gc,var(--c-nav))}
+.grp::before{display:none}
+button.tb:hover{background:color-mix(in srgb,var(--gc,var(--acc)) 10%,var(--panel));border-color:color-mix(in srgb,var(--gc,var(--acc)) 35%,transparent);box-shadow:var(--sh1)}
+button.tb:active{transform:translateY(1px);box-shadow:inset 0 2px 4px rgba(10,30,40,.18)}
+button.tb.on{background:color-mix(in srgb,var(--gc,var(--acc)) 16%,var(--panel));border-color:color-mix(in srgb,var(--gc,var(--acc)) 55%,transparent);color:var(--ink);box-shadow:inset 0 -3px 0 var(--gc,var(--acc)),var(--sh1)}
+button.tb.on small{color:var(--mute);opacity:1}
+button.tb.pinned::after{border-radius:50%}
+.cl{gap:5px}
+input:hover,select:hover,textarea:hover{border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--acc);box-shadow:var(--ring)}
+button:hover{filter:none;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 80%,#fff 20%),color-mix(in srgb,var(--acc) 92%,#fff 8%))}
+button:active{transform:translateY(1px);box-shadow:inset 0 2px 3px rgba(0,0,0,.25)}
+button.alt{background:var(--surface);color:var(--acc);border-color:var(--line);box-shadow:var(--sh1);font-weight:600}
+button.alt:hover{background:color-mix(in srgb,var(--acc) 8%,var(--surface));border-color:color-mix(in srgb,var(--acc) 50%,var(--line))}
+button.alt:active{box-shadow:inset 0 2px 3px rgba(10,30,40,.14)}
+button.on{background:var(--hot);border-color:var(--hot)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:0;box-shadow:var(--ring)}
+button.tb,button.tab,button.rtab,button.qb,.layrow button{box-shadow:none}
+#vlist{border-radius:var(--r)}
+.layrow:hover{background:var(--hover)}
+.layrow.act{background:var(--sel);border-color:color-mix(in srgb,var(--acc) 50%,transparent)}
+.symdlg,.coldlg,#guide,#mcard,.labpop,.expmenu{border-radius:var(--r2);box-shadow:var(--sh2)}
+.labpop{border:1px solid var(--line)}
+#lpanel{box-shadow:var(--sh1)}
+#qat .qb{border-radius:var(--r)}
+.rtp .cg select{max-width:170px;text-overflow:ellipsis}
+.rtp .cg input#ll{min-width:140px}
+:root{--r:6px;--r2:9px;--sh1:0 1px 2px rgba(10,30,40,.12),0 1px 1px rgba(10,30,40,.06);--sh2:0 6px 18px rgba(10,30,40,.18),0 2px 4px rgba(10,30,40,.1);--ring:0 0 0 3px color-mix(in srgb,var(--acc) 28%,transparent);--s1:2px;--s2:4px;--s3:6px;--s4:8px;--s5:12px;--s6:16px;--h-ctl:26px;--h-row:24px;--h-tab:30px;--fs-xs:10.5px;--fs-sm:11.5px;--fs-md:12.5px;--fs-lg:13.5px;--ic-tb:24px;--ic-sm:16px;--ic-tab:22px;--pad-ctl:0 9px}
+body{font-size:var(--fs-md);line-height:1.4;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"tnum" 0}
+input,select,textarea{min-height:var(--h-ctl);border-radius:var(--r);border:1px solid var(--line);background:var(--surface);transition:border-color .12s,box-shadow .12s;padding:2px 7px;font-size:var(--fs-md)}
+textarea{min-height:48px}
+input[type=checkbox],input[type=radio]{min-height:0}
+input[type=color]{min-height:var(--h-ctl);padding:1px 2px}
+button{min-height:var(--h-ctl);padding:var(--pad-ctl);border-radius:var(--r);font-weight:600;font-size:var(--fs-md);border:1px solid color-mix(in srgb,var(--acc) 80%,#000 20%);background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 88%,#fff 12%),var(--acc));box-shadow:var(--sh1),inset 0 1px 0 rgba(255,255,255,.2);transition:background .12s,box-shadow .12s,transform .06s}
+label{margin:var(--s3) 0 var(--s1);font-size:var(--fs-sm);font-weight:500}
+.row{gap:var(--s3);margin-top:var(--s3)}
+.grid2{gap:var(--s3)}
+#titlebar{height:38px;gap:12px;background:linear-gradient(180deg,color-mix(in srgb,var(--bar) 88%,#fff 12%),var(--bar));box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 1px 6px rgba(0,0,0,.25)}
+.brand svg.ic{width:22px;height:22px;stroke:none}
+#qgo{height:26px;border-radius:var(--r);font-size:12.5px}
+#qgoBox svg.ic{width:16px;height:16px;top:5px;opacity:.95}
+#rtabs{padding:3px 8px 0;gap:3px;background:linear-gradient(180deg,var(--panel),var(--bg));border-bottom:1px solid var(--line)}
+.rtab{padding:4px 12px;font-weight:600;font-size:var(--fs-md);border-radius:var(--r) var(--r) 0 0;border-bottom:0;position:relative;color:var(--mute)}
+#ribbon{padding:2px 4px 0;background:var(--panel);box-shadow:var(--sh1)}
+.grp{padding:2px 2px 0}
+.cap{padding:1px 0 2px;font-size:var(--fs-xs);font-weight:500}
+button.tb svg.ic{width:var(--ic-tb);height:var(--ic-tb)}
+.cg{padding:2px 8px;gap:var(--s2)}
+.cr{gap:var(--s3)}
+.rtp .cr{row-gap:var(--s2)}
+.cc{font-size:var(--fs-xs);font-weight:500}
+.rtp .cg{padding:2px 8px}
+.pbody{padding:2px 10px 10px}
+h2{margin:var(--s4) 0 var(--s2);padding-top:var(--s3);font-size:var(--fs-md);font-weight:700}
+.tabsec>h2:first-child{padding-top:var(--s2);margin-top:var(--s2)}
+.note{margin-top:var(--s2);line-height:1.5;font-size:var(--fs-sm)}
+#mres{border-radius:var(--r);padding:5px 9px;margin-top:var(--s3);box-shadow:var(--sh1)}
+.layrow{border-radius:var(--r);padding:2px 4px;gap:5px;transition:background .12s,border-color .12s;display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto auto;align-items:center;column-gap:var(--s2);row-gap:0;min-height:var(--h-row)}
+#lpanel .layrow{display:grid;flex-wrap:nowrap;row-gap:0}
+.layrow .ln{grid-column:3;min-height:24px;padding:1px 6px;flex:none}
+#lpanel .layrow .ln{flex:none}
+.layrow input[type=color]{width:16px;min-height:16px}
+.layrow button{min-height:24px;min-width:24px;padding:0 4px;font-size:12px}
+.lct{grid-column:3;grid-row:2;font-size:var(--fs-xs);line-height:1.2;padding:0 6px 1px}
+#lpanel .layrow .lct{flex:none}
+.laylg{grid-column:1/-1;grid-row:3;padding:0 4px 2px 4px;gap:2px 10px;font-size:var(--fs-xs)}
+#drBox .row button{min-height:24px}
+.atbar{gap:var(--s3);padding:4px 8px}
+.atbar select,.atbar input{min-height:24px}
+.atbar button{min-height:24px;padding:0 9px}
+#atBody th{padding:2px 8px;font-size:var(--fs-sm)}
+#atBody td{padding:1px 8px;font-size:var(--fs-sm);line-height:1.5}
+#atInfo{font-size:var(--fs-sm)}
+.symdlg{padding:8px 12px 12px;width:320px}
+.symhd{margin-bottom:var(--s2)}
+.symhd button{min-height:24px;padding:0 8px}
+.coldlg,#guide,#mcard{padding-block:8px}
+#toast{border-radius:var(--r);box-shadow:var(--sh2);padding:7px 12px;font-size:var(--fs-md)}
+#lpanel .ltabs button.tab{padding:7px 3px 6px}
+#lpanel .ltabs button.tab svg.ic,button.tab svg.ic{width:var(--ic-tab);height:var(--ic-tab)}
+button.tab{padding:4px 2px 3px;gap:2px;font-weight:500;font-size:var(--fs-sm)}
+#qat .qb svg.ic{width:18px;height:18px}
+#status{height:22px;font-size:11px}
+.btns{gap:1px;align-items:flex-start}
+button.tb{min-width:44px;padding:3px 4px;gap:1px;border-radius:var(--r);font-size:var(--fs-sm);font-weight:500;line-height:1.2;color:var(--ink);transition:background .12s,box-shadow .12s,transform .06s;background:transparent;height:auto;align-self:flex-start}
+#ribbon #utmBox:not([hidden]){display:grid;grid-template-columns:auto minmax(88px,118px) minmax(88px,118px);grid-template-rows:auto auto;column-gap:var(--s3);align-items:end}
+#ribbon #utmBox .grid2,#ribbon #utmBox .grid2>div{display:contents}
+#ribbon #utmBox label{margin:0 0 1px;grid-row:1}
+#ribbon #utmBox select#zone{grid-column:1;grid-row:2}
+#ribbon #utmBox label[for=zone]{grid-column:1}
+#ribbon #utmBox label[for=e]{grid-column:2}
+#ribbon #utmBox .withcam{grid-column:2;grid-row:2}
+#ribbon #utmBox label[for=n]{grid-column:3}
+#ribbon #utmBox input#n{grid-column:3;grid-row:2}
+@media(min-width:1500px){
+ .pbody{padding:2px 12px 10px}
+ #atBody td{padding:1px 10px}
+}
+@media(max-width:760px){
+ .rtp .cg{flex:none}
+ .rtp input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=file]){min-width:150px}
+ .rtp select{min-width:130px}
+ .rtp input[type=number]{min-width:70px}
+ body{font-size:13px}
+ input,select,textarea,button{min-height:34px}
+ input,select,textarea{font-size:16px}
+ input[type=checkbox],input[type=radio]{min-height:0}
+ button.tb{min-width:50px;padding:4px 5px}
+ .rtab{padding:6px 11px}
+ .layrow button{min-height:32px;min-width:32px}
+ .layrow .ln{min-height:32px}
+ .layrow{padding:2px 3px}
+ #atBody td{padding:3px 8px}
+ #atBody th{padding:4px 8px}
+ .atbar select,.atbar input,.atbar button{min-height:32px}
+}
+button svg{pointer-events:none}
+/* أزرار الخريطة (تكبير/تصغير، موقعي، الصور الجوية، الأسماء) في الجانب المقابل للوحة Contents */
+html[dir=rtl] .leaflet-top.leaflet-left{left:auto;right:0}
+html[dir=rtl] .leaflet-top.leaflet-left .leaflet-control{margin-left:0;margin-right:10px;float:right;clear:right}
+html[dir=rtl] .bmenu{left:auto;right:40px}
+/* الصيغة بعرض مناسب، والمدى بجانبها */
+.rtp #mode{width:150px;min-width:0;flex:none}
+.rtp .cg:has(#mode){flex:0 0 auto}
+.cr>button.tb.inl{flex-direction:row;min-width:0;min-height:var(--h-ctl);height:var(--h-ctl);padding:0 10px 0 8px;gap:6px;font-size:var(--fs-md);border:1px solid var(--line);background:var(--surface);flex:none}
+.cr>button.tb.inl svg.ic{width:16px;height:16px}
+.cr>button.tb.inl:hover{background:var(--hover)}
+@media(max-width:760px){#ribbon .cr>button.tb.inl{width:auto;min-height:44px;height:auto;flex:1 1 140px}#ribbon .rtp #mode{width:100%}}
+/* أزرار بأيقونات دلالية: أيقونة فقط مع تلميح، أو أيقونة + نص للأوامر الرئيسية */
+button.ico,button.it{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button.ico{width:var(--h-ctl);min-width:var(--h-ctl);padding:0}
+button.ico .bl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button.ico svg.ic,button.it svg.ic{width:16px;height:16px;flex:none}
+button.alt.ico svg.ic,button.alt.it svg.ic{opacity:1}
+.cr>button.tb.inl.ico{padding:0 6px}
+@media(max-width:760px){button.ico{width:auto;min-width:44px;padding:0 12px}button.ico .bl{position:static;width:auto;height:auto;clip:auto;overflow:visible}#ribbon .cr>button.tb.inl.ico{padding:0 12px}}
+/* حدود واضحة بين مجموعات الشريط (عمودية وأفقية بين الصفوف) */
+:root{--sep:color-mix(in srgb,var(--ink) 32%,var(--panel))}
+@media(min-width:761px){
+ #ribbon{border-bottom:0;box-shadow:inset 0 -1px 0 var(--sep)}
+ #ribbon .rtp .cg,#ribbon .rtp>.grp{border-inline-end:1px solid var(--sep);border-bottom:1px solid var(--sep)}
+ #ribbon .rtp .cg:last-child{border-inline-end:1px solid var(--sep)}
+ #ribbon .rtp>.grp:last-child{border-inline-end:1px solid var(--sep)}
+ #ribbon .rtp .cg.eg{display:none}
+}
+/* توحيد ارتفاع الأقسام: العنوان في الأسفل بمحاذاة واحدة والعناصر في المنتصف */
+@media(min-width:761px){
+ #ribbon .rtp .cg{justify-content:flex-start;align-self:stretch}
+ #ribbon .rtp .cg>.cr:first-child{margin-top:auto}
+ #ribbon .rtp .cg>.cc{margin-top:auto;padding-top:3px;text-align:center;align-self:stretch}
+ #ribbon .rtp .cg>.cr:nth-last-child(2){margin-bottom:0}
+ #ribbon .grp>.cap{margin-top:auto;text-align:center}
+}
+/* توحيد أحجام الحقول والمسافات داخل الشريط، وزر طيّ الشريط */
+@media(min-width:761px){
+ #ribbon{--h-ctl:28px}
+ #ribbon .rtp .cg{gap:4px;padding:3px 10px 1px}
+ #ribbon .rtp .cr{gap:6px;row-gap:4px}
+ #ribbon .rtp .cg>.cc{padding-top:1px;line-height:1.1}
+ #ribbon .rtp input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),#ribbon .rtp select,#ribbon .rtp .cg button:not(.tb){height:var(--h-ctl);min-height:var(--h-ctl)}
+ #ribbon .rtp .cc,#ribbon .grp>.cap{font-size:var(--fs-xs);color:var(--mute);font-weight:500}
+ .rtp .lyname{min-width:0}
+ .rtp .lyname b{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--fs-sm);color:var(--acc);font-weight:700}
+ body.rbfolded #ribbon{display:none}
+}
+@media(min-width:761px) and (max-width:1100px){.rtp.on[data-rt=lab]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rbfold{margin-inline-start:auto;align-self:center;width:28px;min-height:22px;height:22px;padding:0;background:transparent;border:0;box-shadow:none;border-radius:var(--r)}
+.rbfold:hover{background:var(--hover)}
+.rbfold svg.ic{width:16px;height:16px;display:block;margin:auto;transition:transform .15s}
+body.rbfolded .rbfold svg.ic{transform:rotate(180deg)}
+@media(max-width:760px){.rbfold{display:none}}
+/* شريط بصف واحد: المجموعات الطويلة أو الزائدة عن العرض تتحوّل تلقائيًا إلى أزرار منسدلة (مثل ArcGIS Pro / Office) */
+@media(min-width:761px){
+ #ribbon .rtp.on{display:flex;flex-wrap:nowrap;align-items:stretch;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+ #ribbon .rtp>.ctxp{display:contents}
+ #ribbon .rtp.on>.cg,#ribbon .rtp.on>.ctxp>.cg,#ribbon .rtp.on>.grp{flex:0 0 auto}
+ #ribbon .rtp .cg.cgc{flex:0 0 auto;padding:3px 8px 1px;justify-content:center;align-items:center}
+ #ribbon .rtp .cg.cgc>.cgpop{display:none}
+ #ribbon .rtp .cg.cgc.cgopen>.cgpop{display:flex}
+ .cgpop{position:fixed;z-index:2700;flex-direction:column;gap:8px;min-width:260px;max-width:min(520px,94vw);max-height:70vh;overflow:auto;padding:10px 12px;background:var(--panel);color:var(--ink);border:1px solid var(--sep);border-radius:var(--r2);box-shadow:var(--sh2)}
+ .cgpop>.cc{order:-1;font-weight:700;color:var(--mute);text-align:start}
+ .cgpop .cr{flex-wrap:wrap}
+ button.cgbtn{display:inline-flex;align-items:center;gap:6px;height:var(--h-ctl);min-height:var(--h-ctl);padding:0 8px 0 10px;font-size:var(--fs-md);font-weight:600;white-space:nowrap}
+ button.cgbtn svg.ic{width:14px;height:14px;opacity:.7;flex:none}
+ .cg.cgopen>button.cgbtn{background:color-mix(in srgb,var(--acc) 14%,var(--surface));border-color:var(--acc)}
+}
+/* ===== Ribbon بنمط ArcGIS Pro: أدوات كبيرة للرئيسية وصغيرة مكدّسة للثانوية ===== */
+:root{--ic-lg:28px;--ic-sm2:16px;--btn-lg-w:54px}
+.stk{display:flex;flex-direction:column;justify-content:space-between;gap:1px;align-self:stretch;min-width:0}
+@media(min-width:761px){
+ #ribbon .btns{align-items:stretch;gap:2px}
+ button.tb{min-width:var(--btn-lg-w);padding:3px 4px 2px;gap:1px;font-size:var(--fs-sm);line-height:1.15;justify-content:flex-start;white-space:nowrap}
+ button.tb svg.ic{width:var(--ic-lg);height:var(--ic-lg)}
+ .stk button.tb.sm{flex:1 1 0;flex-direction:row;justify-content:flex-start;align-items:center;gap:5px;min-width:0;min-height:0;height:auto;padding:0 7px 0 6px;font-size:var(--fs-sm);line-height:1;border-radius:5px}
+ .stk button.tb.sm svg.ic{width:var(--ic-sm2);height:var(--ic-sm2);flex:none}
+ .cap{padding:2px 0 2px;font-size:var(--fs-xs);line-height:1.1;letter-spacing:0}
+ .grp{border-inline-end:1px solid var(--line);padding:2px 3px 0}
+ #ribbon{align-items:stretch}
+ /* أزرار صغيرة بأيقونة داخل اللوحات والطبقات */
+ .layrow button svg.ic,.symhd button svg.ic,.atbar button svg.ic,.phbtn button svg.ic,.ctxt button svg.ic,#mcardX svg.ic,.langbtn svg.ic{width:var(--ic-sm2);height:var(--ic-sm2);display:block;margin:auto}
+}
+.layrow button svg.ic,.symhd button svg.ic,.atbar button svg.ic,.phbtn button svg.ic,.ctxt button svg.ic,#mcardX svg.ic,.langbtn svg.ic{width:16px;height:16px;display:block;margin:auto}
+.langbtn svg.ic{width:18px;height:18px}
+button.phadd svg.ic{width:16px;height:16px;vertical-align:-3px}
+@media(max-width:760px){
+ .stk{display:contents}
+ #ribbon button.tb.sm{flex-direction:column;justify-content:center;min-height:62px;height:auto;padding:8px 2px 6px;font-size:11.5px;border-radius:12px}
+ #ribbon button.tb.sm svg.ic{width:30px;height:30px}
+}
+@media(min-width:761px){
+ .rtp .cg{flex:1 1 auto;justify-content:center}
+ .rtp .cr>input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]):not([type=file]):not([type=number]),.rtp .cr>label.cl>input:not([type=checkbox]):not([type=radio]):not([type=number]):not([type=range]):not([type=file]){min-width:90px;flex:1 1 110px}
+ .rtp .cr>input[type=number],.rtp .cr>label.cl>input[type=number]{width:72px;flex:none}
+ .rtp .cg:last-child{border-inline-end:0}
+}
+/* ===== Mobile Experience: واجهة مستقلة للهاتف (Bottom Navigation + Bottom Sheets) ===== */
+#msheet{display:contents}
+#bnav{display:none}
+@media(max-width:760px){
+ :root{--bn:58px;--sbh:22px;--sheet-max:60dvh}
+ /* الشريط السفلي */
+ #bnav{display:flex;flex:none;height:calc(var(--bn) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:var(--panel);border-top:1px solid var(--line);position:relative;z-index:2500;box-shadow:0 -2px 10px rgba(10,30,40,.12)}
+ #bnav button{flex:1;min-width:0;min-height:0;height:var(--bn);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px 0 2px;background:transparent;border:0;border-radius:0;box-shadow:none;color:var(--mute);font-size:11px;font-weight:600;position:relative}
+ #bnav button svg.ic{width:26px;height:26px;opacity:.8}
+ #bnav button.on{color:var(--ink)}
+ #bnav button.on svg.ic{opacity:1}
+ #bnav button.on::before{content:"";position:absolute;top:0;inset-inline:22%;height:3px;border-radius:0 0 3px 3px;background:var(--acc)}
+ #bnav button:active{background:var(--hover);transform:none}
+ /* الشريط العلوي المبسّط */
+ #titlebar{height:48px;padding:0 8px;gap:6px}
+ #qgo{height:36px;font-size:16px}
+ #qgoBox svg.ic{top:9px}
+ #titlebar .langbtn{min-height:36px;min-width:40px}
+ #themeBtn{display:none}
+ /* لوحة سفلية تحمل التبويبات والأدوات */
+ #msheet{display:none;position:fixed;inset-inline:0;bottom:calc(var(--bn) + var(--sbh) + env(safe-area-inset-bottom,0px));z-index:2400;flex-direction:column;max-height:var(--sheet-max);background:var(--panel);border-radius:16px 16px 0 0;border-top:3px solid var(--acc);box-shadow:0 -8px 28px rgba(10,30,40,.3);overflow:hidden}
+ body.msheet #msheet{display:flex}
+ #rtabs{display:flex;flex:none;gap:6px;overflow-x:auto;padding:8px 10px 6px;background:var(--panel);border-bottom:1px solid var(--line);scrollbar-width:none}
+ #rtabs::-webkit-scrollbar{display:none}
+ body[data-mnav=go] #rtabs{display:none}
+ body[data-mnav=tools] .rtab:not([data-rt=lab]):not([data-rt=bf]):not([data-rt=ch]):not([data-rt=crs]),
+ body[data-mnav=more] .rtab:not([data-rt=data]):not([data-rt=proj]):not([data-rt=rep]):not([data-rt=help]){display:none}
+ .rtab{flex:none;min-height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;box-shadow:none}
+ .rtab::after{display:none}
+ .rtab.on{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:none}
+ #ribbon{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding:8px 10px 12px;box-shadow:none;border:0;-webkit-overflow-scrolling:touch}
+ #ribbon .rtp.on{display:flex;flex-direction:column;flex-wrap:nowrap;gap:8px;width:100%}
+ #ribbon .rtp .ctxp,#ribbon .rtp.on>.ctxp{display:flex;flex-direction:column;width:100%;gap:8px}
+ #ribbon .grp{padding:6px 0;border:0;border-bottom:1px solid var(--line);width:100%}
+ #ribbon .btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ #ribbon button.tb{min-width:0;width:100%;min-height:62px;padding:8px 2px 6px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:11.5px;justify-content:center}
+ #ribbon button.tb svg.ic{width:30px;height:30px}
+ #ribbon button.tb.on{background:color-mix(in srgb,var(--gc,var(--acc)) 16%,var(--surface));border-color:var(--gc,var(--acc))}
+ #ribbon .cap{display:block;padding:0 0 4px;font-size:11px;text-align:start;order:-1}
+ #ribbon .grp{flex-direction:column}
+ #ribbon .btns{order:1}
+ #ribbon .cg{width:100%;flex:none;border:0;border-bottom:1px solid var(--line);padding:8px 0;gap:6px}
+ #ribbon .cr{flex-wrap:wrap;gap:8px}
+ #ribbon .cc{order:-1;font-size:11.5px;font-weight:700;color:var(--mute);text-align:start}
+ #ribbon input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]),#ribbon select{min-height:44px;width:100%;min-width:0!important;max-width:none!important;font-size:16px}
+ #ribbon .cr>*{flex:1 1 140px;min-width:0}
+ #ribbon .cr label.cl{flex:1 1 100%;min-height:36px;display:flex;align-items:center;gap:8px;font-size:14px}
+ #ribbon input[type=checkbox]{width:22px;height:22px}
+ #ribbon button:not(.tb):not(.rtab){min-height:44px;font-size:14px}
+ #ribbon #utmBox:not([hidden]){grid-template-columns:90px 1fr;grid-template-rows:auto auto auto auto}
+ #ribbon #utmBox label[for=e],#ribbon #utmBox .withcam{grid-column:2}
+ #ribbon #utmBox label[for=n],#ribbon #utmBox input#n{grid-column:1/-1}
+ #ribbon #utmBox label[for=e]{grid-row:1}#ribbon #utmBox .withcam{grid-row:2}
+ #ribbon #utmBox label[for=n]{grid-row:3}#ribbon #utmBox input#n{grid-row:4}
+ /* الطبقات كورقة سفلية */
+ #lpanel{position:fixed;inset-inline:0;left:0;right:0;top:auto;bottom:calc(var(--bn) + var(--sbh) + env(safe-area-inset-bottom,0px));z-index:2400;max-height:var(--sheet-max);border:0;border-top:3px solid var(--c-map,var(--acc));border-radius:16px 16px 0 0;box-shadow:0 -8px 28px rgba(10,30,40,.3);display:flex;flex-direction:column}
+ #lpanel.collapsed{display:none}
+ #lpanel .ltabs{display:none}
+ #lpanel .lbody,#lpanel.collapsed .lbody{width:auto!important;max-width:none;display:block;overflow-y:auto;padding:8px 12px 14px;max-height:var(--sheet-max)}
+ #lpanel .layrow{min-height:48px;padding:4px}
+ #lpanel .layrow button{min-height:40px;min-width:40px}
+ #lpanel .layrow .ln{min-height:40px;font-size:16px}
+ #lpanel .layrow input.lv{width:22px;height:22px}
+ #lsplit{display:none}
+ /* لا تتداخل اللوحات المثبّتة مع الورقة */
+ body.msheet #panel{display:none}
+ body.msheet #lpanel,body[data-mnav=layers] #msheet{display:none}
+ body[data-mnav=layers] #lpanel:not(.collapsed){display:flex}
+ #atp{bottom:calc(var(--bn) + var(--sbh) + env(safe-area-inset-bottom,0px))}
+ .symdlg{bottom:calc(var(--bn) + var(--sbh) + 10px + env(safe-area-inset-bottom,0px))}
+ #toast,#mcard{max-width:calc(100vw - 24px)}
+ .leaflet-bottom{margin-bottom:0}
+}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-<symbol id="i-brand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3.2 3 3.2 15 0 18M12 3c-3.2 3-3.2 15 0 18"/></symbol>
-<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.2-4.2"/></symbol>
-<symbol id="i-go" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
-<symbol id="i-gps" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.8"/><path d="M12 2.5v3.5M12 18v3.5M2.5 12H6M18 12h3.5"/></symbol>
-<symbol id="i-cam" viewBox="0 0 24 24"><path d="M3.5 8h3.2l1.6-2.6h7.4L17.3 8h3.2v11h-17z"/><circle cx="12" cy="13.2" r="3.6"/></symbol>
-<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
-<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 3.5l14 7.2-6.2 1.9-1.9 6.3z"/></symbol>
-<symbol id="i-line" viewBox="0 0 24 24"><path d="M5 18.5l5-8 5 4 4-8.5"/><circle cx="5" cy="18.5" r="1.8"/><circle cx="19" cy="6" r="1.8"/></symbol>
-<symbol id="i-poly" viewBox="0 0 24 24"><path d="M5 8.5l9-3.5 5 6.5-4 7.5-9.5-2.5z"/><circle cx="5" cy="8.5" r="1.4"/><circle cx="14" cy="5" r="1.4"/><circle cx="19" cy="11.5" r="1.4"/><circle cx="15" cy="19" r="1.4"/><circle cx="5.5" cy="16.5" r="1.4"/></symbol>
-<symbol id="i-p2l" viewBox="0 0 24 24"><path d="M2.5 19c4 0 5-6 9-6s5.5 4 10 4"/><circle cx="8" cy="5.5" r="2.2"/><path d="M8 8v4.2" stroke-dasharray="2 2"/></symbol>
-<symbol id="i-mark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></symbol>
-<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4h5v3M6 7l1 13h10l1-13M10 11v5.5M14 11v5.5"/></symbol>
-<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3.5v12M7 10.5l5 5 5-5M4.5 20h15"/></symbol>
-<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4.5 20h15"/></symbol>
-<symbol id="i-sat" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 16l9 5 9-5"/></symbol>
-<symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></symbol>
-<symbol id="i-label" viewBox="0 0 24 24"><path d="M5 6.5h14M12 6.5V19M8.5 19h7"/></symbol>
-<symbol id="i-history" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.2 2"/></symbol>
-<symbol id="i-extent" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
-<symbol id="i-tpl" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14.5 3v4.5H19M9 13h7M9 17h7"/></symbol>
-<symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M3 10h18M3 15h18M9 4.5v15"/></symbol>
-<symbol id="i-check" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
-<symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3.5h11l3 3v14H5z"/><path d="M8 3.5V8h7V3.5M8 20.5V14h8v6.5"/></symbol>
-<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></symbol>
-<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></symbol>
-<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 015 .9c0 1.7-2.5 2.1-2.5 3.8M12 17v.2"/></symbol>
-<symbol id="i-names" viewBox="0 0 24 24"><path d="M5 6.5h14M12 6.5V19M8.5 19h7"/></symbol>
-<symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M14.5 4.5v15"/></symbol>
-</defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs></defs><symbol id="i-brand" viewBox="0 0 24 24"><g stroke="none"><g fill="#17998f"><circle cx="12" cy="11.5" r="8.6"/></g><g fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5h17M12 2.9c3 2.6 3 14.6 0 17.2M12 2.9c-3 2.6-3 14.6 0 17.2"/></g></g></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><g stroke="none"><g fill="#667b8d"><circle cx="10.5" cy="10.5" r="6.6"/></g><g fill="#fff" fill-opacity="0.9"><circle cx="10.5" cy="10.5" r="4.2"/></g><g fill="#667b8d"><path d="M15.3 17l1.8-1.8 4 4a1.3 1.3 0 01-1.8 1.8z"/></g></g></symbol>
+<symbol id="i-go" viewBox="0 0 24 24"><g stroke="none"><g fill="#2f7de1"><path d="M12 21.5c-4.8-4.3-7-8-7-11.3a7 7 0 0114 0c0 3.3-2.2 7-7 11.3z"/></g><g fill="#fff" fill-opacity="0.95"><circle cx="12" cy="10" r="3"/></g></g></symbol>
+<symbol id="i-gps" viewBox="0 0 24 24"><g stroke="none"><g fill="#2f7de1"><circle cx="12" cy="11.5" r="8.6"/></g><g fill="#fff" fill-opacity="0.92"><circle cx="12" cy="11.5" r="5.6"/></g><g fill="#2f7de1"><circle cx="12" cy="11.5" r="2.9"/></g><g fill="#fff" fill-opacity="0.9"><rect x="11" y="3.2" width="2" height="3" rx="1"/><rect x="11" y="17" width="2" height="3" rx="1"/><rect x="3.2" y="10.5" width="3" height="2" rx="1"/><rect x="17.8" y="10.5" width="3" height="2" rx="1"/></g></g></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><g stroke="none"><g fill="#2f7de1"><path d="M3.5 8.5a3 3 0 013-3h1.8l1.2-1.8h6l1.2 1.8h1.8a3 3 0 013 3v8a3 3 0 01-3 3h-12a3 3 0 01-3-3z"/></g><g fill="#fff" fill-opacity="0.92"><circle cx="12" cy="12.4" r="4.7"/></g><g fill="#2f7de1"><circle cx="12" cy="12.4" r="2.9"/></g></g></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><g stroke="none"><g fill="#2f7de1"><rect x="4" y="3" width="16" height="18" rx="3.2"/></g><g fill="#fff" fill-opacity="0.95"><rect x="7.4" y="7.4" width="9.2" height="1.9" rx=".95"/><rect x="7.4" y="11.2" width="9.2" height="1.9" rx=".95"/><rect x="7.4" y="15" width="6" height="1.9" rx=".95"/></g></g></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><g stroke="none"><g fill="#e8731a"><path d="M5.5 3.2l13.6 7-5.8 1.9-2 6z"/></g></g></symbol>
+<symbol id="i-line" viewBox="0 0 24 24"><g stroke="none"><g fill="#e8731a"><g transform="rotate(-38 12 11.5)"><rect x="1.2" y="8" width="21.6" height="7.2" rx="2"/></g></g><g fill="#fff" fill-opacity="0.9"><g transform="rotate(-38 12 11.5)"><rect x="4.6" y="8" width="1.5" height="3.2" rx=".6"/><rect x="8.9" y="8" width="1.5" height="4.6" rx=".6"/><rect x="13.2" y="8" width="1.5" height="3.2" rx=".6"/><rect x="17.5" y="8" width="1.5" height="4.6" rx=".6"/></g></g></g></symbol>
+<symbol id="i-poly" viewBox="0 0 24 24"><g stroke="none"><g fill="#e8731a"><path d="M4.3 9.2l8.2-5.8 7.2 5-2.3 9.8H7z"/></g><g fill="#fff" fill-opacity="0.95"><circle cx="4.7" cy="9.2" r="1.6"/><circle cx="12.5" cy="3.9" r="1.6"/><circle cx="19.3" cy="8.6" r="1.6"/><circle cx="17.3" cy="17.8" r="1.6"/><circle cx="7.3" cy="17.8" r="1.6"/></g></g></symbol>
+<symbol id="i-p2l" viewBox="0 0 24 24"><g stroke="none"><g fill="#e8731a"><path d="M2.5 19.6c4-.4 5.2-5.6 9.2-5.6s5.8 3 9.8 2.4v3.4z"/></g><g fill="#e8731a"><circle cx="8" cy="6.4" r="3.5"/></g><g fill="#fff" fill-opacity="0.95"><circle cx="8" cy="6.4" r="1.4"/><circle cx="8" cy="11.2" r=".9"/></g></g></symbol>
+<symbol id="i-mark" viewBox="0 0 24 24"><g stroke="none"><g fill="#e8731a"><path d="M6.5 3h11A1.5 1.5 0 0119 4.5V21l-7-4.6L5 21V4.5A1.5 1.5 0 016.5 3z"/></g><g fill="#fff" fill-opacity="0.92"><path d="M12 6.4l1.1 2.3 2.5.3-1.8 1.7.5 2.5-2.3-1.2-2.3 1.2.5-2.5-1.8-1.7 2.5-.3z"/></g></g></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><g stroke="none"><g fill="#d9453a"><path d="M5.5 8h13l-1 11.3a2 2 0 01-2 1.7H8.5a2 2 0 01-2-1.7z"/><rect x="4" y="4.8" width="16" height="2.8" rx="1.4"/><rect x="9.4" y="2.6" width="5.2" height="2.6" rx="1.1"/></g><g fill="#fff" fill-opacity="0.92"><rect x="9.3" y="10.6" width="1.6" height="6.6" rx=".8"/><rect x="13.1" y="10.6" width="1.6" height="6.6" rx=".8"/></g></g></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><path d="M4 15.4h16v3.2a2.2 2.2 0 01-2.2 2.2H6.2A2.2 2.2 0 014 18.6z"/></g><g fill="#6b4fd6"><path d="M9.4 3h5.2v6h3.2L12 15 6.2 9h3.2z"/></g></g></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><path d="M4 15.4h16v3.2a2.2 2.2 0 01-2.2 2.2H6.2A2.2 2.2 0 014 18.6z"/></g><g fill="#6b4fd6"><path d="M9.4 14.6h5.2v-6h3.2L12 2.8 6.2 8.6h3.2z"/></g></g></symbol>
+<symbol id="i-sat" viewBox="0 0 24 24"><g stroke="none"><g fill="#2e9e4f"><path d="M12 11.6l8.6 4.4-8.6 4.4L3.4 16z"/></g><g fill="#2e9e4f"><path d="M12 7.6l8.6 4.4-8.6 4.4L3.4 12z"/></g><g fill="#2e9e4f"><path d="M12 3.6l8.6 4.4-8.6 4.4L3.4 8z"/></g></g></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><g stroke="none"><g fill="#2e9e4f"><path d="M3.5 6.2l5.5-2.2 6 2.2 5.5-2.2v13.8l-5.5 2.2-6-2.2-5.5 2.2z"/></g><g fill="#fff" fill-opacity="0.38"><path d="M9 4l6 2.2v13.6l-6-2.2z"/></g></g></symbol>
+<symbol id="i-buffer" viewBox="0 0 24 24"><g stroke="none"><g fill="#cf3a78"><rect x="3" y="5.5" width="18" height="12.5" rx="6.2"/></g><g fill="#fff" fill-opacity="0.9"><rect x="6" y="8.5" width="12" height="6.5" rx="3.2"/></g><g fill="#cf3a78"><rect x="7.5" y="10.9" width="9" height="2.2" rx="1.1"/></g></g></symbol>
+<symbol id="i-chain" viewBox="0 0 24 24"><g stroke="none"><g fill="#cf3a78"><rect x="3.5" y="12" width="3.8" height="8" rx="1.3"/><rect x="9.1" y="7.6" width="3.8" height="12.4" rx="1.3"/><rect x="14.7" y="3.4" width="3.8" height="16.6" rx="1.3"/></g></g></symbol>
+<symbol id="i-crs" viewBox="0 0 24 24"><g stroke="none"><g fill="#cf3a78"><circle cx="12" cy="11.5" r="8.6"/></g><g fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5h17M12 2.9c3 2.6 3 14.6 0 17.2M12 2.9c-3 2.6-3 14.6 0 17.2"/></g></g></symbol>
+<symbol id="i-offline" viewBox="0 0 24 24"><g stroke="none"><g fill="#17998f"><path d="M7 19.6a4.6 4.6 0 01-.7-9.1A6 6 0 0118 9.6 4.2 4.2 0 0117 19.6z"/></g><g fill="#fff" fill-opacity="0.95"><path d="M10.6 10.6h2.8v3.6h2.1L12 18l-3.5-3.8h2.1z"/></g></g></symbol>
+<symbol id="i-label" viewBox="0 0 24 24"><g stroke="none"><g fill="#2e9e4f"><rect x="3.5" y="3" width="17" height="17" rx="4.2"/></g><g fill="#fff" fill-opacity="0.95"><path d="M7.4 7.3h9.2v2.2h-3.5v7.4h-2.2V9.5H7.4z"/></g></g></symbol>
+<symbol id="i-names" viewBox="0 0 24 24"><g stroke="none"><g fill="#2e9e4f"><rect x="3.5" y="3" width="17" height="17" rx="4.2"/></g><g fill="#fff" fill-opacity="0.95"><path d="M7.4 7.3h9.2v2.2h-3.5v7.4h-2.2V9.5H7.4z"/></g></g></symbol>
+<symbol id="i-history" viewBox="0 0 24 24"><g stroke="none"><g fill="#17998f"><circle cx="12" cy="11.5" r="8.6"/></g><g fill="#fff" fill-opacity="0.93"><circle cx="12" cy="11.5" r="6.2"/></g><g fill="#17998f"><path d="M11 7v5.1l3.5 2.1 1-1.7-2.5-1.5V7z"/></g></g></symbol>
+<symbol id="i-extent" viewBox="0 0 24 24"><g stroke="none"><g fill="#2e9e4f"><path d="M3.6 3.4h6.2v2.5H6.1v3.7H3.6z"/><g transform="translate(24 0) scale(-1 1)"><path d="M3.6 3.4h6.2v2.5H6.1v3.7H3.6z"/></g><g transform="translate(0 23) scale(1 -1)"><path d="M3.6 3.4h6.2v2.5H6.1v3.7H3.6z"/></g><g transform="translate(24 23) scale(-1 -1)"><path d="M3.6 3.4h6.2v2.5H6.1v3.7H3.6z"/></g></g></g></symbol>
+<symbol id="i-tpl" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><path d="M6.5 2.6h7.8l4.2 4.2v12.7a2 2 0 01-2 2h-10a2 2 0 01-2-2V4.6a2 2 0 012-2z"/></g><g fill="#fff" fill-opacity="0.55"><path d="M14.3 2.6v3.2a1 1 0 001 1h3.2z"/></g><g fill="#fff" fill-opacity="0.95"><rect x="7.6" y="11" width="8.8" height="1.7" rx=".85"/><rect x="7.6" y="14.2" width="8.8" height="1.7" rx=".85"/><rect x="7.6" y="17.2" width="5.4" height="1.7" rx=".85"/></g></g></symbol>
+<symbol id="i-table" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><rect x="3" y="4" width="18" height="16" rx="3.2"/></g><g fill="#fff" fill-opacity="0.92"><rect x="5.4" y="8.6" width="6" height="3.4" rx=".9"/><rect x="12.6" y="8.6" width="6" height="3.4" rx=".9"/><rect x="5.4" y="13.6" width="6" height="3.4" rx=".9"/><rect x="12.6" y="13.6" width="6" height="3.4" rx=".9"/></g></g></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><path d="M12 2.8l7.5 2.8v5.6c0 4.6-3.2 7.8-7.5 9.4-4.3-1.6-7.5-4.8-7.5-9.4V5.6z"/></g><g fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.4 11.6l2.7 2.8 4.6-5.3"/></g></g></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><path d="M5.5 3h10.6l3.4 3.4V19a2 2 0 01-2 2h-12a2 2 0 01-2-2V5a2 2 0 012-2z"/></g><g fill="#fff" fill-opacity="0.92"><rect x="7.6" y="3" width="7" height="5" rx="1"/><rect x="7" y="13" width="10" height="6.6" rx="1.3"/></g></g></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><g stroke="none"><g fill="#17998f"><path d="M3 6.6a2.2 2.2 0 012.2-2.2h4l2 2.2h7.6A2.2 2.2 0 0121 8.8v9.2a2.2 2.2 0 01-2.2 2.2H5.2A2.2 2.2 0 013 18z"/></g><g fill="#fff" fill-opacity="0.3"><path d="M3 10.4h18V18a2.2 2.2 0 01-2.2 2.2H5.2A2.2 2.2 0 013 18z"/></g></g></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><g stroke="none"><g fill="#17998f"><rect x="3" y="4.5" width="18" height="15" rx="3.2"/></g><g fill="#fff" fill-opacity="0.93"><circle cx="8.6" cy="9.4" r="2"/><path d="M4.6 17.8l4.7-5 3.6 3.6 2.7-2.7 3.8 4.1z"/></g></g></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><g stroke="none"><g fill="#dd9712"><circle cx="12" cy="11.5" r="8.8"/></g><g fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.4 9.4a2.7 2.7 0 015.2.8c0 1.8-2.6 2.2-2.6 4"/></g><g fill="#fff" fill-opacity="0.95"><circle cx="12" cy="17.2" r="1.3"/></g></g></symbol>
+<symbol id="i-panel" viewBox="0 0 24 24"><g stroke="none"><g fill="#dd9712"><rect x="3" y="4" width="18" height="16" rx="3.2"/></g><g fill="#fff" fill-opacity="0.88"><path d="M14 4h4a3 3 0 013 3v10a3 3 0 01-3 3h-4z"/></g></g></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><g stroke="none"><g fill="none" stroke="#667b8d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></g></g></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><g stroke="none"><g fill="none" stroke="#667b8d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5L8 12l6.5 6.5"/></g></g></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><g stroke="none"><g fill="none" stroke="#667b8d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5L16 12l-6.5 6.5"/></g></g></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><g stroke="none"><g fill="#dd9712"><circle cx="12" cy="12" r="4.6"/></g><g fill="none" stroke="#dd9712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></g></g></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><g stroke="none"><g fill="#17998f"><path d="M20 14.6A8.4 8.4 0 019.4 4a8.4 8.4 0 1010.6 10.6z"/></g></g></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><g stroke="none"><g fill="#d9453a"><path d="M12 21.5c-4.8-4.3-7-8-7-11.3a7 7 0 0114 0c0 3.3-2.2 7-7 11.3z"/></g><g fill="#fff" fill-opacity="0.95"><circle cx="12" cy="10" r="2.6"/></g></g></symbol>
+<symbol id="i-cam2" viewBox="0 0 24 24"><g stroke="none"><g fill="#2f7de1"><path d="M3.5 8.5a3 3 0 013-3h1.8l1.2-1.8h6l1.2 1.8h1.8a3 3 0 013 3v8a3 3 0 01-3 3h-12a3 3 0 01-3-3z"/></g><g fill="#fff" fill-opacity="0.95"><circle cx="12" cy="12.4" r="4"/></g></g></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><g stroke="none"><g fill="#2f7de1"><rect x="3" y="3" width="18" height="18" rx="4.2"/></g><g fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.2v9.6M7.2 12h9.6"/></g></g></symbol>
+<symbol id="i-run" viewBox="0 0 24 24"><g stroke="none"><g fill="#6b4fd6"><circle cx="12" cy="12" r="9"/></g><g fill="#fff" fill-opacity="0.95"><path d="M10 7.6l6.2 4.4-6.2 4.4z"/></g></g></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24"><g stroke="none"><g fill="none" stroke="#667b8d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 15l6.5-6.5 6.5 6.5"/></g></g></symbol></svg>
 
 <header id="titlebar">
  <div class="brand"><svg class="ic"><use href="#i-brand"/></svg>الانتقال إلى الإحداثي<span style="font:11.5px var(--mono);opacity:.65;direction:ltr">Go To XY</span></div>
+ <div id="qat" aria-label="شريط الوصول السريع"></div>
+ <select id="qfmt" title="صيغة الإدخال في خانة الانتقال السريع" aria-label="صيغة الإدخال"><option value="ll">Lat/Long</option><option value="37">UTM 37N</option><option value="38">UTM 38N</option><option value="39">UTM 39N</option></select>
  <div id="qgoBox"><svg class="ic"><use href="#i-search"/></svg><input id="qgo" type="text" dir="auto" placeholder="انتقال سريع: 30.5081, 47.7835" aria-label="انتقال سريع إلى إحداثي" autocomplete="off"></div>
  <div class="datum">WGS84 · UTM 37–39N</div>
- <button type="button" id="themeBtn" class="langbtn" title="الوضع الليلي / النهاري" aria-label="الوضع الليلي / النهاري">◐</button>
+ <button type="button" id="themeBtn" class="langbtn" title="الوضع الليلي / النهاري" aria-label="الوضع الليلي / النهاري"><svg class="ic"><use href="#i-moon"/></svg></button>
  <button type="button" id="langBtn" class="langbtn" title="تبديل اللغة">English</button>
 </header>
 
+<div id="msheet">
+<div id="rtabs" role="tablist" aria-label="تبويبات الشريط">
+ <button type="button" class="rtab" role="tab" data-rt="home">الرئيسية</button>
+ <button type="button" class="rtab" role="tab" data-rt="data">البيانات</button>
+ <button type="button" class="rtab" role="tab" data-rt="lab">التسميات والعرض</button>
+ <button type="button" class="rtab" role="tab" data-rt="bf">Buffer</button>
+ <button type="button" class="rtab" role="tab" data-rt="ch">Chainage</button>
+ <button type="button" class="rtab" role="tab" data-rt="crs">الإحداثيات</button>
+ <button type="button" class="rtab" role="tab" data-rt="proj">المشروع</button>
+ <button type="button" class="rtab" role="tab" data-rt="rep">التقارير والصور</button>
+ <button type="button" class="rtab" role="tab" data-rt="help">عرض ومساعدة</button>
+ <button type="button" class="rbfold" title="طيّ الشريط" aria-label="طيّ الشريط"><svg class="ic"><use href="#i-chev"/></svg></button>
+</div>
 <nav id="ribbon" aria-label="شريط الأدوات">
  <div class="grp g-nav"><div class="btns">
   <button type="button" class="tb" id="tbGo" title="الانتقال إلى إحداثي"><svg class="ic"><use href="#i-go"/></svg>انتقل</button>
   <button type="button" class="tb" id="tbLoc" title="موقعي الحالي (GPS)"><svg class="ic"><use href="#i-gps"/></svg>موقعي</button>
-  <button type="button" class="tb" id="tbCam" title="قراءة إحداثي من صورة"><svg class="ic"><use href="#i-cam"/></svg>كاميرا</button>
-  <button type="button" class="tb" id="tbLog" title="سجل الإحداثيات"><svg class="ic"><use href="#i-list"/></svg>السجل</button>
+  <div class="stk">  <button type="button" class="tb sm" id="tbCam" title="قراءة إحداثي من صورة"><svg class="ic"><use href="#i-cam"/></svg>كاميرا</button>  <button type="button" class="tb sm" id="tbLog" title="سجل الإحداثيات"><svg class="ic"><use href="#i-list"/></svg>السجل</button></div>
  </div><div class="cap">انتقال</div></div>
 
  <div class="grp g-meas"><div class="btns">
   <button type="button" class="tb tool on" id="tlPan" title="تحريك الخريطة (Esc)"><svg class="ic"><use href="#i-arrow"/></svg>تحريك</button>
   <button type="button" class="tb tool" id="tlLine" title="قياس مسافة"><svg class="ic"><use href="#i-line"/></svg>مسافة</button>
   <button type="button" class="tb tool" id="tlPoly" title="رسم مضلع: المساحة والمحيط"><svg class="ic"><use href="#i-poly"/></svg>مساحة</button>
-  <button type="button" class="tb tool" id="tlP2L" title="أقصر مسافة من نقطة إلى المسار"><svg class="ic"><use href="#i-p2l"/></svg>إلى المسار</button>
-  <button type="button" class="tb" id="tbSaveDraw" title="حفظ الرسم الحالي للتصدير"><svg class="ic"><use href="#i-mark"/></svg>حفظ الرسم</button>
-  <button type="button" class="tb" id="tbClearDraw" title="مسح القياس الحالي"><svg class="ic"><use href="#i-trash"/></svg>مسح</button>
+  <div class="stk">  <button type="button" class="tb sm tool" id="tlP2L" title="أقصر مسافة من نقطة إلى المسار"><svg class="ic"><use href="#i-p2l"/></svg>إلى المسار</button>  <button type="button" class="tb sm" id="tbSaveDraw" title="حفظ الرسم الحالي للتصدير"><svg class="ic"><use href="#i-mark"/></svg>حفظ الرسم</button>  <button type="button" class="tb sm" id="tbClearDraw" title="مسح القياس الحالي"><svg class="ic"><use href="#i-trash"/></svg>مسح</button></div>
  </div><div class="cap">قياس ورسم</div></div>
 
  <div class="grp g-map"><div class="btns">
-  <button type="button" class="tb" id="tbWb" title="صور جوية تاريخية (Wayback)"><svg class="ic"><use href="#i-history"/></svg>تاريخية</button>
-  <button type="button" class="tb" id="tbExt" title="تكبير لعرض كل النقاط والرسومات"><svg class="ic"><use href="#i-extent"/></svg>المدى</button>
+  <button type="button" class="tb dis" id="tbView" title="خيارات عرض النقاط (الملصق، اللون، المسار، الفلترة)"><svg class="ic"><use href="#i-map"/></svg>العرض</button>
+  <button type="button" class="tb" id="tbLab" title="التسميات على الخريطة (Labeling)"><svg class="ic"><use href="#i-label"/></svg>التسميات</button>
  </div><div class="cap">الخريطة</div></div>
+
+ <div class="grp g-an"><div class="btns">
+  <button type="button" class="tb" id="tbBf" title="منطقة Buffer حول خط أو مضلع"><svg class="ic"><use href="#i-buffer"/></svg>Buffer</button>
+  <button type="button" class="tb" id="tbCh" title="Chainage على خط الأنبوب"><svg class="ic"><use href="#i-chain"/></svg>Chainage</button>
+  <button type="button" class="tb" id="tbCrs" title="تحويل بين أنظمة الإحداثيات"><svg class="ic"><use href="#i-crs"/></svg>الإحداثيات</button>
+ </div><div class="cap">تحليل</div></div>
 
  <div class="grp g-data"><div class="btns">
   <button type="button" class="tb" id="tbImp" title="استيراد Excel / CSV / KML / GeoJSON / Shapefile"><svg class="ic"><use href="#i-down"/></svg>استيراد</button>
-  <button type="button" class="tb" id="tbQc" title="فحص جودة النقاط"><svg class="ic"><use href="#i-check"/></svg>الجودة</button>
-  <button type="button" class="tb" id="tbAt" title="جدول الخصائص"><svg class="ic"><use href="#i-table"/></svg>الجدول</button>
+    <button type="button" class="tb" id="tbQc" title="فحص جودة النقاط"><svg class="ic"><use href="#i-check"/></svg>الجودة</button>  <button type="button" class="tb" id="tbAt" title="جدول الخصائص"><svg class="ic"><use href="#i-table"/></svg>الجدول</button>
   <button type="button" class="tb" id="tbExp" title="تصدير النقاط"><svg class="ic"><use href="#i-up"/></svg>تصدير</button>
  </div><div class="cap">البيانات</div></div>
 
  <div class="grp g-proj"><div class="btns">
-  <button type="button" class="tb" id="tbPsave" title="حفظ المشروع"><svg class="ic"><use href="#i-save"/></svg>حفظ</button>
-  <button type="button" class="tb" id="tbPopen" title="فتح مشروع محفوظ"><svg class="ic"><use href="#i-folder"/></svg>فتح</button>
-  <button type="button" class="tb" id="tbImg" title="تصدير صورة الخريطة PNG"><svg class="ic"><use href="#i-image"/></svg>صورة PNG</button>
+  <button type="button" class="tb" id="tbProj" title="مشاريعي: المشروع الحالي والنسخ الاحتياطي"><svg class="ic"><use href="#i-folder"/></svg>مشاريعي</button>
+  <button type="button" class="tb" id="tbImg" title="صورة الخريطة PNG والتقرير والطباعة"><svg class="ic"><use href="#i-image"/></svg>صورة الخريطة</button>
+  <button type="button" class="tb" id="tbPh" title="الصور التاريخية (Wayback) والصور الميدانية"><svg class="ic"><use href="#i-history"/></svg>الصور</button>
+  <button type="button" class="tb" id="tbOff" title="العمل بدون إنترنت: تنزيل الخرائط"><svg class="ic"><use href="#i-offline"/></svg>بدون إنترنت</button>
  </div><div class="cap">المشروع</div></div>
 
  <div class="grp g-help"><div class="btns">
@@ -380,16 +816,79 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
   <button type="button" class="tb" id="tbHelp" title="دليل الاستخدام"><svg class="ic"><use href="#i-help"/></svg>الدليل</button>
  </div><div class="cap">عرض ومساعدة</div></div>
 </nav>
+</div>
+<div id="ctx" hidden>
+ <div class="ctxt"><b id="ctxTitle"></b><button type="button" id="ctxX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div>
+ <div class="ctxp" data-ctx="imp" hidden>
+  <div class="cg"><div class="cr"><label class="cl">اسم الطبقة <input id="layName" dir="auto" placeholder="مثال: أنبوب البصرة 1"></label><label class="cl"><input type="checkbox" id="impAdd" checked> إضافة للبيانات الحالية</label></div><div class="cc">الطبقة</div></div>
+  <div class="cg"><div class="cr"><input type="file" id="file" accept=".xlsx,.xls,.csv,.kml,.kmz,.geojson,.json,.zip,.gpkg,.shp,.dbf,.prj,.cpg,.shx" multiple></div><div class="cc">الملف: Excel · CSV · KML · KMZ · GeoJSON · GPKG · Shapefile (ZIP أو .shp مع .dbf و .prj)</div></div>
+  <div class="cg"><div class="cr"><button id="tpl" class="alt ico" title="قالب Excel"><svg class="ic"><use href="#i-tpl"/></svg><span class="bl">قالب Excel</span></button><button id="clrpts" class="alt ico" title="مسح النقاط"><svg class="ic"><use href="#i-trash"/></svg><span class="bl">مسح النقاط</span></button></div><div class="cc">أدوات</div></div>
+ </div>
+ <div class="ctxp" data-ctx="exp" hidden>
+  <div class="cg"><div class="cr"><label class="cl">الطبقة <select id="cexpL"></select></label></div><div class="cc">نطاق التصدير</div></div>
+  <div class="cg"><div class="cr"><select id="cfmt"><option value="xlsx">Excel (xlsx)</option><option value="csv">CSV</option><option value="kml">KML (Google Earth)</option><option value="kmz">KMZ (Google Earth)</option><option value="geojson">GeoJSON</option><option value="shp">Shapefile (ZIP, WGS84)</option><option value="shpu">Shapefile (ZIP, UTM 38N)</option><option value="gpx">GPX (GPS)</option></select><button id="cexp" title="تصدير" class="it"><svg class="ic"><use href="#i-up"/></svg><span class="bl">تصدير</span></button></div><div class="cc">الصيغة</div></div>
+ </div>
+ <div class="ctxp" data-ctx="lab" hidden>
+  <div class="cg"><div class="cr"><label class="cl"><input type="checkbox" id="clabon"> إظهار الملصقات</label><label class="cl">أدنى تكبير <input id="labZ" type="number" min="3" max="20" value="14"></label></div><div class="cr"><label class="cl"><input type="checkbox" id="labPts" checked> نقاط</label><label class="cl"><input type="checkbox" id="labLines" checked> خطوط</label><label class="cl"><input type="checkbox" id="labPolys" checked> مضلعات</label></div><div class="cc">عرض</div></div>
+  <div class="cg"><div class="cr"><button type="button" id="labFieldsBtn" class="alt">الحقول ▾</button><label class="cl">الفاصل <select id="labSep"><option value=" | ">|</option><option value=" - ">-</option><option value=", ">,</option><option value="\n">سطر جديد</option></select></label></div><div class="cc">المحتوى</div></div>
+  <div class="cg"><div class="cr"><label class="cl">حجم الخط <input id="labSize" type="number" min="8" max="28" value="12"></label><label class="cl">اللون <input id="labColor" type="color" value="#111111"></label></div><div class="cr"><label class="cl"><input type="checkbox" id="labHalo" checked> هالة بيضاء حول النص</label></div><div class="cc">المظهر</div></div>
+ </div>
+
+ <div class="ctxp" data-ctx="crs" hidden>
+  <div class="cg"><div class="cr"><label class="cl">من <select id="cvFrom"></select></label><label class="cl">إلى <select id="cvTo"></select></label></div><div class="cr" id="cvCustBox" hidden><label class="cl">proj4 مخصص <input id="cvCustom" placeholder="+proj=utm +zone=38 +datum=WGS84 +units=m +no_defs"></label></div><div class="cc">التحويل</div></div>
+  <div class="cg"><div class="cr"><label class="cl"><span id="cvAL">X</span> <input id="cvA" inputmode="decimal"></label><label class="cl"><span id="cvBL">Y</span> <input id="cvB" inputmode="decimal"></label><button id="cvGo" title="حوّل" class="it"><svg class="ic"><use href="#i-crs"/></svg><span class="bl">حوّل</span></button><button id="cvShow" class="alt ico" title="اذهب إلى الموقع"><svg class="ic"><use href="#i-go"/></svg><span class="bl">اذهب إلى الموقع</span></button></div><div class="cc">الإحداثي</div></div>
+  <div class="cg"><div id="cvRes" class="note cres"></div><div class="cc">النتيجة</div></div>
+  <div class="cg"><div class="cr"><label class="cl">بنظام <select id="cvOut"></select></label><button id="cvXls" class="alt ico" title="Excel"><svg class="ic"><use href="#i-up"/></svg><span class="bl">Excel</span></button><button id="cvCsv" class="alt ico" title="CSV"><svg class="ic"><use href="#i-tpl"/></svg><span class="bl">CSV</span></button></div><div class="cc">تصدير النقاط المعروضة</div></div>
+ </div>
+ <div class="ctxp" data-ctx="bf" hidden>
+  <div class="cg"><div class="cr"><label class="cl">المصدر <select id="bfSrc"></select></label></div><div class="cc">المصدر</div></div>
+  <div class="cg"><div class="cr"><label class="cl">المسافة من كل جانب (م) <input id="bfW" type="number" min="0.1" step="any" value="15"></label><label class="cl">اللون <input id="bfCol" type="color" value="#e8590c"></label></div><div class="cc">الإعدادات</div></div>
+  <div class="cg"><div class="cr"><button id="bfRun" title="ارسم Buffer" class="it"><svg class="ic"><use href="#i-buffer"/></svg><span class="bl">ارسم Buffer</span></button><button id="bfClr" class="alt ico" title="مسح الـ Buffer"><svg class="ic"><use href="#i-trash"/></svg><span class="bl">مسح الـ Buffer</span></button></div><div class="cr"><button id="bfAn" class="alt ico" title="ما داخل الـ Buffer"><svg class="ic"><use href="#i-search"/></svg><span class="bl">ما داخل الـ Buffer</span></button><button id="bfXls" class="alt ico" title="تصدير النتيجة Excel"><svg class="ic"><use href="#i-up"/></svg><span class="bl">تصدير النتيجة Excel</span></button></div><div class="cc">إجراءات</div></div>
+  <div class="cg"><div id="bfRes" class="note cres"></div><div class="cc">النتيجة</div></div>
+ </div>
+ <div class="ctxp" data-ctx="ch" hidden>
+  <div class="cg"><div class="cr"><label class="cl">الأنبوب <select id="chSrc"></select></label></div><div class="cr"><label class="cl"><input type="checkbox" id="chRev"> عكس الاتجاه</label><label class="cl"><input type="checkbox" id="chMarks"> إظهار العلامات</label></div><div class="cc">الأنبوب (خط مستورد)</div></div>
+  <div class="cg"><div class="cr"><label class="cl">البداية (م أو 3+420) <input id="chStart" value="0"></label><label class="cl">علامات كل (م) <input id="chStep" type="number" min="1" step="any" value="100"></label></div><div class="cc">chainage</div></div>
+  <div class="cg"><div class="cr"><button id="chPick" class="alt ico" title="اقرأ chainage بالنقر"><svg class="ic"><use href="#i-pin"/></svg><span class="bl">اقرأ chainage بالنقر</span></button></div><div class="cr"><label class="cl">انتقل إلى <input id="chAt" placeholder="3+420"></label><button id="chGoBtn" class="alt ico" title="انتقل"><svg class="ic"><use href="#i-go"/></svg><span class="bl">انتقل</span></button></div><div class="cc">قراءة وانتقال</div></div>
+  <div class="cg"><div class="cr"><label class="cl">أقصى بُعد (م) <input id="chMax" type="number" min="0" step="any" value="50"></label><button id="chPts" class="alt ico" title="chainage للنقاط القريبة"><svg class="ic"><use href="#i-chain"/></svg><span class="bl">chainage للنقاط القريبة</span></button><button id="chXls" class="alt ico" title="تصدير Excel"><svg class="ic"><use href="#i-up"/></svg><span class="bl">تصدير Excel</span></button></div><div class="cc">النقاط القريبة</div></div>
+  <div class="cg"><div id="chRes" class="note cres"></div><div class="cc">النتيجة</div></div>
+ </div>
+
+ <div class="ctxp" data-ctx="view" hidden>
+  <div class="cg"><div class="cr"><label class="cl">عمود الملصق <select id="clab"></select></label><label class="cl">تلوين حسب <select id="ccol"></select></label></div><div class="cc">الملصق واللون</div></div>
+  <div class="cg"><div class="cr"><label class="cl">رسم مسار <select id="cpath"></select></label></div><div class="cr"><label class="cl"><input type="checkbox" id="cchain"> المسافة التراكمية في الملصق</label></div><div class="cc">المسار</div></div>
+  <div class="cg"><div class="cr"><label class="cl">بحث / فلترة <input id="cfilt" placeholder="جزء من أي قيمة في الصف"></label></div><div class="cr"><label class="cl"><input type="checkbox" id="cclust"> تجميع النقاط (Clustering)</label></div><div class="cc">التصفية</div></div>
+  <div class="cg cg-keep"><div class="cr lyname"><b data-lly title="التسميات للطبقة المحددة"></b></div><div class="cr"><button id="cdraw" title="ارسم" class="it"><svg class="ic"><use href="#i-run"/></svg><span class="bl">ارسم</span></button><button id="cqc" class="alt ico" title="فحص الجودة"><svg class="ic"><use href="#i-check"/></svg><span class="bl">فحص الجودة</span></button><button type="button" id="colOpen" class="alt ico" title="أعمدة الإحداثيات…"><svg class="ic"><use href="#i-table"/></svg><span class="bl">أعمدة الإحداثيات…</span></button></div><div class="cc">إجراءات</div></div>
+ </div>
+
+ <div class="ctxp" data-ctx="go" hidden>
+  <div class="cg"><div class="cr"><label class="cl">الصيغة <span data-mv="mode"></span></label><button type="button" class="tb inl ico" id="tbExt" title="تكبير لعرض كل النقاط والرسومات"><svg class="ic"><use href="#i-extent"/></svg><span class="bl">المدى</span></button></div><div class="cc">صيغة الإحداثي</div></div>
+  <div class="cg"><div class="cr"><span data-mv="llBox"></span><span data-mv="utmBox"></span></div><div class="cc">الإحداثي</div></div>
+  <div class="cg"><div class="cr"><span data-mv="go"></span><span data-mv="addm"></span></div><div class="cr"><span data-mv="msg"></span></div><div class="cc">إجراءات</div></div>
+ </div>
+ <div class="ctxp" data-ctx="proj" hidden>
+  <div class="cg"><div class="cr"><label class="cl">المشروع الحالي <span data-mv="projSel"></span></label><label class="cl">الاسم <span data-mv="projName"></span></label></div><div class="cr"><span data-mv="projNew"></span><span data-mv="projDel"></span><span data-mv="projSt"></span></div><div class="cc">مشاريعي (حفظ تلقائي)</div></div>
+  <div class="cg"><div class="cr"><span data-mv="psave"></span></div><div class="cr"><label class="cl">استيراد مشروع من ملف <span data-mv="pload"></span></label></div><div class="cc">نسخة احتياطية</div></div>
+ </div>
+ <div class="ctxp" data-ctx="img" hidden>
+  <div class="cg"><div class="cr"><label class="cl">عنوان الخريطة <span data-mv="mtitle"></span></label><label class="cl"><span data-mv="imgLeg"></span> وسيلة إيضاح على الصورة</label></div><div class="cr"><span data-mv="imgexp"></span><span data-mv="imgst"></span></div><div class="cc">صورة الخريطة PNG</div></div>
+  <div class="cg"><div class="cr"><label class="cl">عنوان الورقة <span data-mv="rpTitle"></span></label><label class="cl">الجهة / المشروع <span data-mv="rpSub"></span></label></div><div class="cr"><label class="cl">ملاحظات <span data-mv="rpNote"></span></label><label class="cl">الورقة <span data-mv="rpPaper"></span></label><label class="cl"><span data-mv="rpTbl"></span> جدول الملخص</label></div><div class="cc">ورقة الطباعة</div></div>
+  <div class="cg"><div class="cr"><span data-mv="rpPng"></span><span data-mv="rpPrint"></span></div><div class="cr"><span data-mv="rpXls"></span></div><div class="cr"><span data-mv="rpSt"></span></div><div class="cc">تقرير وطباعة</div></div>
+ </div>
+ <div class="ctxp" data-ctx="ph" hidden>
+  <div class="cg"><div class="cr"><span data-mv="wbload"></span><span data-mv="wbbox"></span></div><div class="cr"><span data-mv="wbst"></span></div><div class="cc">صور جوية تاريخية (Wayback)</div></div>
+  <div class="cg"><div class="cr"><span data-mv="phInfo"></span></div><div class="cr"><span data-mv="phZip"></span><span data-mv="phClr"></span></div><div class="cc">الصور الميدانية</div></div>
+ </div>
+ <div class="ctxp" data-ctx="off" hidden>
+  <div class="cg"><div class="cr"><span data-mv="offSt"></span></div><div class="cr"><label class="cl">تنزيل حتى تكبير إضافي <span data-mv="offZ"></span></label><span data-mv="offInfo"></span></div><div class="cr"><span data-mv="offDl"></span><span data-mv="offClr"></span></div><div class="cc">العمل بدون إنترنت</div></div>
+ </div>
+</div>
+<div id="labPop" class="labpop" hidden><div id="labFields" class="labbox"></div></div>
 
 <div id="work">
 <aside id="panel">
 <div id="grab" role="button" tabindex="0" aria-label="سحب اللوحة"><i></i></div>
-<div class="tabs" role="tablist">
- <button type="button" class="tab on" role="tab" data-t="go"><svg class="ic"><use href="#i-go"/></svg>الإحداثي</button>
- <button type="button" class="tab" role="tab" data-t="measure"><svg class="ic"><use href="#i-line"/></svg>القياس</button>
- <button type="button" class="tab" role="tab" data-t="data"><svg class="ic"><use href="#i-table"/></svg>البيانات</button>
- <button type="button" class="tab" role="tab" data-t="img"><svg class="ic"><use href="#i-sat"/></svg>الصور والمشروع</button>
-</div>
+<div class="tabs" role="tablist" id="pinTabs"></div>
 <div class="pbody">
 <div id="pnlTools"><button type="button" id="secToggle" class="alt" title="طيّ / فتح كل الأقسام">⇕ طيّ الكل</button></div>
 
@@ -410,7 +909,7 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 <label for="e">Easting (X)</label><div class="withcam"><input id="e" inputmode="decimal"><button type="button" class="camb alt" title="قراءة الإحداثي من صورة" aria-label="قراءة الإحداثي من صورة"><svg class="ic"><use href="#i-cam"/></svg></button></div>
 <label for="n">Northing (Y)</label><input id="n" inputmode="decimal">
 </div>
-<div class="row"><button id="go">انتقل</button><button id="addm" class="alt">أضف للقياس</button></div>
+<div class="row"><button id="go" title="انتقل" class="it"><svg class="ic"><use href="#i-go"/></svg><span class="bl">انتقل</span></button><button id="addm" class="alt ico" title="أضف للقياس"><svg class="ic"><use href="#i-plus"/></svg><span class="bl">أضف للقياس</span></button></div>
 <div id="msg" role="alert"></div>
 <div id="visBox" hidden>
 <h2>سجل الإحداثيات (<span id="visN">0</span>)</h2>
@@ -421,7 +920,7 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 <div class="note">يُحفظ كل إحداثي تنتقل إليه (كتابة أو لصق أو كاميرا). والصق عدة أسطر في خانة Lat/Long لإضافتها دفعة واحدة.</div>
 </div>
 <input type="file" id="cam" accept="image/*" hidden>
-<div id="camPanel" hidden>
+<div id="camPanel" class="symdlg wdlg" hidden role="dialog">
 <h2>قراءة إحداثي من صورة</h2>
 <div class="note" style="margin-top:0">اسحب بإصبعك أو بالماوس على الصورة لرسم مربع حول الإحداثي المطلوب فقط.</div>
 <canvas id="cv" style="width:100%;margin-top:8px;border-radius:4px;touch-action:none;cursor:crosshair;background:#000"></canvas>
@@ -446,78 +945,19 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 </section>
 
 <section class="tabsec" data-tab="data" hidden>
-<h2>استيراد ملف</h2>
-<div class="note" style="margin-top:0">Excel / CSV / KML / KMZ / GeoJSON / GeoPackage (gpkg) أو Shapefile (ملف ZIP، أو حدّد .shp و .dbf و .prj معًا)</div>
-<label for="layName" style="margin-top:0">اسم الطبقة (اختياري)</label><input id="layName" dir="auto" style="text-align:start" placeholder="مثال: أنبوب البصرة 1">
-<label style="display:flex;gap:6px;align-items:center;margin-top:8px"><input type="checkbox" id="impAdd" checked style="width:auto"> إضافة إلى البيانات الحالية (بدل الاستبدال)</label>
-<input type="file" id="file" accept=".xlsx,.xls,.csv,.kml,.kmz,.geojson,.json,.zip,.gpkg,.shp,.dbf,.prj,.cpg,.shx" multiple style="margin-top:8px">
-<div class="row"><button id="tpl" class="alt">تحميل قالب Excel</button><button id="clrpts" class="alt">مسح النقاط</button></div>
+<h2>حالة الاستيراد</h2>
 <div id="ptinfo" style="font-size:12.5px;margin-top:8px"></div>
-<div id="shPick" hidden class="note"><b>اختر الأوراق التي تريد إضافتها كطبقات</b><div id="shList"></div><div class="row"><button id="shOk">إضافة</button><button id="shNo" class="alt">إلغاء</button></div></div>
-<div id="laysec" hidden><h2>الطبقات</h2><div id="layList"></div><div class="note">انقر مرّتين على الطبقة لتعديل رموزها (اللون والشكل والحجم).</div></div>
+<div id="shPick" hidden class="symdlg"><b>اختر الأوراق التي تريد إضافتها كطبقات</b><div id="shList"></div><div class="row"><button id="shOk">إضافة</button><button id="shNo" class="alt">إلغاء</button></div></div>
 <div id="cfg" hidden>
-<h2>الأعمدة</h2>
-<label for="ctype" style="margin-top:0">نوع الإحداثي في الملف</label>
-<select id="ctype"><option value="ll">Lat / Long</option><option value="utm">UTM</option><option value="crs">نظام آخر (EPSG)</option></select>
-<div id="crsRow" hidden><label for="cfCrs">نظام إحداثي الملف</label><select id="cfCrs"></select></div>
-<div class="grid2"><div><label for="cx" id="lx">عمود Latitude</label><select id="cx"></select></div><div><label for="cy" id="ly">عمود Longitude</label><select id="cy"></select></div></div>
-<label for="cz">عمود المنطقة Zone (لـ UTM)</label><select id="cz"></select>
-<h2>العرض</h2>
-<label for="clab" style="margin-top:0">عمود الملصق (Label)</label><select id="clab"></select>
-<label for="ccol">تلوين حسب عمود</label><select id="ccol"></select>
-<label for="cpath">رسم مسار</label><select id="cpath"></select>
-<label for="cfilt">بحث / فلترة</label><input id="cfilt" placeholder="جزء من أي قيمة في الصف">
-<label><input type="checkbox" id="cchain" style="width:auto"> إضافة المسافة التراكمية للملصق (مع مسار «كل النقاط»)</label>
-<label><input type="checkbox" id="cclust" style="width:auto"> تجميع النقاط (Clustering)</label>
-<div class="row"><button id="cdraw">ارسم</button><button id="cqc" class="alt">فحص الجودة</button></div>
-<h2>التصدير</h2>
-<label for="cexpL" style="margin-top:0">نطاق التصدير</label><select id="cexpL"></select>
-<div class="row" style="margin-top:0"><select id="cfmt"><option value="xlsx">Excel (xlsx)</option><option value="csv">CSV</option><option value="kml">KML (Google Earth)</option><option value="kmz">KMZ (Google Earth)</option><option value="geojson">GeoJSON</option><option value="shp">Shapefile (ZIP, WGS84)</option><option value="shpu">Shapefile (ZIP, UTM 38N)</option><option value="gpx">GPX (GPS)</option></select><button id="cexp" class="alt">تصدير</button></div>
+<h2>الجودة ووسيلة الإيضاح</h2>
 <div id="qc" class="note"></div>
 <div id="legend" style="font-size:12px;margin-top:6px"></div>
 <div id="pathinfo" style="font-size:12.5px;line-height:1.7;margin-top:6px"></div>
 </div>
-<div id="labsec" hidden>
-<h2>Labeling</h2>
-<label><input type="checkbox" id="clabon" style="width:auto"> إظهار الملصقات على الخريطة</label>
-<label>الحقول المعروضة (اختر حقلًا أو أكثر)</label>
-<div id="labFields" class="labbox"></div>
-<div class="grid2"><div><label for="labSep">الفاصل</label><select id="labSep"><option value=" | ">|</option><option value=" - ">-</option><option value=", ">,</option><option value="\n">سطر جديد</option></select></div><div><label for="labZ">أدنى تكبير</label><input id="labZ" type="number" min="3" max="20" value="14"></div></div>
-<div class="grid2"><div><label for="labSize">حجم الخط</label><input id="labSize" type="number" min="8" max="28" value="12"></div><div><label for="labColor">اللون</label><input id="labColor" type="color" value="#111111"></div></div>
-<label><input type="checkbox" id="labHalo" checked style="width:auto"> هالة بيضاء حول النص</label>
-<div class="labkinds"><label><input type="checkbox" id="labPts" checked style="width:auto"> نقاط</label><label><input type="checkbox" id="labLines" checked style="width:auto"> خطوط</label><label><input type="checkbox" id="labPolys" checked style="width:auto"> مضلعات</label></div>
-</div>
-<div id="crssec">
-<h2>أنظمة الإحداثيات</h2>
-<div class="grid2"><div><label for="cvFrom">من</label><select id="cvFrom"></select></div><div><label for="cvTo">إلى</label><select id="cvTo"></select></div></div>
-<div id="cvCustBox" hidden><label for="cvCustom">تعريف proj4 مخصص</label><input id="cvCustom" placeholder="+proj=utm +zone=38 +datum=WGS84 +units=m +no_defs"></div>
-<div class="grid2"><div><label for="cvA" id="cvAL">X</label><input id="cvA" inputmode="decimal"></div><div><label for="cvB" id="cvBL">Y</label><input id="cvB" inputmode="decimal"></div></div>
-<div class="row"><button id="cvGo">حوّل</button><button id="cvShow" class="alt">اذهب إلى الموقع</button></div>
-<div id="cvRes" class="note"></div>
-<label for="cvOut">تصدير النقاط المعروضة بنظام</label><select id="cvOut"></select>
-<div class="row"><button id="cvXls" class="alt">Excel</button><button id="cvCsv" class="alt">CSV</button></div>
-</div>
-<div class="row"><button id="atOpen" class="alt">جدول الخصائص (كل الطبقات)</button></div>
-<div id="bfsec" hidden>
-<h2>Buffer</h2>
-<label for="bfSrc" style="margin-top:0">المصدر</label><select id="bfSrc"></select>
-<div class="grid2"><div><label for="bfW">المسافة من كل جانب (م)</label><input id="bfW" type="number" min="0.1" step="any" value="15"></div><div><label for="bfCol">اللون</label><input id="bfCol" type="color" value="#e8590c"></div></div>
-<div class="row"><button id="bfRun">ارسم Buffer</button><button id="bfClr" class="alt">مسح الـ Buffer</button></div>
-<div class="row"><button id="bfAn" class="alt">ما داخل الـ Buffer</button><button id="bfXls" class="alt">تصدير النتيجة Excel</button></div>
-<div id="bfRes" class="note"></div>
-</div>
-<div id="chsec" hidden>
-<h2>Chainage</h2>
-<label for="chSrc" style="margin-top:0">الأنبوب (خط مستورد)</label><select id="chSrc"></select>
-<div class="grid2"><div><label for="chStart">chainage نقطة البداية (م أو 3+420)</label><input id="chStart" value="0"></div><div><label for="chStep">علامات كل (م)</label><input id="chStep" type="number" min="1" step="any" value="100"></div></div>
-<label><input type="checkbox" id="chRev" style="width:auto"> عكس الاتجاه</label>
-<label><input type="checkbox" id="chMarks" style="width:auto"> إظهار العلامات على الخط</label>
-<div class="row"><button id="chPick" class="alt">اقرأ chainage بالنقر</button></div>
-<div class="grid2"><div><label for="chAt">الانتقال إلى chainage</label><input id="chAt" placeholder="3+420"></div><div><label for="chGoBtn">&nbsp;</label><button id="chGoBtn" class="alt" style="width:100%">انتقل</button></div></div>
-<div class="grid2"><div><label for="chMax">أقصى بُعد عن الخط (م)</label><input id="chMax" type="number" min="0" step="any" value="50"></div><div><label for="chPts">&nbsp;</label><button id="chPts" class="alt" style="width:100%">chainage للنقاط القريبة</button></div></div>
-<div class="row"><button id="chXls" class="alt">تصدير الجدول Excel</button></div>
-<div id="chRes" class="note"></div>
-</div>
+<div id="labsec" hidden></div>
+<div id="crssec" hidden></div>
+<div id="bfsec" hidden></div>
+<div id="chsec" hidden></div>
 <div id="tbl"></div>
 </section>
 
@@ -565,7 +1005,21 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 
 </div>
 </aside>
-<div id="symsec" class="symdlg" hidden role="dialog"><div class="symhd"><b>رموز الطبقة: <span id="symName"></span></b><button type="button" id="symX" class="alt" title="إغلاق" aria-label="إغلاق">✕</button></div>
+<div id="hiddenCtl" hidden><span data-mv="mmode"></span><span data-mv="mtoggle"></span><span data-mv="mclear"></span><span data-mv="msave"></span><span data-mv="ptinfo"></span><span data-mv="cfg"></span><span data-mv="labsec"></span><span data-mv="crssec"></span><span data-mv="bfsec"></span><span data-mv="chsec"></span><span data-mv="tbl"></span><span data-mv="cam"></span></div>
+<span data-mv="camPanel"></span><span data-mv="shPick"></span>
+<div id="logDlg" class="symdlg wdlg" hidden role="dialog"><div class="symhd"><b>سجل الإحداثيات</b><button type="button" id="logX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div><span data-mv="visBox"></span></div>
+<div id="qcDlg" class="symdlg wdlg" hidden role="dialog"><div class="symhd"><b>الجودة والمسار</b><button type="button" id="qcX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div><span data-mv="qc"></span><span data-mv="pathinfo"></span></div>
+<div id="keyDlg" class="symdlg" hidden role="dialog"><div class="symhd"><b>اختصار لوحة المفاتيح</b><button type="button" id="keyX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div><div class="note" id="keyMsg" style="margin-top:0"></div></div>
+<div id="colDlg" class="symdlg coldlg" hidden role="dialog"><div class="symhd"><b>أعمدة الإحداثيات: <span id="colName"></span></b><button type="button" id="colX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div>
+<div id="colWhy" class="note" style="margin-top:0"></div>
+<label for="ctype" style="margin-top:0">نوع الإحداثي في الملف</label>
+<select id="ctype"><option value="ll">Lat / Long</option><option value="utm">UTM</option><option value="crs">نظام آخر (EPSG)</option></select>
+<div id="crsRow" hidden><label for="cfCrs">نظام إحداثي الملف</label><select id="cfCrs"></select></div>
+<div class="grid2"><div><label for="cx" id="lx">عمود Latitude</label><select id="cx"></select></div><div><label for="cy" id="ly">عمود Longitude</label><select id="cy"></select></div></div>
+<label for="cz">عمود المنطقة Zone (لـ UTM)</label><select id="cz"></select>
+<div class="row"><button type="button" id="colOk">تطبيق</button></div>
+</div>
+<div id="symsec" class="symdlg" hidden role="dialog"><div class="symhd"><b>رموز الطبقة: <span id="symName"></span></b><button type="button" id="symX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button></div>
 <div class="grid2"><div><label for="symShape" style="margin-top:0">شكل النقطة</label><select id="symShape"><option value="circle">● دائرة</option><option value="square">■ مربع</option><option value="triangle">▲ مثلث</option><option value="diamond">◆ معيّن</option><option value="plus">+ زائد</option><option value="x">× علامة</option><option value="star">★ نجمة</option></select></div><div><label for="symSize" style="margin-top:0">حجم النقطة</label><input type="range" id="symSize" min="3" max="20" value="6"></div></div>
 <div class="grid2"><div><label for="symPtc">لون النقاط</label><input type="color" id="symPtc" value="#e03131"></div><div><label for="symLc">لون المسار/الخط</label><input type="color" id="symLc" value="#1971c2"></div></div>
 <div class="grid2"><div><label for="symW">سُمك الخط</label><input type="range" id="symW" min="1" max="10" value="3"></div><div><label for="symDash">نمط الخط</label><select id="symDash"><option value="">متصل</option><option value="8 6">متقطع</option><option value="2 6">منقّط</option></select></div></div>
@@ -573,11 +1027,19 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 <canvas id="symPrev" width="300" height="44" style="max-width:100%;margin-top:6px"></canvas>
 </div>
 <div id="split" role="separator" aria-orientation="vertical" title="اسحب لتغيير عرض اللوحة"></div>
-<div id="mapwrap"><div id="map"></div><div id="toast" hidden role="status"></div><div id="guide" hidden role="dialog" aria-label="الدليل"></div></div>
+<div id="mapwrap"><div id="map"></div><div id="mcard" hidden><button type="button" id="mcardX" class="alt" title="إغلاق" aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button><span data-mv="mres"></span></div><div id="toast" hidden role="status"></div><div id="guide" hidden role="dialog" aria-label="الدليل"></div></div>
+<div id="lsplit" role="separator" aria-orientation="vertical" title="اسحب لتغيير عرض اللوحة"></div>
+<aside id="lpanel">
+<div class="lbody"><div id="laysec" hidden><h2 class="lh2">الطبقات</h2><div id="layList"></div><div class="note">انقر مرّتين على الطبقة لتعديل رموزها (اللون والشكل والحجم).</div></div>
+<div id="legBox" hidden><h2 class="lh2">وسيلة الإيضاح</h2><span data-mv="legend"></span></div>
+<div id="drBox" hidden><h2 class="lh2">الرسومات المحفوظة (<span id="drN">0</span>)</h2><label class="cl" style="margin:4px 0"><input type="checkbox" id="drVis" checked> إظهار على الخريطة</label><div class="row"><span data-mv="mexp"></span><span data-mv="mclrsaved"></span></div></div>
+<div id="layEmpty" class="note">لا توجد طبقات بعد. استورد ملفًا من زر «استيراد» في الشريط العلوي.</div></div>
+<div class="ltabs"><button type="button" id="lpTab" class="tab on" title="Contents — الطبقات"><svg class="ic"><use href="#i-sat"/></svg>Contents</button></div>
+</aside>
 </div>
 <input type="file" id="phIn" accept="image/*" capture="environment" multiple hidden>
 <div id="phView" hidden>
- <div class="phbar"><span id="phCap"></span><span class="phbtn"><button type="button" id="phPrev" class="alt">◀</button><button type="button" id="phNext" class="alt">▶</button><button type="button" id="phDel" class="alt"></button><button type="button" id="phX" class="alt">✕</button></span></div>
+ <div class="phbar"><span id="phCap"></span><span class="phbtn"><button type="button" id="phPrev" class="alt"><svg class="ic"><use href="#i-left"/></svg></button><button type="button" id="phNext" class="alt"><svg class="ic"><use href="#i-right"/></svg></button><button type="button" id="phDel" class="alt"></button><button type="button" id="phX" class="alt"><svg class="ic"><use href="#i-x"/></svg></button></span></div>
  <img id="phImg" alt="">
 </div>
 <div id="atp" hidden>
@@ -588,8 +1050,8 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
   <button type="button" id="atZoom" class="alt">انتقال للمحدد</button>
   <button type="button" id="atDel" class="alt"></button>
   <button type="button" id="atXls" class="alt">تصدير Excel</button>
-  <button type="button" id="atBig" class="alt" title="تكبير / تصغير">⤢</button>
-  <button type="button" id="atClose" class="alt" title="إغلاق">✕</button>
+  <button type="button" id="atBig" class="alt" title="تكبير / تصغير"><svg class="ic"><use href="#i-extent"/></svg></button>
+  <button type="button" id="atClose" class="alt" title="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button>
  </div>
  <div class="atbar" id="atEd">
   <select id="atFF"></select>
@@ -608,6 +1070,7 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
  <span id="sttool" class="ar">تحريك</span>
  <span id="gps" class="ar"></span>
 </footer>
+<nav id="bnav" aria-label="التنقل"><button type="button" data-bn="map"><svg class="ic"><use href="#i-map"/></svg>الخريطة</button><button type="button" data-bn="go"><svg class="ic"><use href="#i-go"/></svg>انتقال</button><button type="button" data-bn="layers"><svg class="ic"><use href="#i-sat"/></svg>الطبقات</button><button type="button" data-bn="tools"><svg class="ic"><use href="#i-label"/></svg>أدوات</button><button type="button" data-bn="more"><svg class="ic"><use href="#i-panel"/></svg>المزيد</button></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.2/proj4.js"></script>
@@ -616,6 +1079,11 @@ html[dir=ltr] .sec.closed>h2::after{transform:rotate(-90deg)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+<script>
+/* المرحلة D: نقل العناصر إلى الأشرطة والنوافذ، ثم حذف التبويبات القديمة */
+(function(){document.querySelectorAll('[data-mv]').forEach(p=>{const e=document.getElementById(p.dataset.mv);if(e)p.replaceWith(e);else p.remove()});
+document.querySelectorAll('.tabsec').forEach(x=>x.remove());})();
+</script>
 <script>
 const $=id=>document.getElementById(id);
 /* ---------- اللغة (عربي / English) ---------- */
@@ -637,6 +1105,10 @@ const EN={
 "تدقيق": "check",
 "النقاط": "Points",
 "المشروع": "Project",
+"الرئيسية": "Home",
+"التقارير والصور": "Reports & imagery",
+"التسميات والعرض": "Labels & display",
+"التسميات للطبقة المحددة": "Labels for the selected layer",
 "مشروع": "project",
 "للتقارير": "for reports",
 "إخفاء/إظهار": "show/hide",
@@ -801,6 +1273,7 @@ const EN={
 "سجل الإحداثيات": "Coordinate log",
 "سجل الإحداثيات (": "Coordinate log (",
 "شريط الأدوات": "Toolbar",
+"تبويبات الشريط": "Ribbon tabs",
 "صف {r} — {d} عن المركز": "Row {r} — {d} from the centre",
 "صف {r}: ": "Row {r}: ",
 "صفوف مرفوضة:": "Rejected rows:",
@@ -884,7 +1357,8 @@ const EN={
 "أسماء الأماكن": "Place names",
 "موقعي الحالي": "My current location"
 };
-Object.assign(EN,{"انقر مرّتين على الطبقة لتعديل رموزها (اللون والشكل والحجم).":"Double-click a layer to edit its symbols (color, shape, size).","الوضع الليلي / النهاري":"Dark / light mode","طيّ / فتح كل الأقسام":"Collapse / expand all sections","⇕ طيّ الكل":"⇕ Collapse all","⇕ فتح الكل":"⇕ Expand all","سحب اللوحة":"Drag the panel","اسحب لتغيير عرض اللوحة":"Drag to resize the panel","نطاق التصدير":"Export scope","كل الطبقات":"All layers","لون النقاط":"Point color","لون المسار/الخط":"Path/line color","رموز الطبقة: ":"Layer symbols: ","رموز الطبقة:":"Layer symbols:","الطبقة":"Layer","شكل النقطة":"Point shape","حجم النقطة":"Point size","سُمك الخط":"Line width","نمط الخط":"Line style","تعبئة المضلعات":"Polygon fill","● دائرة":"● Circle","■ مربع":"■ Square","▲ مثلث":"▲ Triangle","◆ معيّن":"◆ Diamond","+ زائد":"+ Plus","× علامة":"× Cross","★ نجمة":"★ Star","متصل":"Solid","متقطع":"Dashed","منقّط":"Dotted","اسم الطبقة (اختياري)":"Layer name (optional)","مثال: أنبوب البصرة 1":"Example: Basra pipeline 1","الطبقات":"Layers","اختر الأوراق التي تريد إضافتها كطبقات":"Choose the sheets to add as layers","إضافة":"Add","إلغاء":"Cancel","حسب الطبقة":"By layer","إضافة إلى البيانات الحالية (بدل الاستبدال)":"Add to current data (instead of replacing)","الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
+Object.assign(EN,{"مشاريعي":"My projects","الصور":"Imagery","بدون إنترنت":"Offline","الاسم":"Name","الاسم ":"Name ","عنوان الخريطة":"Map title","عنوان الخريطة ":"Map title ","وسيلة إيضاح على الصورة":"Legend on the image","الجهة / المشروع":"Organisation / project","الجهة / المشروع ":"Organisation / project ","ملاحظات":"Notes","ملاحظات ":"Notes ","ورقة الطباعة":"Print sheet","تنزيل حتى تكبير إضافي":"Download up to extra zoom","تنزيل حتى تكبير إضافي ":"Download up to extra zoom ","الجودة والمسار":"Quality and path","اختصار لوحة المفاتيح":"Keyboard shortcut","الصيغة":"Format","الصيغة ":"Format ","صيغة الإحداثي":"Coordinate format","المشروع الحالي ":"Current project ","المشروع الحالي":"Current project","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","نسخة احتياطية":"Backup","استيراد مشروع من ملف ":"Import project from file ","استيراد مشروع من ملف":"Import project from file","صورة الخريطة PNG":"Map image PNG","عنوان الورقة ":"Sheet title ","عنوان الورقة":"Sheet title","الورقة ":"Paper ","الورقة":"Paper","جدول الملخص":"Summary table","تقرير وطباعة":"Report and print","صور جوية تاريخية (Wayback)":"Historical imagery (Wayback)","الصور الميدانية":"Field photos","العمل بدون إنترنت":"Offline use","سجل الإحداثيات":"Coordinate log","وسيلة الإيضاح":"Legend","الرسومات المحفوظة (":"Saved drawings (","إظهار على الخريطة":"Show on map","صورة الخريطة":"Map image","مشاريعي: المشروع الحالي والنسخ الاحتياطي":"My projects: current project and backups","صورة الخريطة PNG والتقرير والطباعة":"Map image PNG, report and print","الصور التاريخية (Wayback) والصور الميدانية":"Historical imagery (Wayback) and field photos","العمل بدون إنترنت: تنزيل الخرائط":"Offline: download maps","صيغة الإدخال في خانة الانتقال السريع":"Input format of the quick box","صيغة الإدخال":"Input format","شريط الوصول السريع":"Quick Access toolbar","انتقال إلى إحداثي":"Go to XY","اسحب لتغيير عرض اللوحة":"Drag to resize the pane","وسيلة إيضاح على الصورة ":"Legend on the image ","عمود الملصق ":"Label column ","عمود الملصق":"Label column","تلوين حسب ":"Color by ","تلوين حسب":"Color by","الملصق واللون":"Label and color","رسم مسار ":"Draw path ","رسم مسار":"Draw path","المسافة التراكمية في الملصق":"Cumulative distance in label","المسار":"Path","بحث / فلترة ":"Search / filter ","بحث / فلترة":"Search / filter","التصفية":"Filter","أعمدة الإحداثيات…":"Coordinate columns…","أعمدة الإحداثيات: ":"Coordinate columns: ","أعمدة الإحداثيات:":"Coordinate columns:","تطبيق":"Apply","لا توجد طبقات بعد. استورد ملفًا من زر «استيراد» في الشريط العلوي.":"No layers yet. Import a file with the Import button in the ribbon.","العرض":"Display","خيارات عرض النقاط (الملصق، اللون، المسار، الفلترة)":"Point display options (label, color, path, filter)","Contents — الطبقات":"Contents — layers","الطبقات":"Layers","تجميع النقاط (Clustering)":"Cluster points","جزء من أي قيمة في الصف":"Part of any value in the row","ارسم":"Draw","فحص الجودة":"Quality check","أقصى بُعد (م)":"Max offset (m)","الإحداثيات":"Coordinates","تحليل":"Analysis","proj4 مخصص ":"Custom proj4 ","proj4 مخصص":"Custom proj4","التحويل":"Conversion","بنظام ":"In system ","بنظام":"In system","تصدير النقاط المعروضة":"Export shown points","الإعدادات":"Settings","إجراءات":"Actions","الأنبوب":"Pipeline","الأنبوب (خط مستورد)":"Pipeline (imported line)","إظهار العلامات":"Show marks","البداية (م أو 3+420)":"Start (m or 3+420)","البداية (م أو 3+420) ":"Start (m or 3+420) ","انتقل إلى ":"Go to ","انتقل إلى":"Go to","المسافة من كل جانب (م) ":"Distance each side (m) ","علامات كل (م) ":"Marks every (m) ","أقصى بُعد (م) ":"Max offset (m) ","اقرأ chainage بالنقر":"Read chainage by clicking","chainage للنقاط القريبة":"Chainage for nearby points","قراءة وانتقال":"Read and go","النقاط القريبة":"Nearby points","النتيجة":"Result","المصدر":"Source","من ":"From ","إلى ":"To ","حوّل":"Convert","اذهب إلى الموقع":"Go to location","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"What's inside the buffer","تصدير النتيجة Excel":"Export result to Excel","تصدير Excel":"Export Excel","عكس الاتجاه":"Reverse direction","انتقل":"Go","منطقة Buffer حول خط أو مضلع":"Buffer zone around a line or polygon","Chainage على خط الأنبوب":"Chainage along the pipeline","تحويل بين أنظمة الإحداثيات":"Convert between coordinate systems","أنظمة الإحداثيات":"Coordinate systems","اسم الطبقة":"Layer name","التسميات":"Labels","التسميات على الخريطة (Labeling)":"Map labels (Labeling)","حالة الاستيراد":"Import status","الجودة ووسيلة الإيضاح":"Quality and legend","اسم الطبقة ":"Layer name ","إضافة للبيانات الحالية":"Add to current data","الطبقة":"Layer","الملف: Excel · CSV · KML · KMZ · GeoJSON · GPKG · Shapefile (ZIP أو .shp مع .dbf و .prj)":"File: Excel · CSV · KML · KMZ · GeoJSON · GPKG · Shapefile (ZIP, or .shp with .dbf and .prj)","أدوات":"Tools","قالب Excel":"Excel template","مسح النقاط":"Clear points","الصيغة":"Format","إظهار الملصقات":"Show labels","أدنى تكبير ":"Min zoom ","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons","عرض":"Display","الحقول ▾":"Fields ▾","الفاصل ":"Separator ","المحتوى":"Content","حجم الخط ":"Font size ","اللون ":"Color ","هالة بيضاء حول النص":"White halo around text","المظهر":"Appearance","استيراد":"Import","تصدير":"Export","انقر مرّتين على الطبقة لتعديل رموزها (اللون والشكل والحجم).":"Double-click a layer to edit its symbols (color, shape, size).","الوضع الليلي / النهاري":"Dark / light mode","طيّ / فتح كل الأقسام":"Collapse / expand all sections","⇕ طيّ الكل":"⇕ Collapse all","⇕ فتح الكل":"⇕ Expand all","سحب اللوحة":"Drag the panel","اسحب لتغيير عرض اللوحة":"Drag to resize the panel","نطاق التصدير":"Export scope","كل الطبقات":"All layers","لون النقاط":"Point color","لون المسار/الخط":"Path/line color","رموز الطبقة: ":"Layer symbols: ","رموز الطبقة:":"Layer symbols:","الطبقة":"Layer","شكل النقطة":"Point shape","حجم النقطة":"Point size","سُمك الخط":"Line width","نمط الخط":"Line style","تعبئة المضلعات":"Polygon fill","● دائرة":"● Circle","■ مربع":"■ Square","▲ مثلث":"▲ Triangle","◆ معيّن":"◆ Diamond","+ زائد":"+ Plus","× علامة":"× Cross","★ نجمة":"★ Star","متصل":"Solid","متقطع":"Dashed","منقّط":"Dotted","اسم الطبقة (اختياري)":"Layer name (optional)","مثال: أنبوب البصرة 1":"Example: Basra pipeline 1","الطبقات":"Layers","اختر الأوراق التي تريد إضافتها كطبقات":"Choose the sheets to add as layers","إضافة":"Add","إلغاء":"Cancel","حسب الطبقة":"By layer","إضافة إلى البيانات الحالية (بدل الاستبدال)":"Add to current data (instead of replacing)","الصور الميدانية":"Field photos","تصدير الصور ZIP":"Export photos ZIP","حذف كل الصور":"Delete all photos","العمل بدون إنترنت":"Offline use","تنزيل الخريطة الظاهرة حتى تكبير إضافي":"Download the visible map up to extra zoom","تنزيل المنطقة الظاهرة":"Download visible area","مسح الخرائط المخزّنة":"Clear stored maps","وسيلة إيضاح (Legend) على الصورة":"Legend on the image","تقرير وطباعة":"Report and print","عنوان الورقة":"Sheet title","الجهة / اسم المشروع":"Organization / project name","ملاحظات تظهر على الورقة":"Notes shown on the sheet","الورقة":"Paper","A4 أفقي":"A4 landscape","A4 عمودي":"A4 portrait","A3 أفقي":"A3 landscape","A3 عمودي":"A3 portrait","جدول الملخص":"Summary table","ورقة الخريطة PNG":"Map sheet PNG","طباعة / PDF":"Print / PDF","تقرير المشروع Excel":"Project report Excel","أنظمة الإحداثيات":"Coordinate systems","نظام آخر (EPSG)":"Other system (EPSG)","نظام إحداثي الملف":"File coordinate system","من":"From","إلى":"To","تعريف proj4 مخصص":"Custom proj4 definition","حوّل":"Convert","اذهب إلى الموقع":"Go to location","تصدير النقاط المعروضة بنظام":"Export shown points in system","جدول الخصائص":"Attribute table","جدول الخصائص (كل الطبقات)":"Attribute table (all layers)","الجدول":"Table","بحث، أو شرط مثل: Length_m>500":"Search, or a condition like: Length_m>500","انتقال للمحدد":"Zoom to selected","تصدير Excel":"Export Excel","تكبير / تصغير":"Larger / smaller","القيمة الجديدة":"New value","اسم حقل جديد":"New field name","+ حقل":"+ Field","الطبقة":"Layer","حقل":"Field","الأنبوب (خط مستورد)":"Pipeline (imported line)","chainage نقطة البداية (م أو 3+420)":"Start chainage (m or 3+420)","علامات كل (م)":"Marks every (m)","عكس الاتجاه":"Reverse direction","إظهار العلامات على الخط":"Show marks on the line","اقرأ chainage بالنقر":"Read chainage by clicking","الانتقال إلى chainage":"Go to chainage","أقصى بُعد عن الخط (م)":"Maximum offset from the line (m)","chainage للنقاط القريبة":"Chainage for nearby points","تصدير الجدول Excel":"Export table to Excel","المصدر":"Source","المسافة من كل جانب (م)":"Distance each side (m)","ارسم Buffer":"Draw buffer","مسح الـ Buffer":"Clear buffer","ما داخل الـ Buffer":"Inside the buffer","تصدير النتيجة Excel":"Export result to Excel","مشاريعي (حفظ تلقائي)":"My projects (auto-save)","المشروع الحالي":"Current project","اسم المشروع":"Project name","مشروع جديد":"New project","حذف المشروع":"Delete project","نسخة احتياطية":"Backup","تصدير المشروع كملف":"Export project to a file","استيراد مشروع من ملف":"Import project from a file","إظهار الملصقات على الخريطة":"Show labels on the map","الحقول المعروضة (اختر حقلًا أو أكثر)":"Fields to display (choose one or more)","الفاصل":"Separator","سطر جديد":"New line","أدنى تكبير":"Minimum zoom","حجم الخط":"Font size","اللون":"Color","هالة بيضاء حول النص":"White halo around text","نقاط":"Points","خطوط":"Lines","مضلعات":"Polygons"});
+Object.assign(EN,{"المحتوى والمظهر":"Content & appearance","طيّ الشريط":"Collapse ribbon","فتح الشريط":"Expand ribbon","الطبقات":"Layers","أدوات":"Tools","المزيد":"More","التنقل":"Navigation"});
 const RUNRE=/[\u0600-\u06FF]+(?:[ \u00A0«»()…،:؟.\-—\/]*[\u0600-\u06FF]+)*/g;
 function T(s,v){
   let r=s;
@@ -910,7 +1384,9 @@ L.control.scale({imperial:false}).addTo(map);
 /* ---------- تحويلات ---------- */
 const def=(z,s)=>`+proj=utm +zone=${z}${s?' +south':''} +datum=WGS84 +units=m +no_defs`;
 const toUTM=(lat,lon)=>{const z=Math.floor((lon+180)/6)+1,s=lat<0,[e,n]=proj4(def(z,s),[lon,lat]);return{z,s,e,n}};
-const fromUTM=(z,s,e,n)=>{const [lon,lat]=proj4(def(z,s),'WGS84',[e,n]);return[lat,lon]};
+/* حرف S بعد رقم المنطقة قد يكون «نطاق خط العرض» (شمال) لا «نصف الكرة الجنوبي» (مثل 39S). في النصف الجنوبي يكون Northing عادةً فوق 5,000,000؛ فإن كان أقل نعدّه شمالًا. */
+let utmFlipped=false;
+const fromUTM=(z,s,e,n)=>{if(s&&n<5e6){s=false;utmFlipped=true;if(typeof toast==='function'&&Date.now()-(window.__fl||0)>8000){window.__fl=Date.now();try{toast(B('الحرف S بعد رقم المنطقة اعتُبر نطاق خط العرض (شمال) لا نصف الكرة الجنوبي، لأن قيمة Northing أقل من 5,000,000.','The S after the zone was read as a latitude band (north), not the southern hemisphere, because Northing is below 5,000,000.'),6000)}catch(_){}}}const [lon,lat]=proj4(def(z,s),'WGS84',[e,n]);return[lat,lon]};
 function dms(v,p,q){const h=v>=0?p:q;v=Math.abs(v);let d=Math.floor(v),m=Math.floor((v-d)*60),s=+(((v-d)*60-m)*60).toFixed(2);if(s>=60){s=0;m++}if(m>=60){m=0;d++}return`${d}°${m}'${s}"${h}`}
 function info(lat,lon){const u=toUTM(lat,lon);return`<div class="pop">${lat.toFixed(6)}, ${lon.toFixed(6)}<br>${dms(lat,'N','S')} ${dms(lon,'E','W')}<br>UTM ${u.z}${u.s?'S':'N'}  E ${u.e.toFixed(2)}  N ${u.n.toFixed(2)}</div>`}
 function parseLL(str){
@@ -967,7 +1443,7 @@ function vRender(){
   });
   marker=vi>=0?(vMarks[vi]||null):null;
   $('visBox').hidden=!visits.length;$('visN').textContent=visits.length;
-  $('vlist').innerHTML=visits.map((v,i)=>'<div class="vrow'+(i===vi?' act':'')+'" data-i="'+i+'"><span>'+(i+1)+'.</span><span class="vc" dir="ltr">'+v.lat.toFixed(6)+', '+v.lon.toFixed(6)+'</span><button class="vdel alt" data-d="'+i+'" aria-label="'+T('حذف')+'">✕</button></div>').join('');
+  $('vlist').innerHTML=visits.map((v,i)=>'<div class="vrow'+(i===vi?' act':'')+'" data-i="'+i+'"><span>'+(i+1)+'.</span><span class="vc" dir="ltr">'+v.lat.toFixed(6)+', '+v.lon.toFixed(6)+'</span><button class="vdel alt" data-d="'+i+'" aria-label="'+T('حذف')+'"><svg class="ic"><use href="#i-x"/></svg></button></div>').join('');
   const act=$('vlist').querySelector('.vrow.act');if(act&&act.scrollIntoView)act.scrollIntoView({block:'nearest'});
 }
 function vAdd(lat,lon){
@@ -1337,7 +1813,7 @@ function ptCol(l){
     l.sym.ptColor=LAYPAL.slice().reverse().find(c=>!used.has(c))||LAYPAL[(layers.indexOf(l)+5)%LAYPAL.length]}
   return l.sym.ptColor;
 }
-function layAdd(name){const l={name:layUnique(name),color:layNextColor(),visible:true,sym:{shape:'circle',size:6,weight:3,dash:'',fillOp:.15},cfg:null};layers.push(l);return l}
+function layAdd(name){const l={name:layUnique(name),color:layNextColor(),visible:true,sym:{shape:'circle',size:6,weight:3,dash:'',fillOp:.15},cfg:null,lab:labDef()};layers.push(l);return l}
 function detectCfg(keys){
   const g=k=>keys.find(c=>K[k].includes(String(c).trim().toLowerCase()))||'';
   const ll=g('lat')&&g('lon');
@@ -1353,12 +1829,18 @@ function layApply(){
   if(rows.length)draw(false);
   impL.clearLayers();impGeo.forEach(addImp);updLabels();markDirty();
 }
+const SHCH={circle:'●',square:'■',triangle:'▲',diamond:'◆',plus:'+',x:'×',star:'★'};
+function layLegend(l,c){const it=[];
+  if(c.p)it.push(`<span class="lg"><b style="color:${esc(ptCol(l))}">${SHCH[l.sym.shape]||'●'}</b>${B('نقاط','Points')}</span>`);
+  if(c.li)it.push(`<span class="lg"><i class="lgl" style="border-top:${Math.min(l.sym.weight,4)}px ${l.sym.dash?'dashed':'solid'} ${esc(l.color)}"></i>${B('خطوط','Lines')}</span>`);
+  if(c.po)it.push(`<span class="lg"><i class="lgp" style="border-color:${esc(l.color)};background:${esc(l.color)}${Math.round(Math.max(.08,l.sym.fillOp)*255).toString(16).padStart(2,'0')}"></i>${B('مضلعات','Polygons')}</span>`);
+  return it.length?'<div class="laylg">'+it.join('')+'</div>':''}
 function layRender(){
-  $('laysec').hidden=!layers.length;
+  $('laysec').hidden=!layers.length;$('layEmpty').hidden=!!layers.length;const tv=$('tbView');if(tv)tv.classList.toggle('dis',!rows.length);
   $('layList').innerHTML=layers.map((l,i)=>{
     const c=layCount(l),p=[];
     if(c.p)p.push(c.p+' '+B('نقطة','pts'));if(c.li)p.push(c.li+' '+B('خط','lines'));if(c.po)p.push(c.po+' '+B('مضلع','polys'));
-    return`<div class="layrow${l.name===activeL?' act':''}" data-i="${i}"><input type="checkbox" class="lv"${l.visible?' checked':''} title="${B('إظهار/إخفاء','Show/hide')}"><input type="color" class="lc" value="${esc(l.color)}" title="${B('اللون','Color')}"><input class="ln" value="${esc(l.name)}" dir="auto" title="${B('اسم الطبقة','Layer name')}"><span class="lct">${p.join('، ')}</span><button type="button" class="lz alt" title="${B('تقريب إلى الطبقة','Zoom to layer')}">⌖</button><button type="button" class="lt alt" title="${B('جدول خصائص الطبقة','Layer attribute table')}">▦</button><button type="button" class="ld alt" title="${B('حذف الطبقة','Delete layer')}">🗑</button></div>`;
+    return`<div class="layrow${l.name===activeL?' act':''}" data-i="${i}"><input type="checkbox" class="lv"${l.visible?' checked':''} title="${B('إظهار/إخفاء','Show/hide')}"><input type="color" class="lc" value="${esc(l.color)}" title="${B('اللون','Color')}"><input class="ln" value="${esc(l.name)}" dir="auto" title="${B('اسم الطبقة','Layer name')}"><span class="lct">${p.join('، ')}</span><button type="button" class="lz alt" title="${B('تقريب إلى الطبقة','Zoom to layer')}"><svg class="ic"><use href="#i-extent"/></svg></button><button type="button" class="lt alt" title="${B('جدول خصائص الطبقة','Layer attribute table')}"><svg class="ic"><use href="#i-table"/></svg></button><button type="button" class="ld alt" title="${B('حذف الطبقة','Delete layer')}"><svg class="ic"><use href="#i-trash"/></svg></button>${layLegend(l,c)}</div>`;
   }).join('');
   symSync();expOpts();
 }
@@ -1400,13 +1882,13 @@ $('layList').addEventListener('click',e=>{
   if(e.target.tagName==='INPUT')return;
   laySelect(l);
 });
-function laySelect(l){activeL=l.name;if(l.cfg)cfgToUI(l.cfg);document.querySelectorAll('#layList .layrow').forEach(r=>r.classList.toggle('act',layers[+r.dataset.i]===l));symSync()}
+function laySelect(l){activeL=l.name;if(l.cfg)cfgToUI(l.cfg);document.querySelectorAll('#layList .layrow').forEach(r=>r.classList.toggle('act',layers[+r.dataset.i]===l));symSync();labSync();labRefresh()}
 $('layList').addEventListener('dblclick',e=>{
   const row=e.target.closest('.layrow');if(!row||e.target.closest('button')||e.target.classList.contains('lv'))return;
   const l=layers[+row.dataset.i];if(!l)return;symOpen=true;laySelect(l);
 });
 $('symX').addEventListener('click',()=>{symOpen=false;$('symsec').hidden=true});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&symOpen){symOpen=false;$('symsec').hidden=true}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&symOpen){symOpen=false;$('symsec').hidden=true;e._h=true}});
 ['ctype','cx','cy','cz','cfCrs'].forEach(id=>$(id).addEventListener('change',()=>{const l=layerByName(activeL);if(l&&l.cfg){l.cfg=domCfg();markDirty()}}));
 /* واجهة الرموز */
 function symDraw(){
@@ -1526,6 +2008,7 @@ function draw(fit){
     $('pathinfo').innerHTML=lines.slice(0,10).join('<br>')+(lines.length>10?'<br>'+T('… و{n} مسارات أخرى',{n:lines.length-10}):'')+'<br><b>'+T('الإجمالي: {t}',{t:fmt(tot)})+'</b>';
   }else $('pathinfo').textContent='';
   $('ptinfo').innerHTML=T('يعرض {a} من {b} صف',{a:shown.length,b:rows.length})+(bad?' — '+T('{n} صف بإحداثي غير صالح',{n:bad}):'')+(bad&&!shown.length?'<br><span dir="ltr" style="font-size:12px">'+T('أول صف: ')+esc(rows[0][$('cx').value])+' | '+esc(rows[0][$('cy').value])+'</span>':'');
+  setTimeout(colCheck,0);
   const oc=cols.filter(c=>c!==$('cx').value&&c!==$('cy').value&&c!==lc&&c!=='Layer').slice(0,2);
   const hc=shown.length&&shown[0].chain!=null;
   $('tbl').innerHTML=shown.length?'<table><tr><th>'+T('الملصق')+'</th>'+oc.map(c=>`<th>${esc(c)}</th>`).join('')+(hc?'<th>'+T('تراكمي (م)')+'</th>':'')+'</tr>'+shown.slice(0,200).map((x,i)=>`<tr class="pt" data-i="${i}"><td>${esc(x.lab)}</td>${oc.map(c=>`<td>${esc(x.r[c])}</td>`).join('')}${hc?'<td>'+x.chain.toFixed(1)+'</td>':''}</tr>`).join('')+'</table>'+(shown.length>200?'<div style="font-size:12px">'+T('يعرض الجدول أول 200 صف؛ استخدم البحث للتضييق.')+'</div>':''):'';
@@ -1534,30 +2017,48 @@ function draw(fit){
   updLabels();
 }
 /* ---------- Labeling ---------- */
-const labSel=new Set(),labCache=new WeakMap(),labL=L.layerGroup().addTo(map);
-let labSig='',labInit=true;
-function labAvail(){
-  const a=[],seen=new Set();
-  if(rows.length)cols.forEach(c=>{a.push({v:'d:'+c,t:String(c)});seen.add(c)});
-  impGeo.forEach(f=>Object.keys(f.props||{}).forEach(k=>{if(!seen.has(k)){seen.add(k);a.push({v:'d:'+k,t:String(k)})}}));
+const labCache=new WeakMap(),labL=L.layerGroup().addTo(map);
+let labSig='',labUIL=null;
+/* إعدادات الملصقات لكل طبقة على حدة */
+function labDef(){return{on:false,sel:[],sep:' | ',z:14,size:12,color:'#111111',halo:true,pts:true,lines:true,polys:true,init:true}}
+function labOf(l){return l.lab||(l.lab=labDef())}
+const LABIDS=['clabon','labZ','labSep','labSize','labColor','labHalo','labPts','labLines','labPolys'];
+function labFromUI(){const l=layerByName(labUIL);if(!l)return;const b=labOf(l);b.on=$('clabon').checked;b.z=+$('labZ').value||14;b.sep=$('labSep').value;b.size=+$('labSize').value||12;b.color=$('labColor').value||'#111111';b.halo=$('labHalo').checked;b.pts=$('labPts').checked;b.lines=$('labLines').checked;b.polys=$('labPolys').checked}
+function labTitle(l){const e=document.querySelector('[data-lly]');if(e)e.textContent=l?l.name:B('اختر طبقة من Contents','Select a layer in Contents')}
+function gateUpd(){const set=(k,en)=>{const p=document.querySelector('.ctxp[data-ctx="'+k+'"]');if(p)p.querySelectorAll('input,select,button,textarea').forEach(e=>{if(en){if(e.dataset.gd){e.disabled=false;delete e.dataset.gd}}else if(!e.disabled){e.disabled=true;e.dataset.gd='1'}})};
+  document.querySelectorAll('.rtp .cg').forEach(g=>{const has=[...g.querySelectorAll('.cr')].some(r=>r.querySelector('input,select,button,textarea,label,b')||r.textContent.trim());g.classList.toggle('eg',!has)});
+  set('view',!!rows.length);set('bf',!!(impGeo.length||shown.length));set('ch',impGeo.some(f=>f.t==='Line'))}
+function labSync(force){
+  const l=layerByName(activeL),nm=l?l.name:null;
+  if(force||nm!==labUIL){labUIL=nm;labSig='';
+    if(l){const b=labOf(l);$('clabon').checked=!!b.on;$('labZ').value=b.z;setSel('labSep',b.sep);$('labSize').value=b.size;$('labColor').value=b.color;$('labHalo').checked=!!b.halo;$('labPts').checked=!!b.pts;$('labLines').checked=!!b.lines;$('labPolys').checked=!!b.polys}}
+  const p=document.querySelector('.ctxp[data-ctx="lab"]');
+  if(p)p.querySelectorAll('input,select,button').forEach(e=>e.disabled=!l);
+  labTitle(l);
+}
+function labAvail(l){
+  const a=[],seen=new Set(),rs=l?rows.filter(r=>r.Layer===l.name):rows,fs=l?impGeo.filter(f=>f.layer===l.name):impGeo;
+  if(rs.length)Object.keys(rs[0]).forEach(c=>{a.push({v:'d:'+c,t:String(c)});seen.add(c)});
+  fs.forEach(f=>Object.keys(f.props||{}).forEach(k=>{if(!seen.has(k)){seen.add(k);a.push({v:'d:'+k,t:String(k)})}}));
   a.push({v:'@no',t:B('رقم الصف / الكيان','Row / feature no.')},{v:'@coord',t:B('الإحداثي Lat, Long','Coordinate Lat, Long')},{v:'@utm',t:B('الإحداثي UTM','Coordinate UTM')});
-  if(impGeo.some(f=>f.t==='Line'))a.push({v:'@len',t:B('الطول (خطوط)','Length (lines)')});
-  if(impGeo.some(f=>f.t!=='Line'))a.push({v:'@area',t:B('المساحة (مضلعات)','Area (polygons)')});
-  if(rows.length)a.push({v:'@chain',t:B('المسافة التراكمية','Cumulative distance')});
+  if(fs.some(f=>f.t==='Line'))a.push({v:'@len',t:B('الطول (خطوط)','Length (lines)')});
+  if(fs.some(f=>f.t!=='Line'))a.push({v:'@area',t:B('المساحة (مضلعات)','Area (polygons)')});
+  if(rs.length)a.push({v:'@chain',t:B('المسافة التراكمية','Cumulative distance')});
   return a;
 }
 function labRefresh(){
   const has=rows.length||impGeo.length;
   $('labsec').hidden=!has;if(!has)return;
-  const av=labAvail(),sig=LANG+'\n'+av.map(x=>x.v).join('\n');
-  if(labInit){
+  const ly=layerByName(activeL);if(!ly)return;const lb=labOf(ly);
+  const av=labAvail(ly),sig=LANG+'\n'+ly.name+'\n'+av.map(x=>x.v).join('\n');
+  if(lb.init){
     const nm=av.find(x=>x.v[0]==='d'&&(x.v.slice(2)===$('clab').value||['name','id','الاسم','اسم'].includes(x.v.slice(2).toLowerCase())));
-    if(nm){labSel.add(nm.v);labInit=false}
+    if(nm){lb.sel.push(nm.v);lb.init=false}
   }
   if(sig===labSig)return;labSig=sig;
   const box=$('labFields');box.innerHTML='';
-  av.forEach(x=>{const l=document.createElement('label'),i=document.createElement('input');i.type='checkbox';i.value=x.v;i.checked=labSel.has(x.v);
-    i.onchange=()=>{i.checked?labSel.add(x.v):labSel.delete(x.v);updLabels()};
+  av.forEach(x=>{const l=document.createElement('label'),i=document.createElement('input');i.type='checkbox';i.value=x.v;i.checked=lb.sel.includes(x.v);
+    i.onchange=()=>{const k=lb.sel.indexOf(x.v);if(i.checked){if(k<0)lb.sel.push(x.v)}else if(k>=0)lb.sel.splice(k,1);updLabels();markDirty()};
     l.appendChild(i);l.appendChild(document.createTextNode(x.t));box.appendChild(l)});
 }
 function labGeo(f){
@@ -1576,10 +2077,10 @@ function labGeo(f){
   }
   labCache.set(f,g);return g;
 }
-function labText(o,lat,lon,extra){
-  const av=labAvail(),out=[];
+function labText(o,lat,lon,extra,lb,av){
+  const out=[];
   av.forEach(x=>{
-    if(!labSel.has(x.v))return;
+    if(!lb.sel.includes(x.v))return;
     let s='';
     if(x.v[0]==='d'){const v=extra.props?extra.props[x.v.slice(2)]:undefined;if(v!==undefined&&v!==null&&v!=='')s=typeof v==='object'?JSON.stringify(v):String(v)}
     else if(x.v==='@no')s=String(extra.no);
@@ -1590,34 +2091,38 @@ function labText(o,lat,lon,extra){
     else if(x.v==='@chain'&&extra.chain!=null)s=fmt(extra.chain);
     if(s!=='')out.push(s);
   });
-  return out.join($('labSep').value);
+  return out.join(lb.sep);
 }
-function labHTML(t){
-  const sz=+$('labSize').value||12,col=$('labColor').value||'#111',h=$('labHalo').checked;
+function labHTML(t,lb){
+  const sz=+lb.size||12,col=lb.color||'#111',h=lb.halo;
   return '<span style="font-size:'+sz+'px;color:'+col+(h?';text-shadow:-1px -1px 0 #fff,1px -1px 0 #fff,-1px 1px 0 #fff,1px 1px 0 #fff,0 0 3px #fff':'')+'">'+esc(t).replace(/\n/g,'<br>')+'</span>';
 }
 function updLabels(){
   try{atSync()}catch(_){}
-  labRefresh();try{bfBuild();chBuild()}catch(_){}
+  labSync();labRefresh();try{bfBuild();chBuild()}catch(_){}try{gateUpd()}catch(_){}
   shown.forEach(x=>x.m.unbindTooltip());labL.clearLayers();
-  if(!$('clabon').checked||map.getZoom()<(+$('labZ').value||14))return;
-  const b=map.getBounds(),nw=labSel.size>0;
-  if($('labPts').checked){let n=0;
-    for(const x of shown){if(n>=300)break;if(!b.contains(x.c))continue;
-      const t=nw?labText(x.r,x.c[0],x.c[1],{props:x.r,no:x.i+1,chain:x.chain}):lbl(x);
-      if(!t)continue;
-      x.m.bindTooltip(labHTML(t),{permanent:true,direction:'top',offset:[0,-4],className:'xylab'});n++}}
-  if(nw){let n=0;
-    impGeo.forEach((f,i)=>{
-      if(n>=300||!layVisF(f)||!(f.t==='Line'?$('labLines').checked:$('labPolys').checked))return;
-      const g=labGeo(f);if(!b.contains(g.pos))return;
-      const t=labText(null,g.pos[0],g.pos[1],{props:f.props||{},no:i+1,len:g.len,area:g.area});if(!t)return;
-      L.tooltip({permanent:true,direction:'center',className:'xylab',opacity:1}).setLatLng(g.pos).setContent(labHTML(t)).addTo(labL);n++;
-    });}
+  const b=map.getBounds(),z=map.getZoom();
+  layers.forEach(l=>{
+    if(!l.visible)return;const lb=labOf(l);
+    if(!lb.on||z<(+lb.z||14))return;
+    const nw=lb.sel.length>0,av=nw?labAvail(l):null;
+    if(lb.pts){let n=0;
+      for(const x of shown){if(n>=300)break;if(x.r.Layer!==l.name||!b.contains(x.c))continue;
+        const t=nw?labText(x.r,x.c[0],x.c[1],{props:x.r,no:x.i+1,chain:x.chain},lb,av):lbl(x);
+        if(!t)continue;
+        x.m.bindTooltip(labHTML(t,lb),{permanent:true,direction:'top',offset:[0,-4],className:'xylab'});n++}}
+    if(nw){let n=0;
+      impGeo.forEach((f,i)=>{
+        if(f.layer!==l.name||n>=300||!(f.t==='Line'?lb.lines:lb.polys))return;
+        const g=labGeo(f);if(!b.contains(g.pos))return;
+        const t=labText(null,g.pos[0],g.pos[1],{props:f.props||{},no:i+1,len:g.len,area:g.area},lb,av);if(!t)return;
+        L.tooltip({permanent:true,direction:'center',className:'xylab',opacity:1}).setLatLng(g.pos).setContent(labHTML(t,lb)).addTo(labL);n++;
+      });}
+  });
 }
 map.on('moveend',updLabels);
 const lbl=x=>String(x.lab)+($('cchain').checked&&x.chain!=null?' | '+x.chain.toFixed(1)+T(' م'):'');
-['clabon','cchain','labSep','labZ','labSize','labColor','labHalo','labPts','labLines','labPolys'].forEach(i=>$(i).addEventListener('change',updLabels));['labSize','labZ'].forEach(i=>$(i).addEventListener('input',updLabels));$('cclust').onchange=()=>draw(false);
+LABIDS.forEach(i=>$(i).addEventListener('change',()=>{labFromUI();updLabels();markDirty()}));$('cchain').addEventListener('change',updLabels);['labSize','labZ'].forEach(i=>$(i).addEventListener('input',()=>{labFromUI();updLabels()}));$('cclust').onchange=()=>draw(false);
 $('ctype').onchange=ctypeUI;$('cfCrs').onchange=ctypeUI;
 $('cdraw').onclick=()=>draw(true);
 let ft;$('cfilt').oninput=()=>{clearTimeout(ft);ft=setTimeout(()=>draw(false),300)};
@@ -1934,7 +2439,7 @@ let expLF='';
 const expSfx=()=>expLF?'_'+expLF.replace(/[^\w\u0600-\u06FF-]+/g,'_'):'';
 const expShown=()=>expLF?shown.filter(x=>x.r.Layer===expLF):shown;
 function expOpts(){const e=$('cexpL');if(!e)return;const sig=layers.map(l=>l.name).join('|')+'#'+expLF;if(e._sig===sig)return;e._sig=sig;if(expLF&&!layerByName(expLF))expLF='';
-  e.innerHTML='<option value="">'+B('كل الطبقات','All layers')+'</option>'+layers.map(l=>`<option value="${esc(l.name)}">${esc(l.name)}</option>`).join('');e.value=expLF;e.hidden=layers.length<2;const lb=document.querySelector('label[for=cexpL]');if(lb)lb.hidden=e.hidden}
+  e.innerHTML='<option value="">'+B('كل الطبقات','All layers')+'</option>'+layers.map(l=>`<option value="${esc(l.name)}">${esc(l.name)}</option>`).join('');e.value=expLF;e.hidden=layers.length<2;const g=e.closest('.cg');if(g)g.hidden=e.hidden}
 function buildOut(){return expShown().map(x=>{const u=toUTM(x.c[0],x.c[1]),o={...x.r,Latitude_WGS84:+x.c[0].toFixed(8),Longitude_WGS84:+x.c[1].toFixed(8),UTM_Zone:u.z+(u.s?'S':'N'),UTM_E:+u.e.toFixed(2),UTM_N:+u.n.toFixed(2)};if(x.chain!=null){o.Chainage_m=+x.chain.toFixed(2);o.Segment_m=+x.seg.toFixed(2)}return o})}
 const items=out=>expShown().map((x,i)=>({name:String(x.lab),c:x.c,props:out[i]}));
 const pathCoords=()=>{if(expLF)return null;return($('cpath').value==='__all'&&shown.length>1)?shown.map(x=>x.c):null};
@@ -2489,7 +2994,6 @@ $('atLayer').onchange=()=>{atL=$('atLayer').value;atSel.clear();atSort={c:null,d
 $('atQ').addEventListener('input',()=>{atSel.clear();atHL.clearLayers();atRender()});
 $('atClose').onclick=atClose;
 $('atBig').onclick=()=>$('atp').classList.toggle('big');
-$('atOpen').onclick=()=>atOpen();
 $('atZoom').onclick=()=>{
   const items=atSel.size?atCur.filter(x=>atSel.has(x.k)):atCur;
   if(!items.length||!atShow(items,true))toast(B('لا توجد عناصر ذات موقع للانتقال إليها.','No located features to zoom to.'),2500);
@@ -2853,7 +3357,7 @@ async function phLoad(){
 }
 function phHTML(c){
   const k=phKey(c),a=phMap.get(k)||[];
-  return '<div class="phbox" data-k="'+esc(k)+'">'+a.map((p,i)=>`<img class="phth" data-i="${i}" src="${p.url}" alt="">`).join('')+'<div><button type="button" class="phadd">📷 '+B('إضافة صورة','Add photo')+'</button></div></div>';
+  return '<div class="phbox" data-k="'+esc(k)+'">'+a.map((p,i)=>`<img class="phth" data-i="${i}" src="${p.url}" alt="">`).join('')+'<div><button type="button" class="phadd"><svg class="ic"><use href="#i-cam2"/></svg> '+B('إضافة صورة','Add photo')+'</button></div></div>';
 }
 async function phResize(file){
   const url=URL.createObjectURL(file);
@@ -3010,10 +3514,9 @@ offStatus();offEstimate();
 function projSnapshot(){
   const cfg={};
   ['ctype','cfCrs','cvCustom','cx','cy','cz','clab','ccol','cpath','cfilt'].forEach(id=>cfg[id]=$(id).value);
-  ['clabon','cchain','cclust'].forEach(id=>cfg[id]=$(id).checked);
+  ['cchain','cclust'].forEach(id=>cfg[id]=$(id).checked);
   const c=map.getCenter();
-  const lab={sel:[...labSel],sep:$('labSep').value,z:$('labZ').value,size:$('labSize').value,color:$('labColor').value,halo:$('labHalo').checked,pts:$('labPts').checked,lines:$('labLines').checked,polys:$('labPolys').checked};
-  return{v:1,rows,cfg,layers:layers.map(l=>({name:l.name,color:l.color,visible:l.visible,sym:l.sym,cfg:l.cfg})),activeL,lab,buf:bufs,ch:{src:$('chSrc').value,start:$('chStart').value,step:$('chStep').value,rev:$('chRev').checked,marks:$('chMarks').checked,max:$('chMax').value},zone:$('zone').value,drawn,imp:impGeo,visits,view:{c:[c.lat,c.lng],z:map.getZoom()}};
+  return{v:1,rows,cfg,layers:layers.map(l=>({name:l.name,color:l.color,visible:l.visible,sym:l.sym,cfg:l.cfg,lab:l.lab||null})),activeL,buf:bufs,ch:{src:$('chSrc').value,start:$('chStart').value,step:$('chStep').value,rev:$('chRev').checked,marks:$('chMarks').checked,max:$('chMax').value},zone:$('zone').value,drawn,imp:impGeo,visits,view:{c:[c.lat,c.lng],z:map.getZoom()}};
 }
 function applyProject(o,silent){
   if(!o||o.v!==1)throw Error(T('ملف مشروع غير صالح'));
@@ -3022,7 +3525,7 @@ function applyProject(o,silent){
   rows=o.rows||[];
   const c=o.cfg||{};
   if(c.cvCustom)$('cvCustom').value=c.cvCustom;
-  layers=Array.isArray(o.layers)?o.layers.map(l=>({name:String(l.name),color:l.color||'#1971c2',visible:l.visible!==false,sym:Object.assign({shape:'circle',size:6,weight:3,dash:'',fillOp:.15},l.sym||{}),cfg:l.cfg||null})):[];
+  layers=Array.isArray(o.layers)?o.layers.map(l=>({name:String(l.name),color:l.color||'#1971c2',visible:l.visible!==false,sym:Object.assign({shape:'circle',size:6,weight:3,dash:'',fillOp:.15},l.sym||{}),cfg:l.cfg||null,lab:(l.lab&&typeof l.lab==='object')?Object.assign(labDef(),l.lab,{sel:[...(l.lab.sel||[])],init:false}):null})):[];
   activeL=o.activeL||null;
   {const imp0=o.imp||[];
    if(!layers.length&&(rows.length||imp0.length)){
@@ -3034,7 +3537,9 @@ function applyProject(o,silent){
    need.forEach(n=>{if(!layerByName(n)){const l=layAdd(n);l.name=n;if(rows.some(r=>r.Layer===n))l.cfg=detectCfg(Object.keys(rows[0]||{}).filter(k=>k!=='Layer'))}});
    if(!layerByName(activeL))activeL=layers.length?layers[0].name:null;
   }
-  $('clabon').checked=!!c.clabon;$('cchain').checked=!!c.cchain;$('cclust').checked=!!c.cclust;
+  if(o.lab&&!layers.some(l=>l.lab)){const ol=o.lab;layers.forEach(l=>{l.lab=Object.assign(labDef(),{on:!!c.clabon,sel:[...(ol.sel||[])],sep:ol.sep||' | ',z:+ol.z||14,size:+ol.size||12,color:ol.color||'#111111',halo:ol.halo!==false,pts:ol.pts!==false,lines:ol.lines!==false,polys:ol.polys!==false,init:false})})}
+  layers.forEach(l=>{if(!l.lab)l.lab=labDef()});
+  $('cchain').checked=!!c.cchain;$('cclust').checked=!!c.cclust;
   if(rows.length){
     setup();
     ['ctype','cfCrs','cx','cy','cz','clab','ccol','cpath'].forEach(id=>setSel(id,c[id]));
@@ -3043,8 +3548,7 @@ function applyProject(o,silent){
   }
   drawn=o.drawn||[];savedL.clearLayers();savedN=drawn.length;drawn.forEach(renderSaved);
   impL.clearLayers();impGeo=o.imp||[];impGeo.forEach(addImp);
-  if(o.lab){labSel.clear();(o.lab.sel||[]).forEach(v=>labSel.add(v));labInit=false;labSig='';setSel('labSep',o.lab.sep);if(o.lab.z)$('labZ').value=o.lab.z;if(o.lab.size)$('labSize').value=o.lab.size;if(o.lab.color)$('labColor').value=o.lab.color;$('labHalo').checked=o.lab.halo!==false;$('labPts').checked=o.lab.pts!==false;$('labLines').checked=o.lab.lines!==false;$('labPolys').checked=o.lab.polys!==false}
-  else{labSel.clear();labInit=true;labSig=''}
+  labUIL=null;labSig='';
   chSig='';try{chBuild()}catch(_){}
   if(o.ch){setSel('chSrc',o.ch.src);$('chStart').value=o.ch.start||'0';$('chStep').value=o.ch.step||100;$('chRev').checked=!!o.ch.rev;$('chMarks').checked=!!o.ch.marks;$('chMax').value=o.ch.max||50}
   chHL.clearLayers();chOut=[];try{chDrawMarks()}catch(_){}
@@ -3214,7 +3718,7 @@ function togglePanel(show){
   w.classList.toggle('collapsed',!want);$('tbPanel').classList.toggle('on',want);
   setTimeout(()=>map.invalidateSize(),30);
 }
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{if(b.classList.contains('on')&&!$('work').classList.contains('collapsed')){isMob()?setSheet(0):togglePanel(false);return}openTab(b.dataset.t)});
+$('pinTabs').addEventListener('click',e=>{const b=e.target.closest('button.tab');if(!b)return;if(b.classList.contains('on')&&!$('work').classList.contains('collapsed')){isMob()?setSheet(0):togglePanel(false);return}openTab(b.dataset.t)});
 /* ---------- المرحلة D: أقسام قابلة للطي، عرض اللوحة، ورقة الجوال، السمة ---------- */
 const isMob=()=>matchMedia('(max-width:760px)').matches;
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
@@ -3279,37 +3783,37 @@ const lsGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}},lsSet=
   const root=document.documentElement,b=$('themeBtn');
   const t0=lsGet('gx_theme');if(t0==='dark'||t0==='light')root.setAttribute('data-theme',t0);
   const dark=()=>root.getAttribute('data-theme')?root.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
-  const ic=()=>{b.textContent=dark()?'☀':'☾'};ic();
+  const ic=()=>{b.innerHTML='<svg class="ic"><use href="#i-'+(dark()?'sun':'moon')+'"/></svg>'};ic();
   b.addEventListener('click',()=>{const n=dark()?'light':'dark';root.setAttribute('data-theme',n);lsSet('gx_theme',n);ic()});
 })();
 if(window.ResizeObserver)new ResizeObserver(()=>map.invalidateSize()).observe($('map'));
 
 const on=(id,fn)=>$(id).addEventListener('click',fn);
-on('tbPanel',()=>togglePanel());
-on('tbGo',()=>{openTab('go');const f=$('mode').value==='utm'?$('e'):$('ll');f.focus();f.select&&f.select()});
+on('tbPanel',()=>{if(!pins.length){toast(B('لا توجد أدوات مثبّتة. انقر بالزر الأيمن على أي أداة في الشريط واختر «تثبيت في اللوحة».','No pinned tools. Right-click any tool in the ribbon and choose "Pin to panel".'),4500);return}togglePanel()});
+on('tbGo',()=>{ctxShow('go');{const f=$('mode').value==='utm'?$('e'):$('ll');setTimeout(()=>{f.focus();f.select&&f.select()},30)}});
 on('tbLoc',()=>$('loc').click());
-on('tbCam',()=>{openTab('go');$('cam').click()});
-on('tbLog',()=>{openTab('go');const v=$('visBox');if(v.hidden)toast(T('السجل فارغ. كل إحداثي تنتقل إليه يُحفظ هنا تلقائيًا.'),3500);else v.scrollIntoView({block:'start',behavior:'smooth'})});
-$('cam').addEventListener('change',()=>openTab('go'));
+on('tbCam',()=>{$('cam').click()});
+on('tbLog',()=>{const v=$('visBox');if(v.hidden){toast(T('السجل فارغ. كل إحداثي تنتقل إليه يُحفظ هنا تلقائيًا.'),3500);return}const d=$('logDlg');d.hidden=!d.hidden;$('tbLog').classList.toggle('on',!d.hidden)});
+$('logX').addEventListener('click',()=>{$('logDlg').hidden=true;$('tbLog').classList.remove('on')});
 
 /* أدوات القياس والرسم */
 const TOOLS=[['tlPan','pan','تحريك'],['tlLine','line','قياس مسافة: انقر لإضافة نقاط'],['tlPoly','poly','رسم مضلع: انقر لإضافة رؤوس (3 فأكثر)'],['tlP2L','p2l','نقطة إلى المسار: انقر على موقع القياس']];
 function syncTools(){
   const m=measuring?$('mmode').value:'pan';
   TOOLS.forEach(([id,k,txt])=>{$(id).classList.toggle('on',m===k);if(m===k)$('sttool').textContent=T(txt)});
+  if(window.mcardUpd)mcardUpd();
 }
 function setTool(t){
   if(t==='pan'){if(measuring)$('mtoggle').click()}
   else{
     if($('mmode').value!==t){$('mmode').value=t;$('mmode').onchange()}
     if(!measuring)$('mtoggle').click();
-    openTab('measure');
   }
   syncTools();
 }
 TOOLS.forEach(([id,k])=>on(id,()=>setTool(k!=='pan'&&measuring&&$('mmode').value===k?'pan':k)));
 $('mtoggle').addEventListener('click',syncTools);$('mmode').addEventListener('change',syncTools);
-on('tbSaveDraw',()=>{$('msave').click();openTab('measure')});
+on('tbSaveDraw',()=>{$('msave').click()});
 on('tbClearDraw',()=>{$('mclear').click()});
 document.addEventListener('keydown',e=>{
   if(e.key!=='Escape')return;
@@ -3376,6 +3880,27 @@ Object.assign(GUIDE,{
 "themeBtn":{ar:["السمة","الوضع الليلي / النهاري","يبدّل بين المظهر الفاتح والداكن، ويتذكّر اختيارك."],en:["Theme","Dark / light mode","Switches between the light and dark look and remembers your choice."]},
 "secToggle":{ar:["طيّ الكل","طيّ / فتح الأقسام","يطوي أو يفتح كل أقسام التبويب الحالي. اضغط على عنوان أي قسم لطيّه أو فتحه، ويُحفظ اختيارك. الخيارات المتقدمة مطويّة افتراضيًا."],en:["Collapse all","Collapse / expand sections","Collapses or expands every section of the current tab. Click any section title to toggle it; your choice is remembered. Advanced options start collapsed."]},
 "symX":{ar:["إغلاق","إغلاق قائمة الرموز","يغلق نافذة رموز الطبقة (أو اضغط Esc)."],en:["Close","Close symbols","Closes the layer symbols window (or press Esc)."]},
+"tbLab":{ar:["التسميات","التسميات على الخريطة","يفتح شريط Labeling تحت الشريط الرئيسي: تشغيل الملصقات، والحقول المعروضة، والحجم واللون والهالة، وأدنى تكبير. اضغطه مرة ثانية للإغلاق."],en:["Labels","Map labels","Opens the Labeling strip under the ribbon: turn labels on, choose fields, size, color, halo and minimum zoom. Click again to close."]},
+"ctxX":{ar:["إغلاق","إغلاق الشريط","يغلق الشريط السياقي المفتوح (أو اضغط Esc)."],en:["Close","Close strip","Closes the open contextual strip (or press Esc)."]},
+"labFieldsBtn":{ar:["الحقول","اختيار حقول الملصق","يفتح قائمة بمربعات اختيار لحقل أو أكثر لتظهر في الملصق."],en:["Fields","Choose label fields","Opens a list of checkboxes to choose one or more fields for the label."]},
+"tbBf":{ar:["Buffer","منطقة Buffer","يفتح شريط Buffer: اختر المصدر والمسافة واللون ثم ارسم، وحلّل ما بداخله، وصدّر النتيجة."],en:["Buffer","Buffer zone","Opens the Buffer strip: choose the source, distance and color, draw, analyse what is inside and export the result."]},
+"tbCh":{ar:["Chainage","Chainage على الأنبوب","يفتح شريط Chainage: علامات على الخط المستورد، وقراءة chainage بالنقر أو الانتقال إلى قيمة، وحسابه للنقاط القريبة."],en:["Chainage","Pipeline chainage","Opens the Chainage strip: marks along the imported line, read chainage by clicking or jump to a value, and compute it for nearby points."]},
+"tbCrs":{ar:["الإحداثيات","أنظمة الإحداثيات","يفتح شريط التحويل بين الأنظمة (WGS84 وUTM وغيرها) وتصدير النقاط بنظام آخر."],en:["Coordinates","Coordinate systems","Opens the conversion strip between systems (WGS84, UTM and others) and exports points in another system."]},
+"tbView":{ar:["العرض","خيارات العرض","يفتح شريط العرض لطبقات النقاط: عمود الملصق، والتلوين حسب عمود، ورسم المسار، والبحث، والتجميع، وفحص الجودة. يعمل بعد استيراد طبقة نقاط."],en:["Display","Display options","Opens the display strip for point layers: label column, color by column, path, search, clustering and quality check. Works after importing a point layer."]},
+"colOpen":{ar:["الأعمدة","أعمدة الإحداثيات","يفتح نافذة اختيار نوع الإحداثي وأعمدته للطبقة النشطة. تظهر تلقائيًا فقط إذا تعذّر التعرف على الأعمدة."],en:["Columns","Coordinate columns","Opens the window to choose the coordinate type and columns of the active layer. It opens by itself only when the columns were not recognised."]},
+"colX":{ar:["إغلاق","إغلاق نافذة الأعمدة","يغلق نافذة الأعمدة (أو اضغط Esc)."],en:["Close","Close columns window","Closes the columns window (or press Esc)."]},
+"colOk":{ar:["تطبيق","تطبيق الأعمدة","يعيد رسم الطبقة بالأعمدة المختارة، ويغلق النافذة إذا صارت الإحداثيات صالحة."],en:["Apply","Apply columns","Redraws the layer with the chosen columns and closes the window once the coordinates are valid."]},
+"lpTab":{ar:["Contents","لوحة المحتويات","تفتح أو تطوي لوحة الطبقات على الجانب الأيسر. انقر مرّتين على طبقة لتعديل رموزها."],en:["Contents","Contents pane","Opens or collapses the layers pane on the left. Double-click a layer to edit its symbols."]},
+"qfmt":{ar:["الصيغة", "صيغة الانتقال السريع", "اختر صيغة ما تكتبه في خانة الانتقال السريع: Lat/Long أو UTM بمنطقة 37 أو 38 أو 39."],en:["Format", "Quick box format", "Choose the format of what you type in the quick box: Lat/Long, or UTM zone 37, 38 or 39."]},
+"tbProj":{ar:["مشاريعي", "مشاريعي", "يفتح شريط المشاريع: المشروع الحالي (حفظ تلقائي)، وإنشاء وحذف، وتصدير المشروع كملف أو استيراده."],en:["Projects", "My projects", "Opens the projects strip: current project (auto-saved), new and delete, and export or import a project file."]},
+"tbPh":{ar:["الصور", "الصور", "يفتح شريط الصور: الصور الجوية التاريخية (Wayback) والصور الميدانية وتصديرها."],en:["Imagery", "Imagery and photos", "Opens the imagery strip: historical aerial imagery (Wayback) and field photos with export."]},
+"tbOff":{ar:["بدون إنترنت", "بدون إنترنت", "يفتح شريط تنزيل الخريطة الظاهرة للعمل بدون إنترنت، ومسح الخرائط المخزّنة."],en:["Offline", "Offline", "Opens the strip to download the visible map for offline use, and clear stored maps."]},
+"logX":{ar:["إغلاق", "إغلاق السجل", "يغلق نافذة سجل الإحداثيات."],en:["Close", "Close log", "Closes the coordinate log window."]},
+"qcX":{ar:["إغلاق", "إغلاق الجودة", "يغلق نافذة الجودة والمسار."],en:["Close", "Close quality", "Closes the quality and path window."]},
+"keyX":{ar:["إغلاق", "إلغاء الاختصار", "يلغي تعيين الاختصار."],en:["Close", "Cancel shortcut", "Cancels assigning the shortcut."]},
+"mcardX":{ar:["إغلاق", "إغلاق النتيجة", "يخفي بطاقة نتيجة القياس حتى يتغير القياس."],en:["Close", "Hide result", "Hides the measurement card until the measurement changes."]},
+"drVis":{ar:["إظهار", "إظهار الرسومات", "يُظهر الرسومات المحفوظة على الخريطة أو يخفيها."],en:["Show", "Show drawings", "Shows or hides the saved drawings on the map."]},
+"tbImg":{ar:["صورة الخريطة", "صورة الخريطة والتقرير", "يفتح شريط صورة الخريطة PNG مع وسيلة الإيضاح، وورقة الطباعة، وتقرير Excel."],en:["Map image", "Map image and report", "Opens the strip for the PNG map image with legend, the print sheet and the Excel report."]},
 "symSize":{ar:["الحجم","حجم النقطة","يكبّر أو يصغّر رمز نقاط هذه الطبقة."],en:["Size","Point size","Makes this layer's point symbols larger or smaller."]},
 "symW":{ar:["السُمك","سُمك الخط","سُمك خطوط هذه الطبقة وحدود مضلعاتها."],en:["Width","Line width","Width of this layer's lines and polygon outlines."]},
 "symDash":{ar:["النمط","نمط الخط","متصل أو متقطع أو منقّط لخطوط الطبقة وحدود مضلعاتها."],en:["Style","Line style","Solid, dashed or dotted lines and polygon outlines."]},
@@ -3541,13 +4066,14 @@ function gKey(t){
   if(t.closest('.leaflet-control-zoom-in'))return 'zoomIn';
   if(t.closest('.leaflet-control-zoom-out'))return 'zoomOut';
   const bm=t.closest('.bm-row');if(bm)return 'bm_'+bm.dataset.k;
-  const tb=t.closest('.tabs button');if(tb)return 'tab_'+tb.dataset.t;
+  const tb=t.closest('.tabs button');if(tb){const k=tb.dataset.t.replace(/^pin-/,'');return CTX[k]?CTX[k].b:'tab_'+tb.dataset.t}
   if(t.closest('.camb'))return 'camb';
   if(t.closest('#labFields'))return 'labFields';
   if(t.closest('.vrow'))return 'vlist';
   const el=t.closest('button,select,input,textarea,a[id],canvas');
   if(el&&el.id&&GUIDE[el.id])return el.id;
   const lab=t.closest('label[for]');if(lab&&GUIDE[lab.htmlFor])return lab.htmlFor;
+  const lw=t.closest('label');if(lw){const c=lw.querySelector('[id]');if(c&&GUIDE[c.id])return c.id}
   return null;
 }
 ['mousedown','click'].forEach(ev=>document.addEventListener(ev,e=>{
@@ -3562,7 +4088,6 @@ function gKey(t){
 $('tbHelp').addEventListener('click',()=>{if(!helpOn)setHelp(true)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&helpOn)setHelp(false)});
 
-on('tbWb',()=>{openTab('img');if($('wbbox').hidden)$('wbload').click()});
 on('tbExt',()=>{
   const b=L.latLngBounds([]);
   [ptsPlain,impL,savedL,visL].forEach(g=>{try{g.eachLayer(l=>{if(l.getBounds)b.extend(l.getBounds());else if(l.getLatLng)b.extend(l.getLatLng())})}catch(_){}});
@@ -3571,29 +4096,186 @@ on('tbExt',()=>{
 });
 
 /* البيانات والمشروع */
-on('tbImp',()=>{openTab('data');$('file').click()});
-$('file').addEventListener('change',()=>openTab('data'));
-on('tbQc',()=>{openTab('data');if($('cfg').hidden)toast(T('استورد ملفًا أولًا لفحص جودته.'),3000);else $('cqc').click()});
+/* الشريط السياقي */
+const CTX={go:{t:'انتقال إلى إحداثي',b:'tbGo'},proj:{t:'مشاريعي',b:'tbProj'},img:{t:'صورة الخريطة والتقرير',b:'tbImg'},ph:{t:'الصور',b:'tbPh'},off:{t:'بدون إنترنت',b:'tbOff'},view:{t:'العرض',b:'tbView'},imp:{t:'استيراد',b:'tbImp'},exp:{t:'تصدير',b:'tbExp'},lab:{t:'Labeling',b:'tbLab'},bf:{t:'Buffer',b:'tbBf'},ch:{t:'Chainage',b:'tbCh'},crs:{t:'أنظمة الإحداثيات',b:'tbCrs'}};
+let ctxCur=null;
+function ctxHide(){ctxCur=null;$('labPop').hidden=true;Object.values(CTX).forEach(c=>$(c.b).classList.remove('on'));setTimeout(()=>{try{map.invalidateSize()}catch(_){}},30)}
+function ctxShow(k){
+  if(pins.includes(k)){const t='pin-'+k,b=document.querySelector('#pinTabs button[data-t="'+t+'"]');if(b&&b.classList.contains('on')&&!$('work').classList.contains('collapsed'))togglePanel(false);else openTab(t);return}
+  const p=document.querySelector('.ctxp[data-ctx="'+k+'"]'),d=p&&p.closest('.rtp');if(d)rtabSet(d.dataset.rt);
+  if(k==='exp')expOpts();if(k==='lab')labSync(true);
+  setTimeout(()=>{try{map.invalidateSize()}catch(_){}},30);
+}
+on('tbImp',()=>ctxShow('imp'));
+on('tbLab',()=>{ctxShow('lab')});
+on('tbCrs',()=>ctxShow('crs'));
+on('tbView',()=>{ctxShow('view')});
+/* نافذة الأعمدة: تظهر تلقائيًا فقط إذا تعذّر تحديد الإحداثيات */
+const colAsked=new Set();
+function colOpen(l,why){l=l||layerByName(activeL);if(!l)return;if(l.name!==activeL){laySelect(l)}if(l.cfg)cfgToUI(l.cfg);$('colName').textContent=l.name;$('colWhy').textContent=why||'';$('colWhy').hidden=!why;$('colDlg').hidden=false}
+function colClose(){$('colDlg').hidden=true}
+function colCheck(){
+  layers.forEach(l=>{const rs=rows.filter(r=>r.Layer===l.name);if(!rs.length||colAsked.has(l.name))return;
+    if(rs.every(r=>!coord(r))){colAsked.add(l.name);colOpen(l,B('لم يتعرّف البرنامج على أعمدة الإحداثيات في هذه الطبقة. اختر نوع الإحداثي والأعمدة ثم اضغط «تطبيق».','The coordinate columns of this layer were not recognised. Choose the coordinate type and columns, then press Apply.'))}});
+}
+$('colX').addEventListener('click',colClose);
+$('colOk').addEventListener('click',()=>{const l=layerByName(activeL);if(l){l.cfg=domCfg();markDirty()}draw(true);const rs=rows.filter(r=>r.Layer===activeL);if(rs.length&&rs.some(r=>coord(r)))colClose();else $('colWhy').textContent=B('ما زالت الإحداثيات غير صالحة بهذه الأعمدة. جرّب نوعًا أو أعمدة أخرى.','Coordinates are still invalid with these columns. Try another type or columns.')});
+$('colOpen').addEventListener('click',()=>colOpen(null,''));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('colDlg').hidden){colClose();e._h=true}});
+/* اللوحة اليسرى Contents */
+(function(){const lp=$('lpanel'),t=$('lpTab');const st=lsGet('gx_lp');if(st==='0'||(st==null&&isMob()))lp.classList.add('collapsed');t.classList.toggle('on',!lp.classList.contains('collapsed'));
+  t.addEventListener('click',()=>{const c=!lp.classList.contains('collapsed');lp.classList.toggle('collapsed',c);t.classList.toggle('on',!c);lsSet('gx_lp',c?'0':'1');setTimeout(()=>{try{map.invalidateSize()}catch(_){}},30)})})();
+on('tbBf',()=>{bfBuild();ctxShow('bf')});
+on('tbCh',()=>{chBuild();ctxShow('ch')});
+$('ctxX').addEventListener('click',ctxHide);
+/* تبويبات Ribbon على نسق Excel: كل تبويب يعرض مجموعاته الثابتة */
+(function(){
+ const rt=$('rtabs'),rb=$('ribbon'),hold=$('hiddenCtl');
+ ['tbGo','tbImp','tbExp','tbLab','tbView','tbBf','tbCh','tbCrs','tbProj','tbImg','tbPh','tbOff'].forEach(id=>{const b=$(id);if(b)hold.appendChild(b)});
+ rb.querySelectorAll('.grp').forEach(g=>{if(!g.querySelector('button.tb'))g.remove()});
+ const pane=k=>document.querySelector('.ctxp[data-ctx="'+k+'"]'),grp=c=>rb.querySelector('.grp.'+c);
+ const MAP={home:[grp('g-nav'),pane('go'),grp('g-meas'),grp('g-map')],data:[pane('imp'),pane('exp'),grp('g-data')],lab:[pane('view'),pane('lab')],bf:[pane('bf')],ch:[pane('ch')],crs:[pane('crs')],proj:[pane('proj'),pane('off')],rep:[pane('img'),pane('ph')],help:[grp('g-help')]};
+ Object.entries(MAP).forEach(([k,list])=>{const d=document.createElement('div');d.className='rtp';d.dataset.rt=k;rb.appendChild(d);
+  list.forEach(e=>{if(!e)return;d.appendChild(e);if(e.classList.contains('ctxp')){e.hidden=false;e._ph=document.createComment('pane-'+e.dataset.ctx);e.before(e._ph)}})});
+ const tabs=[...rt.querySelectorAll('button.rtab')];
+ window.rtabSet=function(k){
+  const t=tabs.find(b=>b.dataset.rt===k&&!b.classList.contains('rbhide'))||tabs.find(b=>!b.classList.contains('rbhide'));if(!t)return;k=t.dataset.rt;
+  tabs.forEach(b=>{const on=b===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false')});
+  rb.querySelectorAll('.rtp').forEach(x=>x.classList.toggle('on',x.dataset.rt===k));
+  lsSet('gx_rtab',k);
+ };
+ window.rtabFor=function(el){const d=el&&el.closest&&el.closest('.rtp');if(d&&!d.classList.contains('on'))rtabSet(d.dataset.rt)};
+ tabs.forEach(b=>b.addEventListener('click',()=>rtabSet(b.dataset.rt)));
+ rtabSet(lsGet('gx_rtab')||'home');
+})();
+/* ---------- تثبيت الأدوات في اللوحة اليمنى، قائمة النقر الأيمن، شريط الوصول السريع ---------- */
+let pins=[];try{pins=JSON.parse(lsGet('gx_pins')||'[]').filter(k=>CTX[k])}catch(_){pins=[]}
+const ctxKeyOf=id=>Object.keys(CTX).find(k=>CTX[k].b===id);
+function pinApply(){
+  const tabs=$('pinTabs'),body=document.querySelector('#panel .pbody');
+  Object.keys(CTX).forEach(k=>{
+    const pane=document.querySelector('.ctxp[data-ctx="'+k+'"]');if(!pane)return;
+    let sec=document.querySelector('.tabsec[data-tab="pin-'+k+'"]');
+    if(pins.includes(k)){
+      if(!sec){sec=document.createElement('section');sec.className='tabsec pinsec';sec.dataset.tab='pin-'+k;sec.hidden=true;
+        const h=document.createElement('h2');h.className='pinh';h.textContent=B(CTX[k].t,{go:'Go to XY',proj:'My projects',img:'Map image & report',ph:'Imagery & photos',off:'Offline',view:'Display',imp:'Import',exp:'Export',lab:'Labeling',bf:'Buffer',ch:'Chainage',crs:'Coordinate systems'}[k]);sec.appendChild(h);body.appendChild(sec)}
+      if(pane.parentElement!==sec){sec.appendChild(pane)}pane.hidden=false;
+      if(!tabs.querySelector('[data-t="pin-'+k+'"]')){const rb=$(CTX[k].b),b=document.createElement('button');b.type='button';b.className='tab';b.setAttribute('role','tab');b.dataset.t='pin-'+k;
+        const ic=rb.querySelector('svg');b.innerHTML=(ic?ic.outerHTML:'')+'<span>'+esc(rb.childNodes[1]?rb.childNodes[1].textContent.trim():CTX[k].t)+'</span>';b.title=rb.title;tabs.appendChild(b)}
+      $(CTX[k].b).classList.add('pinned');
+    }else{
+      if(sec){if(pane._ph&&pane._ph.parentNode)pane._ph.parentNode.insertBefore(pane,pane._ph);else $('ctx').appendChild(pane);pane.hidden=false;sec.remove()}
+      const b=tabs.querySelector('[data-t="pin-'+k+'"]');if(b)b.remove();$(CTX[k].b).classList.remove('pinned');
+    }
+  });
+  $('work').classList.toggle('nopins',!pins.length);
+  $('tbPanel').classList.toggle('on',!!pins.length&&!$('work').classList.contains('collapsed'));
+  setTimeout(()=>{try{map.invalidateSize()}catch(_){}},30);
+}
+function pinToggle(k){
+  if(pins.includes(k))pins=pins.filter(x=>x!==k);else{pins.push(k);if(ctxCur===k)ctxHide()}
+  lsSet('gx_pins',JSON.stringify(pins));pinApply();
+  if(pins.includes(k)){togglePanel(true);openTab('pin-'+k)}
+  else if(pins.length){const t=document.querySelector('#pinTabs button');if(t&&!document.querySelector('#pinTabs button.on'))openTab(t.dataset.t)}
+}
+/* شريط الوصول السريع */
+let qat=[];try{qat=JSON.parse(lsGet('gx_qat')||'[]')}catch(_){qat=[]}
+function qatRender(){
+  const q=$('qat');q.innerHTML='';
+  qat.forEach(id=>{const rb=$(id);if(!rb)return;const b=document.createElement('button');b.type='button';b.className='qb';b.dataset.id=id;b.title=rb.title;const ic=rb.querySelector('svg');b.innerHTML=ic?ic.outerHTML:'•';b.onclick=()=>rb.click();q.appendChild(b)});
+  q.hidden=!qat.length;
+}
+/* إخفاء الأزرار */
+let rbHide=[];try{rbHide=JSON.parse(lsGet('gx_hide')||'[]')}catch(_){rbHide=[]}
+function hideApply(){document.querySelectorAll('#ribbon button.tb').forEach(b=>b.classList.toggle('rbhide',rbHide.includes(b.id)));
+  document.querySelectorAll('#ribbon .grp').forEach(g=>g.classList.toggle('rbhide',![...g.querySelectorAll('button.tb')].some(b=>!b.classList.contains('rbhide'))));
+  document.querySelectorAll('#rtabs .rtab').forEach(t=>{const d=document.querySelector('#ribbon .rtp[data-rt="'+t.dataset.rt+'"]');t.classList.toggle('rbhide',!!d&&!d.querySelector('.ctxp,.grp:not(.rbhide)'))});if(window.rtabSet)rtabSet(lsGet('gx_rtab')||'home')}
+/* اختصارات لوحة المفاتيح */
+let keys={};try{keys=JSON.parse(lsGet('gx_keys')||'{}')||{}}catch(_){keys={}}
+const keyOf=id=>Object.keys(keys).find(k=>keys[k]===id);
+function keysTitles(){document.querySelectorAll('#ribbon button.tb,#hiddenCtl button.tb').forEach(b=>{if(b.dataset.t0==null)b.dataset.t0=b.title;const k=keyOf(b.id);b.title=b.dataset.t0+(k?' ('+k.toUpperCase()+')':'')})}
+let keyWait=null;
+function keyAsk(id){keyWait=id;const rb=$(id);$('keyMsg').innerHTML=B('اضغط حرفًا أو رقمًا ليصبح اختصارًا لأداة «','Press a letter or digit to become the shortcut for “')+esc((rb.childNodes[1]||{}).textContent||id)+B('». Esc للإلغاء.','”. Esc to cancel.');$('keyDlg').hidden=false}
+$('keyX').addEventListener('click',()=>{keyWait=null;$('keyDlg').hidden=true});
+document.addEventListener('keydown',e=>{
+  if(keyWait){e.preventDefault();e.stopPropagation();if(e.key==='Escape'){keyWait=null;$('keyDlg').hidden=true;e._h=true;return}
+    const k=(e.key||'').toLowerCase();if(!/^[a-z0-9]$/.test(k))return;Object.keys(keys).forEach(x=>{if(keys[x]===keyWait)delete keys[x]});keys[k]=keyWait;lsSet('gx_keys',JSON.stringify(keys));keysTitles();
+    toast(B('الاختصار ','Shortcut ')+k.toUpperCase()+B(' جاهز.',' is set.'),2500);keyWait=null;$('keyDlg').hidden=true;return}
+  if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|SELECT|TEXTAREA)$/.test(t.tagName)))return;
+  const id=keys[(e.key||'').toLowerCase()];if(id&&$(id)){e.preventDefault();$(id).click()}
+},true);
+/* قائمة النقر الأيمن على أزرار الشريط */
+let rcm=null;function rcmClose(){if(rcm){rcm.remove();rcm=null}}
+function rcmOpen(id,x,y){
+  rcmClose();const k=ctxKeyOf(id),it=[];
+  if(k)it.push([pins.includes(k)?B('إلغاء التثبيت من اللوحة','Unpin from panel'):B('تثبيت في اللوحة','Pin to panel'),()=>pinToggle(k)]);
+  it.push([qat.includes(id)?B('إزالة من شريط الوصول السريع','Remove from Quick Access'):B('إضافة إلى شريط الوصول السريع','Add to Quick Access'),()=>{qat=qat.includes(id)?qat.filter(x=>x!==id):[...qat,id];lsSet('gx_qat',JSON.stringify(qat));qatRender()}]);
+  it.push(['-']);
+  if($(id)&&$(id).closest('#ribbon'))it.push([B('إخفاء من الشريط','Hide from ribbon'),()=>{rbHide.push(id);lsSet('gx_hide',JSON.stringify(rbHide));hideApply()}]);
+  if(rbHide.length)it.push([B('استعادة الأزرار المخفية (','Restore hidden buttons (')+rbHide.length+')',()=>{rbHide=[];lsSet('gx_hide','[]');hideApply()}]);
+  it.push(['-']);
+  const kk=keyOf(id);
+  it.push([B('تعيين اختصار لوحة مفاتيح…','Assign keyboard shortcut…')+(kk?' ('+kk.toUpperCase()+')':''),()=>keyAsk(id)]);
+  if(kk)it.push([B('إزالة الاختصار','Remove shortcut'),()=>{delete keys[kk];lsSet('gx_keys',JSON.stringify(keys));keysTitles()}]);
+  it.push(['-']);
+  it.push([B('مساعدة','Help'),()=>{if(GUIDE[id]){guideCard(id);const c=$('gclose');if(c)c.onclick=()=>{$('guide').hidden=true}}else toast(B('لا يوجد شرح لهذه الأداة.','No help for this tool.'),2500)}]);
+  rcm=document.createElement('div');rcm.className='expmenu rcm';rcm.dir=document.documentElement.dir;
+  it.forEach(([t,f])=>{if(t==='-'){rcm.appendChild(document.createElement('hr'));return}const b=document.createElement('button');b.type='button';b.textContent=t;b.onclick=()=>{rcmClose();f()};rcm.appendChild(b)});
+  document.body.appendChild(rcm);const w=rcm.offsetWidth,h=rcm.offsetHeight;
+  rcm.style.left=Math.max(4,Math.min(innerWidth-w-4,x))+'px';rcm.style.top=Math.max(4,Math.min(innerHeight-h-4,y))+'px';
+}
+document.addEventListener('contextmenu',e=>{let b=e.target.closest&&e.target.closest('#ribbon button.tb,#qat button.qb'),id=b&&(b.dataset.id||b.id);
+  if(!b){const p=e.target.closest&&e.target.closest('#ribbon .ctxp');if(p&&!/^(INPUT|SELECT|TEXTAREA|OPTION)$/.test(e.target.tagName)&&CTX[p.dataset.ctx]){b=p;id=CTX[p.dataset.ctx].b}}
+  if(!b)return;e.preventDefault();rcmOpen(id,e.clientX,e.clientY)});
+document.addEventListener('click',e=>{if(rcm&&!rcm.contains(e.target))rcmClose()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&rcm){rcmClose();e._h=true}});
+pinApply();qatRender();hideApply();keysTitles();
+labSync(true);gateUpd();new MutationObserver(()=>{try{gateUpd()}catch(_){}}).observe($('ribbon'),{childList:true,characterData:true,subtree:true});
+/* صيغة الإدخال بجانب خانة الانتقال السريع */
+$('qfmt').addEventListener('change',()=>{const v=$('qfmt').value;
+  if(v==='ll'){$('mode').value='ll'}else{$('mode').value='utm';$('zone').value=v}
+  $('mode').dispatchEvent(new Event('change'));
+  $('qgo').placeholder=v==='ll'?T('انتقال سريع: 30.5081, 47.7835'):'UTM '+v+'N: 750123 3375123';lsSet('gx_qfmt',v)});
+(function(){const v=lsGet('gx_qfmt');if(v&&[...$('qfmt').options].some(o=>o.value===v)&&v!=='ll'){$('qfmt').value=v;$('qfmt').dispatchEvent(new Event('change'))}})();
+/* بطاقة نتيجة القياس على الخريطة */
+(function(){const card=$('mcard'),r=$('mres'),def=r.textContent.trim();let closed='';
+  const upd=()=>{const t=r.textContent.trim();card.hidden=!(measuring||(t&&t!==def))||closed===t};
+  new MutationObserver(()=>{closed='';upd()}).observe(r,{childList:true,characterData:true,subtree:true});
+  ['tlPan','tlLine','tlPoly','tlP2L'].forEach(id=>$(id).addEventListener('click',()=>setTimeout(upd,0)));
+  $('mcardX').addEventListener('click',()=>{closed=r.textContent.trim();card.hidden=true});window.mcardUpd=upd;upd();})();
+/* رسالة الاستيراد المؤقتة */
+let impToastAt=0,impT=0;
+new MutationObserver(()=>{if(Date.now()-impToastAt>20000)return;clearTimeout(impT);impT=setTimeout(()=>{const t=$('ptinfo').innerText.trim();if(t)toast(t,5000);impToastAt=0},700)}).observe($('ptinfo'),{childList:true,characterData:true,subtree:true});
+/* وسيلة الإيضاح والرسومات المحفوظة داخل Contents */
+new MutationObserver(()=>{$('legBox').hidden=!$('legend').innerHTML.trim()}).observe($('legend'),{childList:true,subtree:true,characterData:true});
+function drUpd(){$('drN').textContent=drawn.length;$('drBox').hidden=!drawn.length;$('layEmpty').hidden=!!(layers.length||drawn.length)}
+['msave','mclrsaved'].forEach(id=>$(id).addEventListener('click',()=>setTimeout(drUpd,0)));
+$('drVis').addEventListener('change',()=>{if($('drVis').checked)map.addLayer(savedL);else map.removeLayer(savedL)});
+setInterval(drUpd,1500);drUpd();
+/* عرض اللوحة اليسرى */
+(function(){const sp=$('lsplit'),pn=document.querySelector('#lpanel .lbody');
+  const w0=+lsGet('gx_lw');if(w0>=220&&w0<=700)document.documentElement.style.setProperty('--lw',w0+'px');
+  let drag=false;
+  sp.addEventListener('pointerdown',e=>{if($('lpanel').classList.contains('collapsed'))return;drag=true;sp.setPointerCapture(e.pointerId);sp.classList.add('drag');document.body.classList.add('resizing')});
+  sp.addEventListener('pointermove',e=>{if(!drag)return;const r=pn.getBoundingClientRect(),rtl=document.documentElement.dir==='rtl',w=Math.max(220,Math.min(innerWidth*.5,rtl?e.clientX-r.left:r.right-e.clientX));document.documentElement.style.setProperty('--lw',Math.round(w)+'px')});
+  const end=()=>{if(!drag)return;drag=false;sp.classList.remove('drag');document.body.classList.remove('resizing');lsSet('gx_lw',parseInt(getComputedStyle(pn).width));try{map.invalidateSize()}catch(_){}};
+  sp.addEventListener('pointerup',end);sp.addEventListener('pointercancel',end);
+  sp.addEventListener('dblclick',()=>{document.documentElement.style.removeProperty('--lw');lsSet('gx_lw','');try{map.invalidateSize()}catch(_){}});})();
+
+$('labFieldsBtn').addEventListener('click',e=>{e.stopPropagation();const p=$('labPop');if(!p.hidden){p.hidden=true;return}labRefresh();p.hidden=false;const r=$('labFieldsBtn').getBoundingClientRect();p.style.top=(r.bottom+4)+'px';p.style.left=Math.max(4,Math.min(innerWidth-274,r.left))+'px'});
+document.addEventListener('click',e=>{const p=$('labPop');if(!p.hidden&&!p.contains(e.target))p.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e._h){if(!$('labPop').hidden)$('labPop').hidden=true;else if(ctxCur&&!document.querySelector('.symdlg:not([hidden])'))ctxHide()}});
+['ctx'].forEach(id=>{$(id).addEventListener('change',markDirty);$(id).addEventListener('input',markDirty)});
+$('file').addEventListener('change',()=>{impToastAt=Date.now()});
+on('tbQc',()=>{if($('cfg').hidden){toast(T('استورد ملفًا أولًا لفحص جودته.'),3000);return}$('cqc').click();$('qcDlg').hidden=false});
+$('cqc').addEventListener('click',()=>{$('qcDlg').hidden=false});
+$('qcX').addEventListener('click',()=>{$('qcDlg').hidden=true});
 let expM=null;
 function closeExpM(){if(expM){expM.remove();expM=null}}
-on('tbExp',e=>{
-  e.stopPropagation();
-  if(expM){closeExpM();return}
-  if(!shown.length&&!allDr().length){openTab('data');toast(B('لا توجد بيانات للتصدير: استورد ملفًا أو ارسم شيئًا.','Nothing to export: import a file or draw something.'),3500);return}
-  const FM=[['xlsx','Excel (.xlsx)'],['csv','CSV (.csv)'],['-'],['kml','KML (Google Earth)'],['kmz','KMZ (Google Earth)'],['geojson','GeoJSON'],['gpx','GPX (GPS)'],['-'],['shp','Shapefile ZIP — WGS84'],['shpu','Shapefile ZIP — UTM 38N']];
-  expM=document.createElement('div');expM.className='expmenu';
-  FM.forEach(([v,t])=>{if(v==='-'){expM.appendChild(document.createElement('hr'));return}
-    const b=document.createElement('button');b.type='button';b.textContent=t;b.onclick=()=>{$('cfmt').value=v;closeExpM();$('cexp').click()};expM.appendChild(b)});
-  document.body.appendChild(expM);
-  const r=$('tbExp').getBoundingClientRect(),w=expM.offsetWidth;
-  expM.style.top=(r.bottom+4)+'px';expM.style.left=Math.max(4,Math.min(innerWidth-w-4,(document.documentElement.dir==='rtl'?r.right-w:r.left)))+'px';
-});
+on('tbExp',()=>ctxShow('exp'));
 document.addEventListener('click',e=>{if(expM&&!expM.contains(e.target))closeExpM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeExpM()});
-on('tbPsave',()=>$('psave').click());
-on('tbPopen',()=>{openTab('img');$('pload').click()});
-on('tbImg',()=>$('imgexp').click());
-$('vtbl').addEventListener('click',()=>openTab('data'));
+on('tbProj',()=>ctxShow('proj'));on('tbImg',()=>ctxShow('img'));on('tbPh',()=>ctxShow('ph'));on('tbOff',()=>ctxShow('off'));
 
 /* انتقال سريع من شريط العنوان */
 $('qgo').addEventListener('keydown',e=>{
@@ -3640,7 +4322,7 @@ function applyLang(){
   try{if(!$('atp').hidden){atLayerOpts();atRender()}else atEdLabels()}catch(_){}
   try{crsOpts()}catch(_){}
   try{phInfoRender();offStatus();offEstimate()}catch(_){}
-  relabelOpts();ctypeUI();vRender();bmRender();syncTools();labSig='';updLabels();projStRender();
+  relabelOpts();ctypeUI();vRender();try{layRender()}catch(_){}bmRender();syncTools();labSig='';updLabels();projStRender();
   $('mtoggle').textContent=measuring?T('إيقاف القياس'):T('ابدأ القياس بالنقر');
   updM();
   if(helpOn){if(gCur)guideCard(gCur);else guideOverview()}
@@ -3650,8 +4332,58 @@ $('langBtn').addEventListener('click',()=>{setTimeout(()=>window.secBtn&&secBtn(
   try{localStorage.setItem('gotoxy_lang',LANG)}catch(_){}
   applyLang();
 });
-setInterval(()=>{$('tbWb').classList.toggle('on',!!wbLayer)},500);
+setInterval(()=>{$('tbPh').classList.toggle('active',!!wbLayer)},500);
 if(LANG==='en')applyLang();
+/* واجهة الهاتف: التنقل السفلي (يعيد استخدام نفس منطق الشريط ولا يكرره) */
+(function(){const nav=document.getElementById('bnav');if(!nav)return;
+ const G={go:['home'],tools:['lab','bf','ch','crs'],more:['data','proj','rep','help']};
+ const lp=document.getElementById('lpanel');let ready=false;setTimeout(()=>{ready=true},900);
+ const grpOf=k=>{for(const g in G)if(G[g].includes(k))return g;return null};
+ const inv=()=>setTimeout(()=>{try{map.invalidateSize()}catch(_){}},60);
+ function paint(k){document.body.dataset.mnav=k;document.body.classList.toggle('msheet',!!G[k]);nav.querySelectorAll('[data-bn]').forEach(b=>b.classList.toggle('on',b.dataset.bn===k));
+  const lpOn=k==='layers';lp.classList.toggle('collapsed',!lpOn);const t=document.getElementById('lpTab');if(t)t.classList.toggle('on',lpOn);inv()}
+ function setNav(k){if(!isMob())return;paint(k);if(G[k]){const cur=(document.querySelector('.rtab.on')||{dataset:{}}).dataset.rt;if(!G[k].includes(cur))window.rtabSet(G[k][0])}}
+ nav.addEventListener('click',e=>{const b=e.target.closest('[data-bn]');if(!b)return;const k=b.dataset.bn;setNav(document.body.dataset.mnav===k&&k!=='map'?'map':k)});
+ const orig=window.rtabSet;window.rtabSet=function(k){orig(k);if(!isMob()||!ready)return;const g=grpOf(k);if(g)paint(g)};
+ /* أغلق الورقة بالنقر على الخريطة */
+ document.getElementById('mapwrap').addEventListener('pointerdown',()=>{if(isMob()&&document.body.dataset.mnav&&document.body.dataset.mnav!=='map')paint('map')},true);
+ const mq=matchMedia('(max-width:760px)');mq.addEventListener('change',()=>{if(!mq.matches){document.body.classList.remove('msheet');delete document.body.dataset.mnav;nav.querySelectorAll('.on').forEach(b=>b.classList.remove('on'))}else paint('map')});
+ if(isMob())paint('map');
+})();
+/* طيّ الشريط لتكبير الخريطة (تصميم فقط، يحفظ الحالة محليًا) */
+(function(){const b=document.querySelector('.rbfold');if(!b)return;
+ const apply=f=>{document.body.classList.toggle('rbfolded',f);b.title=f?B('فتح الشريط','Expand ribbon'):B('طيّ الشريط','Collapse ribbon');b.setAttribute('aria-label',b.title);lsSet('gx_rbf',f?'1':'0')};
+ const cur=()=>document.body.classList.contains('rbfolded');
+ apply(lsGet('gx_rbf')==='1');b.addEventListener('click',()=>apply(!cur()));
+ $('rtabs').addEventListener('click',e=>{if(e.target.closest('.rtab')&&cur())apply(false)});
+ $('langBtn').addEventListener('click',()=>setTimeout(()=>apply(cur()),0));
+})();
+/* تكيّف الشريط مع العرض: مجموعات الإدخال تتحوّل إلى أزرار منسدلة عند الحاجة، فيبقى الشريط في صف واحد */
+(function(){const rb=$('ribbon'),MAXH=96;let busy=false,lastW=0,openG=null;
+ const isM=()=>matchMedia('(max-width:760px)').matches;
+ function unc(g){if(!g.classList.contains('cgc'))return;const pop=g.querySelector(':scope>.cgpop'),btn=g.querySelector(':scope>.cgbtn');if(pop){while(pop.firstChild)g.insertBefore(pop.firstChild,btn||pop);pop.remove()}if(btn)btn.remove();g.classList.remove('cgc','cgopen')}
+ function close(){if(openG){openG.classList.remove('cgopen');openG=null}}
+ function toggle(g){const was=g.classList.contains('cgopen');close();if(was)return;const pop=g.querySelector(':scope>.cgpop'),r=g.getBoundingClientRect();g.classList.add('cgopen');openG=g;pop.style.top=Math.round(r.bottom+2)+'px';const w=pop.offsetWidth,rtl=document.documentElement.dir==='rtl';let x=rtl?r.right-w:r.left;x=Math.max(8,Math.min(x,innerWidth-w-8));pop.style.left=Math.round(x)+'px'}
+ function col(g){if(g.classList.contains('cgc'))return;const cap=g.querySelector(':scope>.cc'),label=cap?cap.textContent.trim():'…';const pop=document.createElement('div');pop.className='cgpop';while(g.firstChild)pop.appendChild(g.firstChild);const btn=document.createElement('button');btn.type='button';btn.className='cgbtn alt';const sp=document.createElement('span');sp.textContent=label;btn.appendChild(sp);btn.insertAdjacentHTML('beforeend','<svg class="ic"><use href="#i-chev" transform="rotate(180 12 12)"/></svg>');btn.setAttribute('aria-haspopup','true');g.appendChild(btn);g.appendChild(pop);g.classList.add('cgc');btn.addEventListener('click',e=>{e.stopPropagation();toggle(g)})}
+ function fit(){if(busy)return;busy=true;try{close();document.querySelectorAll('.cg.cgc').forEach(unc);if(isM())return;const pane=rb.querySelector('.rtp.on');if(!pane)return;
+  pane.classList.add('rb-m');
+  const gs=[...pane.querySelectorAll('.cg')].filter(g=>!g.classList.contains('eg')&&!g.classList.contains('cg-keep')&&g.offsetWidth>0);
+  gs.forEach(g=>{if(g.offsetHeight>MAXH)col(g)});
+  pane.classList.remove('rb-m');
+  for(const g of gs.filter(g=>!g.classList.contains('cgc')).reverse()){if(pane.scrollWidth<=pane.clientWidth+1)break;col(g)}
+ }finally{busy=false}}
+ window.rbFit=fit;
+ const o1=window.rtabSet;window.rtabSet=function(k){o1(k);fit()};
+ const o2=window.rtabFor;window.rtabFor=function(el){o2(el);const g=el&&el.closest&&el.closest('.cg.cgc');if(g&&!g.classList.contains('cgopen'))toggle(g)};
+ document.addEventListener('pointerdown',e=>{if(openG&&!e.target.closest('.cg.cgopen'))close()},true);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openG)close()});
+ if(window.ResizeObserver)new ResizeObserver(()=>{const w=rb.clientWidth;if(w!==lastW){lastW=w;fit()}}).observe(rb);
+ $('langBtn').addEventListener('click',()=>setTimeout(fit,60));
+ $('mode').addEventListener('change',()=>setTimeout(()=>{if(!(openG))fit()},0));
+ const pnl=$('panel');if(pnl)new MutationObserver(()=>{pnl.querySelectorAll('.cg.cgc').forEach(unc)}).observe(pnl,{childList:true,subtree:true});
+ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+ setTimeout(fit,400);
+})();
 </script>
 </body>
 </html>
