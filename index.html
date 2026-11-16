@@ -169,7 +169,7 @@ tr.pt{cursor:pointer}tr.pt:hover{background:var(--hover)}
 #atBody tr.sel td{background:var(--sel)}
 #status{flex:none;display:flex;align-items:center;gap:18px;height:26px;padding:0 12px;background:var(--bar);color:var(--bar-ink);font:11.5px var(--mono);direction:ltr;overflow:hidden;white-space:nowrap}
 #status span{opacity:.9}#status .ar{font-family:var(--font);direction:rtl}
-#status span{flex:none}#status #cur{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}#status #gps{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#status .appver{margin-inline-start:auto;opacity:.6;font-size:10.5px}#status span{flex:none}#status #cur{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}#status #gps{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:640px){#status{gap:10px}#status #sttool{display:none}}
 #cur{min-width:0}
 .leaflet-bar a,.leaflet-bar a:hover{color:#333}
@@ -1069,6 +1069,7 @@ button.phadd svg.ic{width:16px;height:16px;vertical-align:-3px}
  <span id="stz">z —</span>
  <span id="sttool" class="ar">تحريك</span>
  <span id="gps" class="ar"></span>
+ <span class="appver" title="Build">v2.1 · 2026-11-16</span>
 </footer>
 <nav id="bnav" aria-label="التنقل"><button type="button" data-bn="map"><svg class="ic"><use href="#i-map"/></svg>الخريطة</button><button type="button" data-bn="go"><svg class="ic"><use href="#i-go"/></svg>انتقال</button><button type="button" data-bn="layers"><svg class="ic"><use href="#i-sat"/></svg>الطبقات</button><button type="button" data-bn="tools"><svg class="ic"><use href="#i-label"/></svg>أدوات</button><button type="button" data-bn="more"><svg class="ic"><use href="#i-panel"/></svg>المزيد</button></nav>
 
@@ -2054,6 +2055,7 @@ function labRefresh(){
   if(lb.init){
     const nm=av.find(x=>x.v[0]==='d'&&(x.v.slice(2)===$('clab').value||['name','id','الاسم','اسم'].includes(x.v.slice(2).toLowerCase())));
     if(nm){lb.sel.push(nm.v);lb.init=false}
+    else{const fb=av.find(x=>x.v[0]==='d'&&!['Layer','Latitude','Longitude'].includes(x.v.slice(2)))||av.find(x=>x.v==='@no');if(fb){lb.sel.push(fb.v);lb.init=false}}
   }
   if(sig===labSig)return;labSig=sig;
   const box=$('labFields');box.innerHTML='';
@@ -2122,7 +2124,10 @@ function updLabels(){
 }
 map.on('moveend',updLabels);
 const lbl=x=>String(x.lab)+($('cchain').checked&&x.chain!=null?' | '+x.chain.toFixed(1)+T(' م'):'');
-LABIDS.forEach(i=>$(i).addEventListener('change',()=>{labFromUI();updLabels();markDirty()}));$('cchain').addEventListener('change',updLabels);['labSize','labZ'].forEach(i=>$(i).addEventListener('input',()=>{labFromUI();updLabels()}));$('cclust').onchange=()=>draw(false);
+LABIDS.forEach(i=>$(i).addEventListener('change',()=>{labFromUI();
+  if(i==='clabon'&&$('clabon').checked){const l=layerByName(labUIL),z=map.getZoom();
+    if(l){const lb=labOf(l);if(z<(+lb.z||14)){lb.z=Math.max(3,z);$('labZ').value=lb.z;toast(B('خُفِّض أدنى تكبير للملصقات إلى '+lb.z+' ليظهر على المستوى الحالي.','Minimum label zoom lowered to '+lb.z+' so labels show at the current level.'),4000)}}}
+  updLabels();markDirty()}));$('cchain').addEventListener('change',updLabels);['labSize','labZ'].forEach(i=>$(i).addEventListener('input',()=>{labFromUI();updLabels()}));$('cclust').onchange=()=>draw(false);
 $('ctype').onchange=ctypeUI;$('cfCrs').onchange=ctypeUI;
 $('cdraw').onclick=()=>draw(true);
 let ft;$('cfilt').oninput=()=>{clearTimeout(ft);ft=setTimeout(()=>draw(false),300)};
