@@ -123,6 +123,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 button.camb{flex:none;display:flex;align-items:center;justify-content:center;width:40px;padding:0}
 button.camb svg.ic{width:20px;height:20px}
 #msg{color:var(--err);font-size:12.5px;min-height:18px;margin-top:8px;line-height:1.6}
+.midmk i{display:block;width:0;height:0;margin:4px 3px;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:16px solid #00c8e6;filter:drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1px #000);cursor:pointer}
+.midpop{font-size:12.5px;line-height:1.7;min-width:210px}.midbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.midbtns button{padding:3px 9px;font-size:12px}
+#mres .mkeep{display:inline-block;margin-top:3px;font-weight:700;color:var(--acc)}
 #mres{font-size:12.5px;line-height:1.8;margin-top:10px;padding:8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
 .note{font-size:12px;color:var(--mute);line-height:1.7;margin-top:6px}
 table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
@@ -1069,7 +1072,7 @@ button.phadd svg.ic{width:16px;height:16px;vertical-align:-3px}
  <span id="stz">z —</span>
  <span id="sttool" class="ar">تحريك</span>
  <span id="gps" class="ar"></span>
- <span class="appver" title="Build">v2.1 · 2026-11-16</span>
+ <span class="appver" title="Build">v2.2 · 2026-11-17</span>
 </footer>
 <nav id="bnav" aria-label="التنقل"><button type="button" data-bn="map"><svg class="ic"><use href="#i-map"/></svg>الخريطة</button><button type="button" data-bn="go"><svg class="ic"><use href="#i-go"/></svg>انتقال</button><button type="button" data-bn="layers"><svg class="ic"><use href="#i-sat"/></svg>الطبقات</button><button type="button" data-bn="tools"><svg class="ic"><use href="#i-label"/></svg>أدوات</button><button type="button" data-bn="more"><svg class="ic"><use href="#i-panel"/></svg>المزيد</button></nav>
 
@@ -1678,7 +1681,7 @@ $('ocrall').onclick=()=>readImg(true);
 $('camclose').onclick=()=>{$('camPanel').hidden=true;bmp=null;sel=null};
 
 /* ---------- القياس والرسم ---------- */
-let mp=[],measuring=false,mode='line',savedN=0,drawn=[];
+let mp=[],measuring=false,mode='line',savedN=0,drawn=[],kept=[];
 const mLine=L.polyline([],{color:'#ffd43b',weight:3}).addTo(map),mPoly=L.polygon([],{color:'#ffd43b',weight:3,fillOpacity:.15}).addTo(map),mMarks=L.layerGroup().addTo(map),savedL=L.layerGroup().addTo(map),p2lL=L.layerGroup().addTo(map);
 const HINT={line:'انقر على نقطتين أو أكثر على الخريطة، أو أضف النقاط من الإحداثيات أعلاه.',poly:'انقر على ثلاث نقاط أو أكثر لتحديد مضلع وحساب مساحته ومحيطه.',p2l:'انقر على نقطة بجانب المسار (المرسوم من Excel) لحساب أقصر مسافة إليه.'};
 function bearing(a,b){const r=Math.PI/180,y=Math.sin((b.lng-a.lng)*r)*Math.cos(b.lat*r),x=Math.cos(a.lat*r)*Math.sin(b.lat*r)-Math.sin(a.lat*r)*Math.cos(b.lat*r)*Math.cos((b.lng-a.lng)*r);return(Math.atan2(y,x)/r+360)%360}
@@ -1716,19 +1719,21 @@ function updM(){
   mode=$('mmode').value;
   mLine.setLatLngs(mode==='p2l'?[]:mp);
   mPoly.setLatLngs(mode==='poly'&&mp.length>=3?mp:[]);
-  if(mode==='p2l'){$('mres').textContent=T(HINT.p2l);return}
-  if(!mp.length){$('mres').textContent=T(HINT[mode]);return}
+  if(mode==='p2l'){$('mres').textContent=T(HINT.p2l);midRefresh();return}
+  if(!mp.length){$('mres').textContent=T(HINT[mode]);midRefresh();return}
   let tot=0,h='';
   for(let i=1;i<mp.length;i++){const d=mp[i-1].distanceTo(mp[i]);tot+=d;h+=T('المقطع {i}: {d} — الاتجاه {b}°',{i,d:fmt(d),b:bearing(mp[i-1],mp[i]).toFixed(1)})+'<br>'}
   if(mode==='poly'&&mp.length>=3){
     const per=tot+mp[mp.length-1].distanceTo(mp[0]),ar=polyArea(planar(mp.map(p=>[p.lat,p.lng])));
     h+=T('المحيط: {p}',{p:fmt(per)})+'<br><b>'+T('المساحة: {a} م² — {h} هكتار — {d} دونم',{a:ar.toFixed(1),h:(ar/10000).toFixed(4),d:(ar/2500).toFixed(3)})+'</b>';
   }else h+='<b>'+T('الإجمالي: {t}',{t:fmt(tot)})+'</b>'+(tot?' ('+(tot*0.000621371).toFixed(3)+' '+T('ميل')+')':'');
-  $('mres').innerHTML=h;
+  if((mode==='line'&&mp.length>=2)||(mode==='poly'&&mp.length>=3))h+='<br><a class="mkeep" href="#">'+T('إنهاء القياس والإبقاء عليه (Enter)')+'</a>';
+  $('mres').innerHTML=h;midRefresh();
 }
 $('mtoggle').onclick=()=>{measuring=!measuring;$('mtoggle').classList.toggle('on',measuring);$('mtoggle').textContent=measuring?T('إيقاف القياس'):T('ابدأ القياس بالنقر');map.getContainer().style.cursor=measuring?'crosshair':''};
-$('mclear').onclick=()=>{mp=[];mMarks.clearLayers();p2lL.clearLayers();updM()};
-$('mmode').onchange=()=>$('mclear').click();
+function clrCur(){mp=[];mMarks.clearLayers();p2lL.clearLayers();updM()}
+$('mclear').onclick=()=>{kept=[];keptL.clearLayers();clrCur()};
+$('mmode').onchange=()=>clrCur();
 $('msave').onclick=()=>{
   mode=$('mmode').value;let name,tip,layer;
   const P=mp.map(p=>[p.lat,p.lng]);
@@ -1741,12 +1746,78 @@ $('msave').onclick=()=>{
     name=T('مضلع ')+(++savedN);drawn.push({type:'poly',name,pts:P});
     L.polygon(P,{color:'#f08c00',weight:3,fillOpacity:.15}).bindTooltip(name+' — '+ar.toFixed(1)+T(' م²')).addTo(savedL);
   }else{$('mres').textContent=T('ارسم خطًا (نقطتان أو أكثر) أو مضلعًا (3 نقاط أو أكثر) أولًا.');return}
-  $('mclear').click();$('mres').textContent=T('تم حفظ {n} للتصدير.',{n:name});
+  clrCur();$('mres').textContent=T('تم حفظ {n} للتصدير.',{n:name});
 };
-$('mclrsaved').onclick=()=>{drawn=[];savedN=0;savedL.clearLayers();$('mres').textContent=T('تم مسح الرسومات المحفوظة.')};
+$('mclrsaved').onclick=()=>{drawn=[];savedN=0;savedL.clearLayers();midRefresh();$('mres').textContent=T('تم مسح الرسومات المحفوظة.')};
 let snapT=0,mapClickT=0;
+/* ---------- نقاط المنتصف والالتقاط (مثل AutoCAD) ---------- */
+Object.assign(EN,{"إنهاء القياس والإبقاء عليه (Enter)":"Finish & keep (Enter)","نقطة المنتصف · {n} · مقطع {i}":"Midpoint · {n} · segment {i}","القياس الحالي":"Current measurement","نقطة المنتصف":"Midpoint","قياس {n}":"Measurement {n}","المسافة من البداية: {d}":"Distance from start: {d}","طول المقطع: {d}":"Segment length: {d}","نسخ":"Copy","اذهب":"Go to","ابدأ القياس من هنا":"Start measure here","تم النسخ":"Copied","تم الإبقاء على القياس على الخريطة. ابدأ قياسًا جديدًا — تُلتقط نقاط المنتصف والنهايات.":"Measurement kept on the map. Start a new one — midpoints and endpoints will snap."});
+const keptL=L.layerGroup().addTo(map),midL=L.layerGroup().addTo(map),snapMk=L.circleMarker([0,0],{radius:12,weight:3,fill:false,interactive:false});
+let snapLL=null,snapC=[],midT=0;
+const midIcon=L.divIcon({className:'midmk',html:'<i></i>',iconSize:[24,24],iconAnchor:[12,14]});
+function midSources(){
+  const S=[],m=$('mmode').value,cur=mp.map(p=>L.latLng(p.lat,p.lng));
+  if(m!=='p2l'&&cur.length>=2)S.push({P:cur,closed:m==='poly'&&cur.length>=3,name:T('القياس الحالي'),cur:true});
+  kept.forEach((k,i)=>S.push({P:k.pts.map(p=>L.latLng(p[0],p[1])),closed:k.closed,name:T('قياس {n}',{n:i+1})}));
+  drawn.forEach(d=>{if(d.pts&&d.pts.length>=2)S.push({P:d.pts.map(p=>L.latLng(p[0],p[1])),closed:d.type==='poly',name:esc(d.name||'')})});
+  return S;
+}
+function midHTML(ll,s,i,acc,d){
+  const u=toUTM(ll.lat,ll.lng),ds=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6),at=' data-ll="'+ll.lat+','+ll.lng+'"';
+  return '<div class="midpop"><b>'+T('نقطة المنتصف · {n} · مقطع {i}',{n:s.name,i})+'</b><br>Lat/Long: '+ds+'<br>UTM '+u.z+(u.s?'S':'N')+': '+u.e.toFixed(0)+' '+u.n.toFixed(0)+'<br>'+T('المسافة من البداية: {d}',{d:fmt(acc+d/2)})+'<br>'+T('طول المقطع: {d}',{d:fmt(d)})+
+    '<div class="midbtns"><button type="button" class="alt" data-act="copy"'+at+' data-txt="'+ds+'">'+T('نسخ')+'</button><button type="button" class="alt" data-act="go"'+at+'>'+T('اذهب')+'</button><button type="button" data-act="meas"'+at+'>'+T('ابدأ القياس من هنا')+'</button></div></div>';
+}
+function midRefresh(){
+  clearTimeout(midT);midT=setTimeout(()=>{
+    midL.clearLayers();snapC=[];
+    midSources().forEach(s=>{
+      const P=s.P,n=P.length,segs=s.closed?n:n-1;let acc=0;
+      P.forEach((p,k)=>{if(!(s.cur&&k===n-1))snapC.push({ll:p,t:'end'})});
+      for(let i=0;i<segs;i++){
+        const a=P[i],b=P[(i+1)%n],d=a.distanceTo(b),ll=L.latLng((a.lat+b.lat)/2,(a.lng+b.lng)/2);
+        snapC.push({ll,t:'mid'});
+        L.marker(ll,{icon:midIcon,keyboard:false,title:T('نقطة المنتصف')}).bindPopup(()=>midHTML(ll,s,i+1,acc,d)).addTo(midL);
+        acc+=d;
+      }
+    });
+  },0);
+}
+map.on('mousemove',e=>{
+  if(!measuring||!snapC.length){if(snapLL){snapLL=null;map.removeLayer(snapMk)}return}
+  const p=map.latLngToContainerPoint(e.latlng);let best=null,bd=14;
+  for(const c of snapC){const q=map.latLngToContainerPoint(c.ll),d=Math.hypot(p.x-q.x,p.y-q.y);if(d<bd){bd=d;best=c}}
+  if(best){snapLL=best.ll;snapMk.setStyle({color:best.t==='mid'?'#00c8e6':'#2fb344'}).setLatLng(best.ll);if(!map.hasLayer(snapMk))snapMk.addTo(map)}
+  else if(snapLL){snapLL=null;map.removeLayer(snapMk)}
+});
+map.on('mouseout',()=>{if(snapLL){snapLL=null;map.removeLayer(snapMk)}});
+function keepM(){
+  const m=$('mmode').value;
+  if(!measuring||!((m==='line'&&mp.length>=2)||(m==='poly'&&mp.length>=3)))return;
+  const P=mp.map(p=>[p.lat,p.lng]),closed=m==='poly';
+  kept.push({pts:P,closed});
+  L.polyline(closed?P.concat([P[0]]):P,{color:'#ffd43b',weight:3,opacity:.6,dashArray:'7 6',interactive:false}).addTo(keptL);
+  clrCur();$('mres').textContent=T('تم الإبقاء على القياس على الخريطة. ابدأ قياسًا جديدًا — تُلتقط نقاط المنتصف والنهايات.');
+}
+$('mres').addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.mkeep')){e.preventDefault();keepM()}});
+document.addEventListener('keydown',e=>{
+  if(!measuring)return;const t=e.target,tn=t&&t.tagName;
+  if(tn==='INPUT'||tn==='TEXTAREA'||tn==='SELECT'||(t&&t.isContentEditable))return;
+  if(e.key==='Enter'&&!e.defaultPrevented){e.preventDefault();keepM()}
+  else if(e.key==='Escape'&&mp.length){clrCur()}
+});
+map.on('popupopen',e=>{
+  const el=e.popup&&e.popup.getElement&&e.popup.getElement();if(!el)return;
+  el.querySelectorAll('.midbtns button').forEach(b=>b.addEventListener('click',()=>{
+    const [la,ln]=b.dataset.ll.split(',').map(Number),ll=L.latLng(la,ln),a=b.dataset.act;
+    if(a==='copy'){const tx=b.dataset.txt;const ok=()=>toast(T('تم النسخ'),1500);
+      try{navigator.clipboard.writeText(tx).then(ok,()=>{})}catch(_){}}
+    else if(a==='go'){map.setView(ll,Math.max(map.getZoom(),17))}
+    else if(a==='meas'){map.closePopup();if(!measuring)$('mtoggle').click();if($('mmode').value==='p2l'){$('mmode').value='line';clrCur()}snapT=Date.now();addM(ll)}
+  }));
+});
+
 $('map').addEventListener('click',()=>{mapClickT=Date.now()},true);
-map.on('click',e=>{if(measuring&&Date.now()-snapT>120)addM(e.latlng)});
+map.on('click',e=>{if(measuring&&Date.now()-snapT>120)addM(snapLL&&$('mmode').value!=='p2l'?snapLL:e.latlng)});
 /* أثناء القياس: النقر على دبوس لا يفتح نافذته، بل يضيف مركزه كنقطة قياس */
 map.on('popupopen',e=>{
   if(!measuring||Date.now()-mapClickT>200)return;
@@ -2587,7 +2658,7 @@ $('wboff').onclick=()=>{if(wbLayer){map.removeLayer(wbLayer);wbLayer=null}$('wbs
 
 /* ---------- حفظ وفتح المشروع ---------- */
 function setSel(id,v){if(v!==undefined&&[...$(id).options].some(o=>o.value===String(v)))$(id).value=v}
-function renderSaved(d){
+function renderSaved(d){midRefresh();
   if(d.type==='line'){let len=0;for(let i=1;i<d.pts.length;i++)len+=L.latLng(d.pts[i-1]).distanceTo(d.pts[i]);L.polyline(d.pts,{color:'#f08c00',weight:3}).bindTooltip(d.name+' — '+fmt(len)).addTo(savedL)}
   else L.polygon(d.pts,{color:'#f08c00',weight:3,fillOpacity:.15}).bindTooltip(d.name+' — '+polyArea(planar(d.pts)).toFixed(1)+T(' م²')).addTo(savedL);
 }
