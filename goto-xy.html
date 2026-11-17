@@ -124,6 +124,7 @@ button.camb{flex:none;display:flex;align-items:center;justify-content:center;wid
 button.camb svg.ic{width:20px;height:20px}
 #msg{color:var(--err);font-size:12.5px;min-height:18px;margin-top:8px;line-height:1.6}
 .midmk i{display:block;width:0;height:0;margin:4px 3px;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:16px solid #00c8e6;filter:drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1px #000);cursor:pointer}
+.seglab{pointer-events:none}.seglab span{position:absolute;left:0;top:0;white-space:nowrap;font:700 12px var(--mono,monospace);color:#fff;text-shadow:0 0 3px #000,0 0 2px #000,0 0 2px #000}
 .midpop{font-size:12.5px;line-height:1.7;min-width:210px}.midbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.midbtns button{padding:3px 9px;font-size:12px}
 #mres .mkeep{display:inline-block;margin-top:3px;font-weight:700;color:var(--acc)}
 #mres{font-size:12.5px;line-height:1.8;margin-top:10px;padding:8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
@@ -1072,7 +1073,7 @@ button.phadd svg.ic{width:16px;height:16px;vertical-align:-3px}
  <span id="stz">z —</span>
  <span id="sttool" class="ar">تحريك</span>
  <span id="gps" class="ar"></span>
- <span class="appver" title="Build">v2.2 · 2026-11-17</span>
+ <span class="appver" title="Build">v2.5 · 2026-11-17</span>
 </footer>
 <nav id="bnav" aria-label="التنقل"><button type="button" data-bn="map"><svg class="ic"><use href="#i-map"/></svg>الخريطة</button><button type="button" data-bn="go"><svg class="ic"><use href="#i-go"/></svg>انتقال</button><button type="button" data-bn="layers"><svg class="ic"><use href="#i-sat"/></svg>الطبقات</button><button type="button" data-bn="tools"><svg class="ic"><use href="#i-label"/></svg>أدوات</button><button type="button" data-bn="more"><svg class="ic"><use href="#i-panel"/></svg>المزيد</button></nav>
 
@@ -1751,7 +1752,7 @@ $('msave').onclick=()=>{
 $('mclrsaved').onclick=()=>{drawn=[];savedN=0;savedL.clearLayers();midRefresh();$('mres').textContent=T('تم مسح الرسومات المحفوظة.')};
 let snapT=0,mapClickT=0;
 /* ---------- نقاط المنتصف والالتقاط (مثل AutoCAD) ---------- */
-Object.assign(EN,{"إنهاء القياس والإبقاء عليه (Enter)":"Finish & keep (Enter)","نقطة المنتصف · {n} · مقطع {i}":"Midpoint · {n} · segment {i}","القياس الحالي":"Current measurement","نقطة المنتصف":"Midpoint","قياس {n}":"Measurement {n}","المسافة من البداية: {d}":"Distance from start: {d}","طول المقطع: {d}":"Segment length: {d}","نسخ":"Copy","اذهب":"Go to","ابدأ القياس من هنا":"Start measure here","تم النسخ":"Copied","تم الإبقاء على القياس على الخريطة. ابدأ قياسًا جديدًا — تُلتقط نقاط المنتصف والنهايات.":"Measurement kept on the map. Start a new one — midpoints and endpoints will snap."});
+Object.assign(EN,{"إنهاء القياس والإبقاء عليه (Enter)":"Finish & keep (Enter)","نقطة المنتصف · {n} · مقطع {i}":"Midpoint · {n} · segment {i}","القياس الحالي":"Current measurement","نقطة المنتصف":"Midpoint","مق {i}: {d}":"Seg {i}: {d}","قياس {n}":"Measurement {n}","المسافة من البداية: {d}":"Distance from start: {d}","طول المقطع: {d}":"Segment length: {d}","نسخ":"Copy","اذهب":"Go to","ابدأ القياس من هنا":"Start measure here","تم النسخ":"Copied","تم الإبقاء على القياس على الخريطة. ابدأ قياسًا جديدًا — تُلتقط نقاط المنتصف والنهايات.":"Measurement kept on the map. Start a new one — midpoints and endpoints will snap."});
 const keptL=L.layerGroup().addTo(map),midL=L.layerGroup().addTo(map),snapMk=L.circleMarker([0,0],{radius:12,weight:3,fill:false,interactive:false});
 let snapLL=null,snapC=[],midT=0;
 const midIcon=L.divIcon({className:'midmk',html:'<i></i>',iconSize:[24,24],iconAnchor:[12,14]});
@@ -1767,6 +1768,26 @@ function midHTML(ll,s,i,acc,d){
   return '<div class="midpop"><b>'+T('نقطة المنتصف · {n} · مقطع {i}',{n:s.name,i})+'</b><br>Lat/Long: '+ds+'<br>UTM '+u.z+(u.s?'S':'N')+': '+u.e.toFixed(0)+' '+u.n.toFixed(0)+'<br>'+T('المسافة من البداية: {d}',{d:fmt(acc+d/2)})+'<br>'+T('طول المقطع: {d}',{d:fmt(d)})+
     '<div class="midbtns"><button type="button" class="alt" data-act="copy"'+at+' data-txt="'+ds+'">'+T('نسخ')+'</button><button type="button" class="alt" data-act="go"'+at+'>'+T('اذهب')+'</button><button type="button" data-act="meas"'+at+'>'+T('ابدأ القياس من هنا')+'</button></div></div>';
 }
+
+/* خط بُعد بنمط AutoCAD: خطا امتداد + خط مواز بسهمين + النص في المنتصف */
+function dimSeg(a,b,d,idx){
+  const pa=map.latLngToContainerPoint(a),pb=map.latLngToContainerPoint(b),dx=pb.x-pa.x,dy=pb.y-pa.y,pl=Math.hypot(dx,dy);
+  let txt=T('مق {i}: {d}',{i:idx,d:fmt(d)}),tw=txt.length*7.4+14;
+  if(pl<tw+46){txt=fmt(d);tw=txt.length*7.4+14}
+  if(pl<tw+46)return;
+  const ux=dx/pl,uy=dy/pl,nx=uy,ny=-ux,OFF=28,EXT=OFF+8,AR=9,AW=3.5;
+  const P=(p,u,v)=>({x:p.x+ux*u+nx*v,y:p.y+uy*u+ny*v}),LL=p=>map.containerPointToLatLng(p);
+  const A1=P(pa,0,OFF),B1=P(pb,0,OFF),mid={x:(A1.x+B1.x)/2,y:(A1.y+B1.y)/2};
+  const parts=[
+    [LL(P(pa,0,4)),LL(P(pa,0,EXT))],[LL(P(pb,0,4)),LL(P(pb,0,EXT))],
+    [LL(A1),LL({x:mid.x-ux*tw/2,y:mid.y-uy*tw/2})],[LL({x:mid.x+ux*tw/2,y:mid.y+uy*tw/2}),LL(B1)],
+    [LL(P(pa,AR,OFF+AW)),LL(A1),LL(P(pa,AR,OFF-AW))],[LL(P(pb,-AR,OFF+AW)),LL(B1),LL(P(pb,-AR,OFF-AW))]
+  ];
+  L.polyline(parts,{color:'#000',weight:4,opacity:.55,interactive:false}).addTo(midL);
+  L.polyline(parts,{color:'#fff',weight:1.6,interactive:false}).addTo(midL);
+  let ang=Math.atan2(dy,dx)*180/Math.PI;if(ang>90)ang-=180;else if(ang<-90)ang+=180;
+  L.marker(LL(mid),{icon:L.divIcon({className:'seglab',html:'<span style="transform:translate(-50%,-50%) rotate('+ang.toFixed(1)+'deg)">'+txt+'</span>',iconSize:[0,0]}),interactive:false,keyboard:false,zIndexOffset:-50}).addTo(midL);
+}
 function midRefresh(){
   clearTimeout(midT);midT=setTimeout(()=>{
     midL.clearLayers();snapC=[];
@@ -1777,6 +1798,7 @@ function midRefresh(){
         const a=P[i],b=P[(i+1)%n],d=a.distanceTo(b),ll=L.latLng((a.lat+b.lat)/2,(a.lng+b.lng)/2);
         snapC.push({ll,t:'mid'});
         L.marker(ll,{icon:midIcon,keyboard:false,title:T('نقطة المنتصف')}).bindPopup(()=>midHTML(ll,s,i+1,acc,d)).addTo(midL);
+        try{dimSeg(a,b,d,i+1)}catch(_){}
         acc+=d;
       }
     });
@@ -1789,6 +1811,7 @@ map.on('mousemove',e=>{
   if(best){snapLL=best.ll;snapMk.setStyle({color:best.t==='mid'?'#00c8e6':'#2fb344'}).setLatLng(best.ll);if(!map.hasLayer(snapMk))snapMk.addTo(map)}
   else if(snapLL){snapLL=null;map.removeLayer(snapMk)}
 });
+map.on('zoomend',()=>{if(midL.getLayers&&midL.getLayers().length)midRefresh()});
 map.on('mouseout',()=>{if(snapLL){snapLL=null;map.removeLayer(snapMk)}});
 function keepM(){
   const m=$('mmode').value;
